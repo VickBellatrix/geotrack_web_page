@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la conexión a MySQL</title>
+</head>
+<body>
+<!--    <h1>Detalles de la conexión a MySQL</h1>
+    <pre><%= JSON.stringify(connectionDetails, null, 2) %></pre> -->
+
+    <h2>Datos desde la base de datos</h2>
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>ID Producto</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Valor Unitario</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(function(row) { %>
+                <tr>
+                    <td><%= row.IDproducto %></td>
+                    <td><%= row.nombre %></td>
+                    <td><%= row.cantidad %></td>
+                    <td><%= row.valor_unit %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <script src="/script.js"></script>
+</body>
+</html>

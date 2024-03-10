@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoTrack</title>
+</head>
+<body>
+    <h1>Geotrack: datos recibidos:</h1>
+    <ul id="datos">
+        <li>Latitud: <span id="latitud"></span></li>
+        <li>Longitud: <span id="longitud"></span></li>
+        <li>Fecha: <span id="fecha"></span></li>
+        <li>Hora: <span id="hora"></span></li>
+
+    </ul>
+
+    <script>
+        // Función para actualizar los datos
+        function actualizarDatos() {
+            fetch('/latest-data') // Solicitar los últimos datos al servidor
+            .then(response => response.json())
+            .then(data => {
+                // Actualizar los elementos HTML con los nuevos datos recibidos
+                document.getElementById('latitud').innerText = data.lati;
+                document.getElementById('longitud').innerText = data.longi;
+                document.getElementById('fecha').innerText = data.fecha;
+                document.getElementById('hora').innerText = data.timestamp;
+            })
+            .catch(error => console.error('Error al obtener los datos:', error));
+        }
+
+        // Actualizar los datos cada 5 segundos (5000 milisegundos)
+        setInterval(actualizarDatos, 500);
+
+        // Llamar a la función actualizarDatos al cargar la página para obtener los datos iniciales
+        window.onload = actualizarDatos;
+    </script>
+</body>
+</html>

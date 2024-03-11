@@ -4,54 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa</title>
-    <!-- Agrega el enlace al archivo CSS de Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Agrega el enlace al archivo JavaScript de Leaflet -->
+    <link rel="stylesheet" href="styles.css"/>
+    
     <script src="https://unpkg.com/leaflet"></script>
-    <!-- Estilo personalizado para el contenedor del mapa -->
     <style>
+        body {
+            background-color: white;
+            color: rgb(8,27,42);
+            font-family: Batangas-Regular;
+            margin: 0;
+            padding: 0;
+        }
+
+        #banner {
+            background-color: rgb(8,27,42);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #map-container {
+            background-color: rgb(191, 210, 224); /* Fondo azul claro */
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            width: 70%;
+            max-width: 800px;
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-weight: bold;
+        }
+
         #map {
             height: 400px;
             width: 100%;
+            margin-top: 20px;
+            border-radius: 20px;
+            border: 2px solid rgb(8,27,42);
+        }
+
+        .button {
+            background-color: rgb(8,27,42);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: rgb(4,20,32);
         }
     </style>
 </head>
 <body>
-    <!-- Contenedor para el mapa -->
-    <div id="map"></div>
+    <div id="banner">
+        <h1>Geotrack</h1>
+    </div>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
 
-    <!-- Agrega el contenido de map.js aquí -->
     <script>
-        // Función para inicializar el mapa
         function initMap() {
-            // Crea un mapa con Leaflet
             var map = L.map('map').setView([0, 0], 13);
-
-            // Agrega una capa de azulejos OpenStreetMap al mapa
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            // Realiza una solicitud para obtener los datos más recientes
-            fetch('/latest-data')
-                .then(response => response.json())
-                .then(data => {
-                    // Verifica si se recibieron datos válidos
-                    if (data && data.lati && data.longi) {
-                        // Crea un marcador en la ubicación recibida
-                        L.marker([data.lati, data.longi]).addTo(map)
-                            .bindPopup('Aquí está tu ubicación')
-                            .openPopup();
-                    } else {
-                        console.error('Los datos recibidos no son válidos:', data);
-                    }
-                })
-                .catch(error => console.error('Error al obtener los datos:', error));
+            function actualizarUbicacion() {
+                fetch('/latest-data')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.lati && data.longi && data.fecha && data.timestamp) {
+                            L.marker([data.lati, data.longi]).addTo(map)
+                                .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
+                                .openPopup();
+                        } else {
+                            console.error('Los datos recibidos no son válidos:', data);
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener los datos:', error));
+            }
+
+            actualizarUbicacion();
+            setInterval(actualizarUbicacion, 5000);
         }
 
-        // Llama a la función initMap cuando se cargue el documento
         document.addEventListener('DOMContentLoaded', initMap);
     </script>
 </body>
 </html>
-

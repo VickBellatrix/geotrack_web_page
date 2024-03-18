@@ -125,13 +125,13 @@ app.get('/mapa', (req, res) => {
     });
 
 // Inicialización del servidor HTTP
-const portHTTP = 80;
+const portHTTP = 3000;
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-    console.log(`Servidor HTTP escuchando en http://18.117.165.187/mapa`);
+    console.log(`Servidor HTTP escuchando en http://18.117.165.187:3000/mapa`);
 });
 
 //Prueba 

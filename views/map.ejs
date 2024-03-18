@@ -78,27 +78,33 @@
     <script>
         function initMap() {
             var map = L.map('map').setView([0, 0], 13);
+            var polyline = L.polyline([], { color: 'red' }).addTo(map); // Polilínea para el recorrido
+            var currentMarker = null; // Variable para el marcador actual
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-
-            var ubicaciones = []; // Array para almacenar las ubicaciones
-            var polyline; // Variable para almacenar la polilínea
 
             function actualizarUbicacion() {
                 fetch('/latest-data')
                     .then(response => response.json())
                     .then(data => {
-                        if (data && data.lati && data.longi) {
-                            // Agregar nueva ubicación al array
-                            ubicaciones.push([data.lati, data.longi]);
-
-                            // Trazar la polilínea con todas las ubicaciones
-                            if (!polyline) {
-                                polyline = L.polyline(ubicaciones, { color: 'blue' }).addTo(map);
-                            } else {
-                                polyline.setLatLngs(ubicaciones);
+                        if (data && data.lati && data.longi && data.fecha && data.timestamp) {
+                            // Eliminar el marcador anterior
+                            if (currentMarker) {
+                                map.removeLayer(currentMarker);
                             }
+
+                            // Agregar el nuevo marcador
+                            currentMarker = L.marker([data.lati, data.longi]).addTo(map)
+                                .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
+                                .openPopup();
+
+                            // Agregar punto a la polilínea para trazar el recorrido
+                            polyline.addLatLng([data.lati, data.longi]);
+
+                            // Centrar el mapa en la nueva ubicación
+                            map.setView([data.lati, data.longi], 13);
                         } else {
                             console.error('Los datos recibidos no son válidos:', data);
                         }
@@ -107,11 +113,10 @@
             }
 
             actualizarUbicacion();
-            setInterval(actualizarUbicacion, 5000); // Actualizar cada 5 segundos
+            setInterval(actualizarUbicacion, 5000);
         }
 
         document.addEventListener('DOMContentLoaded', initMap);
     </script>
 </body>
 </html>
-

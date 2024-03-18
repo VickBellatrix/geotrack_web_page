@@ -133,3 +133,5 @@ app.use(express.static(__dirname));
 app.listen(portHTTP, () => {
     console.log(`Servidor HTTP escuchando en http://localhost:${portHTTP}/mapa`);
 });
+
+//Prueba pipeline

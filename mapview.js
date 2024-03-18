@@ -99,4 +99,3 @@ function actualizarTabla(data) {
 
 // Inicializar el mapa cuando se cargue la página
 document.addEventListener('DOMContentLoaded', initMap);
-

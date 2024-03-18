@@ -38,7 +38,7 @@ const server = net.createServer();
 const PORT = 5000;
 
 // Dirección IP en la que el servidor debe escuchar
-const HOST = '10.20.57.68';
+const HOST = '0.0.0.0';
 
 server.on('listening', () => {
     const address = server.address();

@@ -11,7 +11,7 @@ function initMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var ubicar = L.marker([0, 0]).addTo(map);
+    var ubicar = L.marker([10.8941, -74.8041]).addTo(map);
 
     // Función para centrar el mapa en la última coordenada almacenada en la base de datos
     function UltimaUbicacion() {

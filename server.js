@@ -131,5 +131,5 @@ app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-    console.log(`Servidor HTTP escuchando en http://3.142.134.153:${portHTTP}/mapa`);
+    console.log(`Servidor HTTP escuchando en http://18.117.165.187:${portHTTP}/mapa`);
 });

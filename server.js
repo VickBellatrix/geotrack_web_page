@@ -125,7 +125,7 @@ app.get('/mapa', (req, res) => {
     });
 
 // Inicialización del servidor HTTP
-const portHTTP = 3000;
+const portHTTP = 80;
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname));
 

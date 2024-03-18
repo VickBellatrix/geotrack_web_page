@@ -38,7 +38,7 @@ const server = net.createServer();
 const PORT = 5000;
 
 // Dirección IP en la que el servidor debe escuchar
-const HOST = '0.0.0.0';
+const HOST = '10.20.57.68';
 
 server.on('listening', () => {
     const address = server.address();
@@ -131,5 +131,7 @@ app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-    console.log(`Servidor HTTP escuchando en http://18.117.165.187:${portHTTP}/mapa`);
+    console.log(`Servidor HTTP escuchando en http://localhost:${portHTTP}/mapa`);
 });
+
+//Prueba pipeline

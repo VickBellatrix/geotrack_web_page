@@ -30,3 +30,4 @@ function initMap() {
     }
 
 document.addEventListener('DOMContentLoaded', initMap);
+}

@@ -46,7 +46,7 @@ function initMap() {
         document.getElementById('timestampValue').textContent = data.hora;
         Rastrear(data.latitud, data.longitud);
         if (!mapaCentrado) {
-            map.setView([data.latitud, data.longitud], 13);
+            map.setView([data.latitud, data.longitud]);
             mapaCentrado = true;
         }
     });

@@ -4,7 +4,7 @@ var intervaloActualizacion = null; // Variable para almacenar el intervalo de ac
 function initMap() {
     // Crear e inicializar el mapa
     var map = L.map('map').setView([0, 0], 13);
-    var polyline = L.polyline([], { color: 'blue' }).addTo(map);
+    var polyline = L.polyline([], { color: 'red' }).addTo(map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,

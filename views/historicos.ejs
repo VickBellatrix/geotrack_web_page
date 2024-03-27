@@ -1,0 +1,39 @@
+<!-- historicos.ejs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtrado por Rango de Fechas</title>
+</head>
+<body>
+  <label for="fecha-inicio">Fecha de inicio:</label>
+  <input type="date" id="fecha-inicio">
+  <label for="fecha-fin">Fecha de fin:</label>
+  <input type="date" id="fecha-fin">
+  <button onclick="filtrarPorFecha()">Filtrar</button>
+
+  <div id="resultados"></div>
+
+  <script>
+    function filtrarPorFecha() {
+      const fechaInicio = document.getElementById('fecha-inicio').value;
+      const fechaFin = document.getElementById('fecha-fin').value;
+
+      fetch(`/filtrar-por-fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultadosDiv = document.getElementById('resultados');
+          resultadosDiv.innerHTML = '';
+
+          data.forEach(item => {
+            const p = document.createElement('p');
+            p.textContent = `Latitud: ${item.latitud}, Longitud: ${item.longitud}, Fecha: ${item.fecha}, Hora: ${item.hora}`;
+            resultadosDiv.appendChild(p);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>

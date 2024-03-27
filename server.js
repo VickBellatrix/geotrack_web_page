@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const app = express();
 const path = require('path');
+const historicosview = require('./historicosview');
 
 // Inicializar latestData para almacenar los últimos datos recibidos del sniffer
 let latestData = {
@@ -38,7 +39,7 @@ const server = net.createServer();
 const PORT = 5000;
 
 // Dirección IP en la que el servidor debe escuchar
-const HOST = '10.20.57.68';
+const HOST = '0.0.0.0';
 
 server.on('listening', () => {
     const address = server.address();
@@ -122,7 +123,27 @@ app.get('/latest-data', (req, res) => {
 
 app.get('/mapa', (req, res) => {
     res.render('map');
+});
+
+// Ruta para filtrar por rango de fechas
+app.get('/historicos', (req, res) => {
+    res.render('historicos');
+});
+
+// Ruta para filtrar por rango de fechas
+app.get('/filtrar-por-fechas', (req, res) => {
+    const { fechaInicio, fechaFin } = req.query;
+
+    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ?';
+    connection.query(sql, [fechaInicio, fechaFin], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send('Error interno del servidor');
+        } else {
+            res.json(results);
+        }
     });
+});
 
 // Inicialización del servidor HTTP
 const portHTTP = 3000;
@@ -131,7 +152,7 @@ app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-    console.log(`Servidor HTTP escuchando en http://localhost:${portHTTP}/mapa`);
+    console.log(`Servidor HTTP escuchando en http://localhost:3000/mapa`);
 });
 
-//Prueba pipeline
+//Prueba 

@@ -89,7 +89,13 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.lati && data.longi && data.fecha && data.timestamp) {
-                            L.marker([data.lati, data.longi]).addTo(map)
+                            // Eliminar el marcador anterior
+                            if (currentMarker) {
+                                map.removeLayer(currentMarker);
+                            }
+
+                            // Agregar el nuevo marcador
+                            currentMarker = L.marker([data.lati, data.longi]).addTo(map)
                                 .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
                                 .openPopup();
 

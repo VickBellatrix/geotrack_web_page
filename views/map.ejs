@@ -150,12 +150,14 @@
     <div id="map"></div>
   </div>
 
+
+
+// ==========================================================================================
+  // Trazado de la funcion
   <script>
     function initMap() {
       var map = L.map('map').setView([10.8941, -74.8041], 13);
-      var polyline = L.polyline([], {
-        color: 'red'
-      }).addTo(map);
+      var polyline = L.polyline([], {color: 'red'}).addTo(map);
       var currentMarker = null;
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -164,27 +166,29 @@
 
       function actualizarUbicacion() {
         fetch('/latest-data')
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.latitud && data.longitud) {
-                    const { latitud, longitud, fecha, hora } = data;
-                    const popupContent = `Usted se encuentra aquí\n(latitud: ${latitud}, longitud: ${longitud})\nFecha: ${fecha}\nHora: ${hora}`;
-                    
-                    if (currentMarker) {
-                        map.removeLayer(currentMarker);
-                    }
-    
-                    currentMarker = L.marker([latitud, longitud]).addTo(map)
-                        .bindPopup(popupContent)
-                        .openPopup();
-    
-                    polyline.addLatLng([latitud, longitud]);
-                    map.setView([latitud, longitud], 13);
-                } else {
-                    console.error('Los datos recibidos no son válidos:', data);
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.lati && data.longi && data.fecha && data.timestamp) {
+                // Eliminar el marcador anterior
+                if (currentMarker) {
+                    map.removeLayer(currentMarker);
                 }
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
+
+                // Agregar el nuevo marcador
+                currentMarker = L.marker([data.lati, data.longi]).addTo(map)
+                    .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
+                    .openPopup();
+
+                // Agregar punto a la polilínea para trazar el recorrido
+                polyline.addLatLng([data.lati, data.longi]);
+
+                // Centrar el mapa en la nueva ubicación
+                map.setView([data.lati, data.longi], 13);
+            } else {
+                console.error('Los datos recibidos no son válidos:', data);
+            }
+        })
+        .catch(error => console.error('Error al obtener los datos:', error));
     }
     
     actualizarUbicacion();

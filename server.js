@@ -62,7 +62,11 @@ server.on('connection', (socket) => {
 
         latestData.lati = parseFloat(valoresSeparados[0]);
         latestData.longi = parseFloat(valoresSeparados[1]);
-        latestData.fecha = valoresSeparados[2];
+
+        const fechaPartes = valoresSeparados[2].split('/');
+        const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
+        latestData.fecha = fechaFormateada;
+
         latestData.timestamp = valoresSeparados[3];
 
         console.log(`latitud: ${latestData.lati}`);
@@ -75,6 +79,7 @@ server.on('connection', (socket) => {
         connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp], (error, results) => {
             if (error) console.error(error);
             else console.log("Datos insertados correctamente en la base de datos");
+            
         });
     });
 
@@ -112,8 +117,8 @@ app.get('/datos-json', (req, res) => {
 });
 
 // Ruta para acceder a los datos y renderizar la vista
-app.get('/', (req, res) => {
-    res.render('coords', { lati: latestData.lati, longi: latestData.longi, fecha: latestData.fecha ,timestamp: latestData.timestamp });
+app.get('/coords', (req, res) => {
+    res.render('coords', { lati: latestData.lati, longi: latestData.longi, fecha: latestData.fecha, timestamp: latestData.timestamp });
 });
 
 // Ruta para obtener los últimos datos en formato JSON
@@ -121,7 +126,7 @@ app.get('/latest-data', (req, res) => {
     res.json(latestData);
 });
 
-app.get('/mapa', (req, res) => {
+app.get('/', (req, res) => {
     res.render('map');
 });
 
@@ -152,7 +157,7 @@ app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-    console.log(`Servidor HTTP escuchando en http://localhost:3000/mapa`);
+    console.log(`Servidor HTTP escuchando en http://localhost:3000/`);
 });
 
 //Prueba 

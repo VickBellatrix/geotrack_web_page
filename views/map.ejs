@@ -1,41 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css"/>
-    
+    <link rel="stylesheet" href="styles.css" />
+
     <script src="https://unpkg.com/leaflet"></script>
     <style>
         body {
             background-color: white;
-            color: rgb(8,27,42);
+            color: rgb(8, 27, 42);
             font-family: Batangas-Regular;
             margin: 0;
             padding: 0;
         }
 
         #banner {
-            background-color: rgb(8,27,42);
+            background-color: rgb(8, 27, 42);
             color: white;
             padding: 20px;
+            /* Aumenta el padding del banner */
             text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+            /* Aumenta el tamaño de la fuente del banner */
         }
 
         #map-container {
-            background-color: rgb(191, 210, 224); /* Fondo azul claro */
+            background-color: rgb(191, 210, 224);
             border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
-            width: 70%;
-            max-width: 800px;
+            padding: 20px;
+            /* Agrega un padding al contenedor del mapa */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: calc(100vw - 100px);
+            /* Ancho del 100% del viewport menos 40px de margen */
+            max-width: calc(100% - 40px);
+            /* Ancho máximo igual al 100% del viewport menos 40px de margen */
             text-align: center;
             margin: 20px auto;
+            /* Mantiene un margen de 20px en la parte superior e inferior, y auto para centrar horizontalmente */
+            overflow-x: auto;
+            /* Agrega desplazamiento horizontal si el contenido es más ancho que el contenedor */
         }
 
-        h1, h2 {
+        #map {
+            height: 60vh;
+            width: calc(100% - 20px);
+            /* Ancho del 100% menos 40px */
+            border-radius: 20px;
+            border: 3px solid rgb(8, 27, 42);
+        }
+
+
+
+
+        h1,
+        h2 {
             text-align: center;
             color: white;
             margin-bottom: 20px;
@@ -43,42 +66,57 @@
             font-weight: bold;
         }
 
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 20px;
-            border-radius: 20px;
-            border: 2px solid rgb(8,27,42);
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+            /* Agrega un espacio debajo del botón */
         }
 
         .button {
-            background-color: rgb(8,27,42);
+            background-color: rgb(8, 27, 42);
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 20px 40px;
+            /* Aumenta el padding para hacer el botón más grande */
+            font-size: 26px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .button:hover {
-            background-color: rgb(4,20,32);
+            background-color: rgb(4, 20, 32);
         }
     </style>
 </head>
+
 <body>
-    <div id="banner">
-        <h1>Geotracker</h1>
+    <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="flex: 1; margin-right: 10px;">
+            <img src="/views/Media/logo.jpeg" style="max-width: 160px; width: 100%; height: auto; border-radius: 40px;">
+        </div>
+        <div style="flex: 1; text-align: right; margin-left: 20px;">
+            <h1>Geotrack</h1>
+        </div>
     </div>
+    
+    
+    
+
+
+    <div class="button-container"> <!-- Contenedor para centrar el botón horizontalmente -->
+        <button class="button" id="buscar-datos">CONSULTA DE HISTORICOS</button>
+    </div>
+
     <div id="map-container">
         <div id="map"></div>
     </div>
 
     <script>
         function initMap() {
-            var map = L.map('map').setView([10, -74], 4);
+            var map = L.map('map').setView([10.8941, -74.8041], 13);
             var polyline = L.polyline([], { color: 'red' }).addTo(map); // Polilínea para el recorrido
+            var currentMarker = null; // Variable para el marcador actual
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -96,24 +134,30 @@
 
                             // Agregar el nuevo marcador
                             currentMarker = L.marker([data.lati, data.longi]).addTo(map)
-                                .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
+                                .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:' + data.fecha + '\nHora:' + data.timestamp + '')
                                 .openPopup();
 
                             // Agregar punto a la polilínea para trazar el recorrido
                             polyline.addLatLng([data.lati, data.longi]);
+
+                            // Centrar el mapa en la nueva ubicación
+                            map.setView([data.lati, data.longi], 13);
                         } else {
                             console.error('Los datos recibidos no son válidos:', data);
                         }
                     })
                     .catch(error => console.error('Error al obtener los datos:', error));
             }
-            
-
             actualizarUbicacion();
             setInterval(actualizarUbicacion, 5000);
         }
+        // Redireccionar al hacer clic en el botón
+        document.getElementById('buscar-datos').addEventListener('click', function () {
+            window.location.href = 'http://localhost:3000/historicos';
+        });
 
         document.addEventListener('DOMContentLoaded', initMap);
     </script>
 </body>
+
 </html>

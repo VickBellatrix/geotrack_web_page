@@ -11,22 +11,10 @@ function initMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var ubicar = L.marker([10.8941, -74.8041]).addTo(map);
+    var ubicar = L.marker([10, -74],1).addTo(map);
 
     // Función para centrar el mapa en la última coordenada almacenada en la base de datos
     function UltimaUbicacion() {
-        fetch('/latest-data')
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.lati && data.longi) {
-                    L.marker([data.lati, data.longi]).addTo(map)
-                        .bindPopup('Aquí está tu ubicación')
-                        .openPopup();
-                } else {
-                    console.error('Los datos recibidos no son válidos:', data);
-                }
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
     }
 
     UltimaUbicacion();
@@ -46,7 +34,7 @@ function initMap() {
         document.getElementById('timestampValue').textContent = data.hora;
         Rastrear(data.latitud, data.longitud);
         if (!mapaCentrado) {
-            map.setView([data.latitud, data.longitud], 13);
+            map.setView([data.latitud, data.longitud]);
             mapaCentrado = true;
         }
     });

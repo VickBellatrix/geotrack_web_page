@@ -1,39 +1,485 @@
-<!-- historicos.ejs -->
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Filtrado por Rango de Fechas</title>
-</head>
-<body>
-  <label for="fecha-inicio">Fecha de inicio:</label>
-  <input type="date" id="fecha-inicio">
-  <label for="fecha-fin">Fecha de fin:</label>
-  <input type="date" id="fecha-fin">
-  <button onclick="filtrarPorFecha()">Filtrar</button>
+  <title>Mapa</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
 
-  <div id="resultados"></div>
+  <script src="https://unpkg.com/leaflet"></script>
+  <style>
+    body {
+      background-color: white;
+      color: rgb(8, 27, 42);
+      font-family: Batangas-Regular;
+      margin: 0;
+      padding: 0;
+    }
+
+    .logo-container {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .logo-image {
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      border-radius: 40px;
+    }
+
+    .title-container {
+      flex: 1;
+      text-align: right;
+      margin-left: 20px;
+    }
+
+    #banner {
+      background-color: rgb(8, 27, 42);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 0px;
+      font-size: 30px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .consult-button {
+      background-color: rgb(8, 27, 42);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 20px 40px;
+      font-size: 26px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .consult-button:hover {
+
+      background-color: rgb(4, 20, 32);
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .position-container {
+      text-align: center;
+      color: rgb(4, 20, 32);
+      margin-bottom: 20px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    #busqueda-container {
+      background-color: rgb(191, 210, 224);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: calc(100vw - 100px);
+      max-width: calc(100% - 40px);
+      text-align: center;
+      margin: 10px auto;
+      overflow-x: auto;
+    }
+
+    #hora-container {
+      background-color: rgb(191, 210, 224);
+      border-radius: 20px;
+      padding: 20px;
+
+      width: calc(100vw - 100px);
+      max-width: calc(100% - 40px);
+      text-align: center;
+      margin: 10px auto;
+      overflow-x: auto;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .map-container {
+      display: flex;
+    }
+
+    .left {
+      flex: 1;
+      margin-right: 10px;
+      /* Agrega un poco de margen a la derecha */
+    }
+
+    .right {
+      flex: 1;
+      margin-left: 10px;
+      /* Agrega un poco de margen a la izquierda */
+    }
+
+
+    #map {
+      height: 60vh;
+      width: calc(100% - 20px);
+      border-radius: 20px;
+      border: 3px solid rgb(8, 27, 42);
+    }
+
+
+
+    h1 {
+      text-align: center;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 80px;
+    }
+
+    h2 {
+      text-align: center;
+      color: rgb(255, 255, 255);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    h3 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    label {
+      text-align: center;
+      color: rgb(4, 20, 32);
+      margin-bottom: 0px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: lighter;
+      font-size: 15px;
+    }
+
+    #resultados p {
+      margin: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    table th,
+    table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: rgb(4, 20, 32);
+      color: white;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    table tbody tr:hover {
+      background-color: #ddd;
+    }
+
+    /* Estilo para el contenedor del checkbox */
+    #checkBox {
+      font-family: Arial, sans-serif;
+
+      /* Cambia la fuente del texto */
+      color: #333;
+      /* Cambia el color del texto */
+    }
+
+    /* Estilo para el texto del checkbox */
+    #checkBox label {
+      margin: 10px auto;
+      font-size: 20px;
+      /* Ajusta el margen izquierdo para separar el texto del checkbox */
+    }
+
+    #checkBox input[type="checkbox"] {
+      margin: 10px auto;
+      width: 20px;
+      /* Ajusta el ancho de la casilla */
+      height: 20px;
+      /* Ajusta la altura de la casilla */
+    }
+
+    .error-message {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+    <div class="logo-container">
+      <img src="/views/Media/logo.jpeg" class="logo-image">
+    </div>
+    <div class="title-container">
+      <h1>Geotrack</h1>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button class="consult-button" id="buscar-datos">
+      <h2>POSICIÓN EN TIEMPO REAL</h2>
+    </button>
+  </div>
+
+  <div id="busqueda-container">
+    <div style="text-align: center; color: rgb(4, 20, 32); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;">
+      ¿DÓNDE ESTUVO EN EL SIGUIENTE RANGO DE TIEMPO?
+    </div>
+
+    <div>
+      <label for="fecha-inicio" style="font-size: 20px;">Fecha de inicio:</label>
+      <input type="date" id="fecha-inicio">
+      <label for="fecha-fin" style="font-size: 20px;">Fecha de fin:</label>
+      <input type="date" id="fecha-fin">
+    </div>
+
+    <div id="checkBox">
+      <label for="buscar-por-hora">
+        <input type="checkbox" id="buscar-por-hora"> Filtrar por hora
+      </label>
+    </div>
+
+    <div id="hora-container" style="display: none;">
+      <label for="hora-inicio" id="label-hora-inicio" style="font-size: 20px; margin-left: 20px;">Hora de inicio:</label>
+      <input type="time" id="hora-inicio" style="width: 150px;">
+      <label for="hora-fin" id="label-hora-fin" style="font-size: 20px; margin-left: 20px;">Hora de fin:</label>
+      <input type="time" id="hora-fin" style="width: 150px;">
+    </div>
+
+    <div>
+      <button class="consult-button" onclick="filtrarPorFechaYHora()">Filtrar</button>
+    </div>
+
+    <div>
+      <p>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></p>
+      <p>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></p>
+      <p>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></p>
+      <p>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></p>
+    </div>
+
+    <div class="map-container">
+      <div class="left">
+        <table id="resultados">
+          <thead>
+            <tr>
+              <th>Latitud</th>
+              <th>Longitud</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aquí se agregarán las filas de resultados -->
+          </tbody>
+        </table>
+      </div>
+      <div class="right">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
 
   <script>
-    function filtrarPorFecha() {
-      const fechaInicio = document.getElementById('fecha-inicio').value;
-      const fechaFin = document.getElementById('fecha-fin').value;
+    document.addEventListener("DOMContentLoaded", function() {
+      // Declarar map como una variable global para que sea accesible en todas las funciones
+      var map;
 
-      fetch(`/filtrar-por-fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`)
-        .then(response => response.json())
-        .then(data => {
-          const resultadosDiv = document.getElementById('resultados');
-          resultadosDiv.innerHTML = '';
+      function initMap() {
+        // Asignar el mapa a la variable global map
+        map = L.map('map').setView([10.8941, -74.8041], 13);
+        var currentMarker = null;
 
-          data.forEach(item => {
-            const p = document.createElement('p');
-            p.textContent = `Latitud: ${item.latitud}, Longitud: ${item.longitud}, Fecha: ${item.fecha}, Hora: ${item.hora}`;
-            resultadosDiv.appendChild(p);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+      }
+
+      initMap();
+
+      document.getElementById('buscar-datos').addEventListener('click', function() {
+        window.location.href = 'http://localhost:3000/';
+      });
+
+      // Asignar a las variables los elementos del DOM
+      const buscarPorHoraCheckbox = document.getElementById('buscar-por-hora');
+      const horaContainer = document.getElementById('hora-container');
+      const labelHoraInicio = document.getElementById('label-hora-inicio');
+      const labelHoraFin = document.getElementById('label-hora-fin');
+
+      // Variables de estado para el tipo de búsqueda
+      let buscarPorHora = false; // Por defecto, no buscará por hora
+
+      // Evento change del checkbox de búsqueda por hora
+      buscarPorHoraCheckbox.addEventListener('change', function() {
+        buscarPorHora = buscarPorHoraCheckbox.checked;
+        // Dependiendo de si se marca o desmarca, mostrar u ocultar los campos de hora
+        if (buscarPorHora) {
+          horaContainer.style.display = 'block';
+          labelHoraInicio.style.display = 'inline-block';
+          labelHoraFin.style.display = 'inline-block';
+        } else {
+          horaContainer.style.display = 'none';
+          labelHoraInicio.style.display = 'none';
+          labelHoraFin.style.display = 'none';
+        }
+      });
+
+      // Función para enviar la solicitud de filtrado por fecha y hora
+      function filtrarPorFechaYHora() {
+        // Obtener los valores de los campos de fecha y hora
+        const fechaInicio = document.getElementById('fecha-inicio').value;
+        const fechaFin = document.getElementById('fecha-fin').value;
+        let horaInicio = '00:00:00'; // Valor inicial de hora de inicio con segundos
+        let horaFin = '23:59:59'; // Valor inicial de hora de fin con segundos
+
+        // Verificar si se busca por hora
+        const buscarPorHora = document.getElementById('buscar-por-hora').checked;
+
+        // Si se busca por hora, obtener los valores de hora introducidos por el usuario
+        if (buscarPorHora) {
+          horaInicio = document.getElementById('hora-inicio').value + ':00'; // Agregar segundos
+          horaFin = document.getElementById('hora-fin').value + ':59'; // Agregar segundos
+        }
+
+        // Verificar si se han seleccionado las fechas
+        if (fechaInicio === '' || fechaFin === '') {
+          // Mostrar mensaje de error al usuario
+          alert('Por favor, seleccione las fechas de inicio y fin.');
+          return; // Detener la ejecución si las fechas no están seleccionadas
+        }
+
+        // Mostrar los valores de fecha y hora en pantalla para el usuario
+        document.getElementById('fecha-inicio-usuario').textContent = fechaInicio;
+        document.getElementById('fecha-fin-usuario').textContent = fechaFin;
+        document.getElementById('hora-inicio-usuario').textContent = horaInicio;
+        document.getElementById('hora-fin-usuario').textContent = horaFin;
+
+        // Hacer la petición al servidor con los parámetros correspondientes
+        fetch(`/filtrar-por-fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&horaInicio=${horaInicio}&horaFin=${horaFin}`)
+          .then(response => response.json())
+          .then(data => {
+            // Llamar a la función para mostrar los resultados en la tabla
+            mostrarResultadosEnTabla(data);
+
+            // Crear una matriz de coordenadas para los marcadores en el mapa
+            const coordenadas = [];
+
+            // Iterar sobre las filas de resultados
+            data.forEach(result => {
+              const latitud = result.latitud; // Obtener la latitud
+              const longitud = result.longitud; // Obtener la longitud
+              coordenadas.push([parseFloat(latitud), parseFloat(longitud)]); // Agregar las coordenadas como un par [latitud, longitud]
+            });
+
+            // Llamar a la función para mostrar los resultados en el mapa
+            mostrarResultadosEnMapa(coordenadas);
+          })
+          .catch(error => console.error('Error:', error));
+      }
+
+      // Evento click del botón de filtrar
+      document.getElementById('consult-button').addEventListener('click', function() {
+        filtrarPorFechaYHora(); // Llamar a la función para filtrar por fecha y hora cuando se hace clic en el botón
+      });
+
+      // Función para mostrar los resultados en la tabla
+      function mostrarResultadosEnTabla(data) {
+        const resultadosTbody = document.querySelector('#resultados tbody');
+        resultadosTbody.innerHTML = ''; // Limpiar resultados anteriores
+
+        if (data.error) {
+          // Si hay un error, mostrar mensaje de error en una fila de la tabla
+          const errorRow = document.createElement('tr');
+          const errorCell = document.createElement('td');
+          errorCell.setAttribute('colspan', '4'); // Column span para ocupar todas las columnas
+          errorCell.textContent = data.error;
+          errorRow.appendChild(errorCell);
+          resultadosTbody.appendChild(errorRow);
+        } else {
+          // Mostrar los resultados en filas de la tabla
+          data.forEach(result => {
+            const row = document.createElement('tr');
+            const latitudCell = document.createElement('td');
+            const longitudCell = document.createElement('td');
+            const fechaCell = document.createElement('td');
+            const horaCell = document.createElement('td');
+
+            latitudCell.textContent = result.latitud;
+            longitudCell.textContent = result.longitud;
+            fechaCell.textContent = result.fecha;
+            horaCell.textContent = result.hora;
+
+            row.appendChild(latitudCell);
+            row.appendChild(longitudCell);
+            row.appendChild(fechaCell);
+            row.appendChild(horaCell);
+
+            resultadosTbody.appendChild(row);
           });
-        })
-        .catch(error => console.error('Error:', error));
-    }
+        }
+      }
+
+      // Función para mostrar los resultados en el mapa
+      function mostrarResultadosEnMapa(coordenadas) {
+        // Limpiar marcadores anteriores
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+          }
+        });
+
+        // Agregar marcadores al mapa
+        coordenadas.forEach(coordenada => {
+          const marker = L.marker([coordenada[0], coordenada[1]]).addTo(map);
+          const popupContent = `Latitud: ${coordenada[0]}, Longitud: ${coordenada[1]}`;
+          marker.bindPopup(popupContent);
+        });
+
+        // Ajustar vista del mapa para mostrar todos los marcadores
+        if (coordenadas.length > 0) {
+          const bounds = L.latLngBounds(coordenadas);
+          map.fitBounds(bounds);
+        }
+      }
+    });
   </script>
 </body>
+
 </html>

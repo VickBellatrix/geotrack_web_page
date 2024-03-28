@@ -2,162 +2,200 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
 
-    <script src="https://unpkg.com/leaflet"></script>
-    <style>
-        body {
-            background-color: white;
-            color: rgb(8, 27, 42);
-            font-family: Batangas-Regular;
-            margin: 0;
-            padding: 0;
-        }
+  <script src="https://unpkg.com/leaflet"></script>
+  <style>
+    body {
+      background-color: white;
+      color: rgb(8, 27, 42);
+      font-family: Batangas-Regular;
+      margin: 0;
+      padding: 0;
+    }
 
-        #banner {
-            background-color: rgb(8, 27, 42);
-            color: white;
-            padding: 20px;
-            /* Aumenta el padding del banner */
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 30px;
-            /* Aumenta el tamaño de la fuente del banner */
-        }
+    .logo-container {
+      flex: 1;
+      margin-right: 10px;
+    }
 
-        #map-container {
-            background-color: rgb(191, 210, 224);
-            border-radius: 20px;
-            padding: 20px;
-            /* Agrega un padding al contenedor del mapa */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            width: calc(100vw - 100px);
-            /* Ancho del 100% del viewport menos 40px de margen */
-            max-width: calc(100% - 40px);
-            /* Ancho máximo igual al 100% del viewport menos 40px de margen */
-            text-align: center;
-            margin: 20px auto;
-            /* Mantiene un margen de 20px en la parte superior e inferior, y auto para centrar horizontalmente */
-            overflow-x: auto;
-            /* Agrega desplazamiento horizontal si el contenido es más ancho que el contenedor */
-        }
+    .logo-image {
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      border-radius: 40px;
+    }
 
-        #map {
-            height: 60vh;
-            width: calc(100% - 20px);
-            /* Ancho del 100% menos 40px */
-            border-radius: 20px;
-            border: 3px solid rgb(8, 27, 42);
-        }
+    .title-container {
+      flex: 1;
+      text-align: right;
+      margin-left: 20px;
+    }
 
+    #banner {
+      background-color: rgb(8, 27, 42);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 0px;
+      font-size: 30px;
+    }
 
+    .button-container {
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
 
+    .consult-button {
+      background-color: rgb(8, 27, 42);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 20px 40px;
+      font-size: 26px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        h1,
-        h2 {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            font-weight: bold;
-        }
+    .consult-button:hover {
+      background-color: rgb(4, 20, 32);
+    }
 
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-            /* Agrega un espacio debajo del botón */
-        }
+    .position-container {
+      text-align: center;
+      color: rgb(4, 20, 32);
+      margin-bottom: 20px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
 
-        .button {
-            background-color: rgb(8, 27, 42);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 20px 40px;
-            /* Aumenta el padding para hacer el botón más grande */
-            font-size: 26px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    #map-container {
+      background-color: rgb(191, 210, 224);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: calc(100vw - 100px);
+      max-width: calc(100% - 40px);
+      text-align: center;
+      margin: 10px auto;
+      overflow-x: auto;
+    }
 
-        .button:hover {
-            background-color: rgb(4, 20, 32);
-        }
-    </style>
+    #map {
+      height: 60vh;
+      width: calc(100% - 20px);
+      border-radius: 20px;
+      border: 3px solid rgb(8, 27, 42);
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 10px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 80px;
+    }
+
+    h2 {
+      text-align: center;
+      color: rgb(255, 255, 255);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    h3 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
-        <div style="flex: 1; margin-right: 10px;">
-            <img src="/views/Media/logo.jpeg" style="max-width: 160px; width: 100%; height: auto; border-radius: 40px;">
-        </div>
-        <div style="flex: 1; text-align: right; margin-left: 20px;">
-            <h1>Geotrack</h1>
-        </div>
+  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+    <div class="logo-container">
+      <img src="/views/Media/logo.jpeg" class="logo-image">
     </div>
+    <div class="title-container">
+      <h1>Geotrack</h1>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button class="consult-button" id="buscar-datos">
+      <h2>
+        CONSULTA DE HISTORICOS
+      </h2>
+    </button>
+  </div>
+
+  <div id="map-container">
+    <div class="position-container">
+      <h3>POSICIÓN EN TIEMPO REAL</h3>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    function initMap() {
+      var map = L.map('map').setView([10.8941, -74.8041], 13);
+      var polyline = L.polyline([], {
+        color: 'red'
+      }).addTo(map);
+      var currentMarker = null;
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      function actualizarUbicacion() {
+        fetch('/latest-data')
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.latitud && data.longitud) {
+                    const { latitud, longitud, fecha, hora } = data;
+                    const popupContent = `Usted se encuentra aquí\n(latitud: ${latitud}, longitud: ${longitud})\nFecha: ${fecha}\nHora: ${hora}`;
+                    
+                    if (currentMarker) {
+                        map.removeLayer(currentMarker);
+                    }
+    
+                    currentMarker = L.marker([latitud, longitud]).addTo(map)
+                        .bindPopup(popupContent)
+                        .openPopup();
+    
+                    polyline.addLatLng([latitud, longitud]);
+                    map.setView([latitud, longitud], 13);
+                } else {
+                    console.error('Los datos recibidos no son válidos:', data);
+                }
+            })
+            .catch(error => console.error('Error al obtener los datos:', error));
+    }
+    
+    actualizarUbicacion();
+    setInterval(actualizarUbicacion, 5000);}
     
     
-    
-
-
-    <div class="button-container"> <!-- Contenedor para centrar el botón horizontalmente -->
-        <button class="button" id="buscar-datos">CONSULTA DE HISTORICOS</button>
-    </div>
-
-    <div id="map-container">
-        <div id="map"></div>
-    </div>
-
-    <script>
-        function initMap() {
-            var map = L.map('map').setView([10.8941, -74.8041], 13);
-            var polyline = L.polyline([], { color: 'red' }).addTo(map); // Polilínea para el recorrido
-            var currentMarker = null; // Variable para el marcador actual
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            function actualizarUbicacion() {
-                fetch('/latest-data')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.lati && data.longi && data.fecha && data.timestamp) {
-                            // Eliminar el marcador anterior
-                            if (currentMarker) {
-                                map.removeLayer(currentMarker);
-                            }
-
-                            // Agregar el nuevo marcador
-                            currentMarker = L.marker([data.lati, data.longi]).addTo(map)
-                                .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:' + data.fecha + '\nHora:' + data.timestamp + '')
-                                .openPopup();
-
-                            // Agregar punto a la polilínea para trazar el recorrido
-                            polyline.addLatLng([data.lati, data.longi]);
-
-                            // Centrar el mapa en la nueva ubicación
-                            map.setView([data.lati, data.longi], 13);
-                        } else {
-                            console.error('Los datos recibidos no son válidos:', data);
-                        }
-                    })
-                    .catch(error => console.error('Error al obtener los datos:', error));
-            }
-            actualizarUbicacion();
-            setInterval(actualizarUbicacion, 5000);
-        }
-        // Redireccionar al hacer clic en el botón
-        document.getElementById('buscar-datos').addEventListener('click', function () {
-            window.location.href = 'http://localhost:3000/historicos';
-        });
-
-        document.addEventListener('DOMContentLoaded', initMap);
-    </script>
+    document.getElementById('buscar-datos').addEventListener('click', function() {
+      window.location.href = 'http://localhost:3000/historicos';
+    });
+    document.addEventListener('DOMContentLoaded', initMap);
+  </script>
 </body>
 
 </html>

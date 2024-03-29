@@ -19,6 +19,7 @@ This project showcases practices in DevOps methodologies, including continuous i
 De la página 
 - [] Despliegue en cada una de las instancias
 - [] Url sin el puerto
+- las url de direccionamiento de cada pagina segun la ip de cada instancia (dice localhost)
 
 Del github
 - [] Que no se pueda subir al main sin la aprobación de todos

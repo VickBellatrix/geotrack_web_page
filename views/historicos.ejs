@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mapa</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css" />
 
   <script src="https://unpkg.com/leaflet"></script>
   <style>
@@ -246,7 +245,7 @@
     <div class="logo-container">
       <img src="/views/Media/logo.jpeg" class="logo-image">
     </div>
-    <div class="title-container">
+    <div class="title-container" style="text-align: center">
       <h1>Geotrack</h1>
     </div>
   </div>
@@ -259,7 +258,7 @@
 
   <div id="busqueda-container">
     <div style="text-align: center; color: rgb(4, 20, 32); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;">
-      ¿DÓNDE ESTUVO EN EL SIGUIENTE RANGO DE TIEMPO?
+      BÚSQUEDA DE HISTORICOS POR FECHA Y HORA
     </div>
 
     <div>
@@ -317,8 +316,6 @@
 
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Declarar map como una variable global para que sea accesible en todas las funciones
       var map;
 
       function initMap() {
@@ -478,7 +475,6 @@
           map.fitBounds(bounds);
         }
       }
-    });
   </script>
 </body>
 

@@ -71,7 +71,8 @@ server.on('connection', (socket) => {
         const horaMinutos = valoresSeparados[3].split(':');
         let horas = parseInt(horaMinutos[0]);
         const minutos = horaMinutos[1];
-
+        latestData.usuario = valoresSeparados[4];
+        
         // Convertir a formato de 24 horas si es necesario
         const amPm = valoresSeparados[4];
         if (amPm === 'p.' && horas !== 12) {
@@ -89,15 +90,18 @@ server.on('connection', (socket) => {
         }
 
         latestData.timestamp = `${horaFormateada}:${minutos}`;
+        
+        
 
         console.log(`latitud: ${latestData.lati}`);
         console.log(`longitud: ${latestData.longi}`);
         console.log(`fecha: ${latestData.fecha}`);
         console.log(`hora: ${latestData.timestamp}`);
+        console.log(`Usuario: ${latestData.usuario}`); 
 
         // Inserción de los datos en la base de datos
-        const sql = `INSERT INTO coords (latitud, longitud, fecha, hora) VALUES (?, ?, ?, ?)`;
-        connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp], (error, results) => {
+        const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario) VALUES (?, ?, ?, ?, ?)`;
+        connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp, latestData.usuario], (error, results) => {
             if (error) console.error(error);
             else console.log("Datos insertados correctamente en la base de datos");
 

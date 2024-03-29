@@ -14,7 +14,7 @@ Key Components:
 
 This project showcases practices in DevOps methodologies, including continuous integration and deployment (CI/CD) and version control. It fosters collaboration among development, operations, and QA teams, ensuring seamless deployment and maintenance of the geotracking system.
 
-Cosas por arreglar
+**Cosas por arreglar**
 
 De la página 
 - [] Despliegue en cada una de las instancias

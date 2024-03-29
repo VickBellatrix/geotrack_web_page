@@ -44,6 +44,24 @@
       font-size: 30px;
     }
 
+    #banner-space {
+      background-color: rgb(191, 210, 224);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 0px;
+      font-size: 5px;
+    }
+
+    #banner-space1 {
+      background-color: rgb(191, 210, 224);
+      color: white;
+      padding: 5px;
+      text-align: center;
+      margin-bottom: 0px;
+      font-size: 5px;
+    }
+
     .button-container {
       text-align: center;
       margin-bottom: 10px;
@@ -241,10 +259,13 @@
 </head>
 
 <body>
-  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+  <div id="banner" style="display: flex; justify-content: space-between;">
     <div class="logo-container">
       <img src="/views/Media/logo.jpeg" class="logo-image">
     </div>
+  </div>
+
+  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
     <div class="title-container" style="text-align: center">
       <h1>Geotrack</h1>
     </div>
@@ -268,6 +289,9 @@
       <input type="date" id="fecha-fin">
     </div>
 
+    <div id="banner-space1">
+    </div>
+
     <div id="checkBox">
       <label for="buscar-por-hora">
         <input type="checkbox" id="buscar-por-hora"> Filtrar por hora
@@ -285,11 +309,35 @@
       <button class="consult-button" onclick="filtrarPorFechaYHora()">Filtrar</button>
     </div>
 
+    <div id="banner-space">
+    </div>
+
     <div>
-      <p>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></p>
-      <p>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></p>
-      <p>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></p>
-      <p>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></p>
+      <label>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
+    </div>
+
+    <div>
+      <label>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
+    </div>
+
+    <div>
+      <label>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
+    </div>
+
+    <div>
+      <label>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
     </div>
 
     <div class="map-container">

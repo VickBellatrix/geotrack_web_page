@@ -31,7 +31,7 @@ En la visualización en tiempo real
 - Hacer que el popup de información de ubicación y timestamp solo salga cuando se hace click en el marcador de ubicación
 
 En la visualización de historicos
-- Añadir polilinea de los recorridos históricos 
+- ~~Añadir polilinea de los recorridos históricos~~
 - Enviar mensaje de advertencia cuando no hay datos en las fechas seleccionadas
 - ~~Que filtre por horas~~
 - Que el formato de horas no dependa del sistema operativo

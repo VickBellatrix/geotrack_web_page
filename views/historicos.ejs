@@ -450,7 +450,9 @@
             data.forEach(result => {
               const latitud = result.latitud; // Obtener la latitud
               const longitud = result.longitud; // Obtener la longitud
-              coordenadas.push([parseFloat(latitud), parseFloat(longitud)]); // Agregar las coordenadas como un par [latitud, longitud]
+              const fecha = result.fecha;
+              const hora =result.hora;
+              coordenadas.push([parseFloat(latitud), parseFloat(longitud), fecha, hora]); // Agregar las coordenadas como un par [latitud, longitud]
             });
 
             // Llamar a la función para mostrar los resultados en el mapa
@@ -510,18 +512,49 @@
           }
         });
 
-        // Agregar marcadores al mapa
-        coordenadas.forEach(coordenada => {
-          const marker = L.marker([coordenada[0], coordenada[1]]).addTo(map);
-          const popupContent = `Latitud: ${coordenada[0]}, Longitud: ${coordenada[1]}`;
-          marker.bindPopup(popupContent);
+        const polylinePoints = coordenadas.map(coordenada => [coordenada[0], coordenada[1]]);
+        const polyline = L.polyline(polylinePoints, { color: 'red' }).addTo(map);
+
+        const startMarker = L.marker([coordenadas[0][0], coordenadas[0][1]]).addTo(map);
+        const endMarker = L.marker([coordenadas[coordenadas.length - 1][0], coordenadas[coordenadas.length - 1][1]]).addTo(map);
+
+        // Crear contenido para los popups de los marcadores
+        const startMarkerPopupContent = `Inicio del recorrido:<br>Latitud: ${coordenadas[0][0]}, Longitud: ${coordenadas[0][1]}<br>Fecha: ${coordenadas[0][2]}<br>Hora: ${coordenadas[0][3]}`;
+        const endMarkerPopupContent = `Fin del recorrido:<br>Latitud: ${coordenadas[coordenadas.length - 1][0]}, Longitud: ${coordenadas[coordenadas.length - 1][1]}<br>Fecha: ${coordenadas[coordenadas.length - 1][2]}<br>Hora: ${coordenadas[coordenadas.length - 1][3]}`;
+
+        // Agregar popups a los marcadores
+        startMarker.bindPopup(startMarkerPopupContent);
+        endMarker.bindPopup(endMarkerPopupContent);
+
+        // Evento de clic en el marcador de inicio
+        startMarker.on('click', function (e) {
+          startMarker.openPopup();
         });
 
+        // Evento de clic en el marcador de fin
+        endMarker.on('click', function (e) {
+          endMarker.openPopup();
+        });
+        
+        const bounds = L.latLngBounds(polylinePoints);
+        bounds.extend(startMarker.getLatLng());
+        bounds.extend(endMarker.getLatLng());
+
+        // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
+        map.fitBounds(bounds);
+
+        // Agregar marcadores al mapa
+        //coordenadas.forEach(coordenada => {
+        //  const marker = L.marker([coordenada[0], coordenada[1]]).addTo(map);
+        //  const popupContent = `Latitud: ${coordenada[0]}, Longitud: ${coordenada[1]}`;
+        //  marker.bindPopup(popupContent);
+        //});
+
         // Ajustar vista del mapa para mostrar todos los marcadores
-        if (coordenadas.length > 0) {
-          const bounds = L.latLngBounds(coordenadas);
-          map.fitBounds(bounds);
-        }
+        //if (coordenadas.length > 0) {
+        //  const bounds = L.latLngBounds(coordenadas);
+        //  map.fitBounds(bounds);
+        //}
       }
   </script>
 </body>

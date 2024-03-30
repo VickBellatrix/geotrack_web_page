@@ -27,8 +27,8 @@ Del github
 - Variables de entorno
 
 En la visualización en tiempo real
-- Que el zoom del mapa no sea impuesto
-- Hacer que el popup de información de ubicación y timestamp solo salga cuando se hace click en el marcador de ubicación
+- ~~Que el zoom del mapa no sea impuesto~~
+- ~~Hacer que el popup de información de ubicación y timestamp solo salga cuando se hace click en el marcador de ubicación~~
 
 En la visualización de historicos
 - ~~Añadir polilinea de los recorridos históricos~~

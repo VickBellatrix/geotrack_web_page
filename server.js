@@ -163,10 +163,11 @@ app.get('/historicos', (req, res) => {
 
 // Ruta para filtrar por rango de fechas
 app.get('/filtrar-por-fechas', (req, res) => {
-    const { fechaInicio, fechaFin } = req.query;
+    const { fechaInicio, fechaFin, horaInicio, horaFin } = req.query;
 
-    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ?';
-    connection.query(sql, [fechaInicio, fechaFin], (error, results) => {
+    // Utiliza los valores de fecha y hora en tu consulta SQL para filtrar los datos
+    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ? AND hora BETWEEN ? AND ?';
+    connection.query(sql, [fechaInicio, fechaFin, horaInicio, horaFin], (error, results) => {
         if (error) {
             console.error(error);
             res.status(500).send('Error interno del servidor');

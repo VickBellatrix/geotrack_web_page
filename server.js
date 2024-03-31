@@ -14,11 +14,18 @@ let latestData = {
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
-    host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
+    //host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
+    //user: 'admin',
+    //password: '17091709',
+
+    host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
     user: 'admin',
-    password: '17091709',
-    database: 'db_geotrack',
+    password: 'adastra2',
+
+    database: 'geotrack',
 });
+
+
 
 // Conección a la base de datos
 connection.connect(function (err) {
@@ -52,7 +59,7 @@ server.on('connection', (socket) => {
 
     // Manejo de los datos recibidos
     socket.on('data', (data) => {
-        console.log(`Datos capturados por el sniffer: ${data}`);
+        console.log(`Datos capturados por el sniffer:${data}`);
 
         const mensajito = String(data);
 
@@ -68,31 +75,32 @@ server.on('connection', (socket) => {
         latestData.fecha = fechaFormateada;
 
         // Obtener la hora y los minutos de la marca de tiempo
-        const horaMinutos = valoresSeparados[3].split(':');
-        let horas = parseInt(horaMinutos[0]);
-        const minutos = horaMinutos[1];
-        latestData.usuario = valoresSeparados[4];
-        
-        // Convertir a formato de 24 horas si es necesario
-        const amPm = valoresSeparados[4];
-        if (amPm === 'p.' && horas !== 12) {
-            horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche
-        } else if (amPm === 'a.' && horas === 12) {
-            horas = 0; // Establecer la hora a 0 si es medianoche y "a. m."
-        }
+        //const horaMinutos = valoresSeparados[3].split(':');
+        //let horas = parseInt(horaMinutos[0]);
+        //const minutos = horaMinutos[1];
 
-        // Formatear la hora en formato de 24 horas
-        let horaFormateada;
-        if (horas === 0) {
-            horaFormateada = '00';
-        } else {
-            horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
-        }
-
-        latestData.timestamp = `${horaFormateada}:${minutos}`;
+  
         
-        
+        // // Convertir a formato de 24 horas si es necesario
+        // const amPm = valoresSeparados[4];
+        // if (amPm === 'p.m' && horas !== 12) {
+        //     horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche 4
+        // } else if (amPm === 'a.m' && horas === 12) {
+        //     horas = 0; // Establecer la hora a 0 si es medianoche y "a. m."
+        // }
 
+        // // Formatear la hora en formato de 24 horas
+        // let horaFormateada;
+        // if (horas === 0) {
+        //     horaFormateada = '00';
+        // } else {
+        //     horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
+        // }
+
+        // latestData.timestamp = `${horaFormateada}:${minutos}`;
+        latestData.timestamp = valoresSeparados[3]
+        latestData.usuario = valoresSeparados[4];   //Variable para el usuario
+        
         console.log(`latitud: ${latestData.lati}`);
         console.log(`longitud: ${latestData.longi}`);
         console.log(`fecha: ${latestData.fecha}`);

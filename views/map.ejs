@@ -145,12 +145,26 @@
     </button>
   </div>
 
+
+  <div class="button-container">
+    <button class="consult-button" id="centrar-mapa">
+      <h2>
+        Centrar en posición actual
+      </h2>
+    </button>
+  </div>
+
+
+
+
   <div id="map-container">
     <div class="position-container">
       <h3>POSICIÓN EN TIEMPO REAL</h3>
     </div>
     <div id="map"></div>
   </div>
+
+  
 
   <script>
     function initMap() {
@@ -164,6 +178,9 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
+
+
+
       function actualizarUbicacion() {
         fetch('/latest-data')
             .then(response => response.json())
@@ -176,14 +193,33 @@
 
                   // Agregar el nuevo marcador
                   currentMarker = L.marker([data.lati, data.longi]).addTo(map)
-                      .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
-                      .openPopup();
+                  //    .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
+                 //     .openPopup();
+
+                 currentMarker.on('click', function(e) {
+                    var popupContent = 'Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'';
+                    currentMarker.bindPopup(popupContent).openPopup();
+                });
 
                   // Agregar punto a la polilínea para trazar el recorrido
                   polyline.addLatLng([data.lati, data.longi]);
 
                   // Centrar el mapa en la nueva ubicación
-                  map.setView([data.lati, data.longi], 13);  
+                  //map.setView([data.lati, data.longi], 13);  
+
+                  // Función para centrar el mapa en la posición actual
+                  function centrarMapaEnPosicionActual() {
+                      map.setView([data.lati, data.longi], 20);
+                  }
+
+                  // Evento de clic para centrar el mapa en la posición actual cuando se presiona el botón
+                  document.getElementById('centrar-mapa').addEventListener('click', function() {
+                      centrarMapaEnPosicionActual();
+                  });
+
+        // =================================
+
+
 
                 } else {
                     console.error('Los datos recibidos no son válidos:', data);

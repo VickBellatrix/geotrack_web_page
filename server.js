@@ -55,9 +55,7 @@ server.on('connection', (socket) => {
         console.log(`Datos capturados por el sniffer: ${data}`);
 
         const mensajito = String(data);
-
         const mensaje = mensajito.replace(/"/g, '');
-
         let valoresSeparados = mensaje.split(' ');
 
         latestData.lati = parseFloat(valoresSeparados[0]);
@@ -67,37 +65,31 @@ server.on('connection', (socket) => {
         const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
         latestData.fecha = fechaFormateada;
 
-        // Obtener la hora y los minutos de la marca de tiempo
         const horaMinutos = valoresSeparados[3].split(':');
         let horas = parseInt(horaMinutos[0]);
         const minutos = horaMinutos[1];
-        latestData.usuario = valoresSeparados[4];
-        
+        let amPm = valoresSeparados[4]; // Obtener el período
+
         // Convertir a formato de 24 horas si es necesario
-        const amPm = valoresSeparados[4];
-        if (amPm === 'p.' && horas !== 12) {
-            horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche
+        if (amPm === 'p.') {
+            if (horas !== 12) {
+                horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche
+            }
         } else if (amPm === 'a.' && horas === 12) {
             horas = 0; // Establecer la hora a 0 si es medianoche y "a. m."
         }
 
         // Formatear la hora en formato de 24 horas
-        let horaFormateada;
-        if (horas === 0) {
-            horaFormateada = '00';
-        } else {
-            horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
-        }
+        let horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
 
         latestData.timestamp = `${horaFormateada}:${minutos}`;
-        
-        
 
         console.log(`latitud: ${latestData.lati}`);
         console.log(`longitud: ${latestData.longi}`);
         console.log(`fecha: ${latestData.fecha}`);
         console.log(`hora: ${latestData.timestamp}`);
-        console.log(`Usuario: ${latestData.usuario}`); 
+        console.log(`Usuario: ${latestData.usuario}`);
+
 
         // Inserción de los datos en la base de datos
         const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario) VALUES (?, ?, ?, ?, ?)`;
@@ -158,7 +150,7 @@ app.get('/', (req, res) => {
 // Ruta para filtrar por rango de fechas
 app.get('/historicos', (req, res) => {
     res.render('historicos');
-    
+
 });
 
 // Ruta para filtrar por rango de fechas
@@ -185,5 +177,3 @@ app.use(express.static(__dirname));
 app.listen(portHTTP, () => {
     console.log(`Servidor HTTP escuchando en http://localhost:3000/`);
 });
-
-//Prueba 

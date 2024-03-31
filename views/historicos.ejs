@@ -345,6 +345,7 @@
         <table id="resultados">
           <thead>
             <tr>
+              <th>Usuario</th>
               <th>Latitud</th>
               <th>Longitud</th>
               <th>Fecha</th>
@@ -475,7 +476,7 @@
           // Si hay un error, mostrar mensaje de error en una fila de la tabla
           const errorRow = document.createElement('tr');
           const errorCell = document.createElement('td');
-          errorCell.setAttribute('colspan', '4'); // Column span para ocupar todas las columnas
+          errorCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
           errorCell.textContent = data.error;
           errorRow.appendChild(errorCell);
           resultadosTbody.appendChild(errorRow);
@@ -483,16 +484,19 @@
           // Mostrar los resultados en filas de la tabla
           data.forEach(result => {
             const row = document.createElement('tr');
+            const usuarioCell = document.createElement('td');
             const latitudCell = document.createElement('td');
             const longitudCell = document.createElement('td');
             const fechaCell = document.createElement('td');
             const horaCell = document.createElement('td');
 
+            usuarioCell.textContent = result.usuario; // Obtener el usuario del resultado
             latitudCell.textContent = result.latitud;
             longitudCell.textContent = result.longitud;
             fechaCell.textContent = result.fecha;
             horaCell.textContent = result.hora;
 
+            row.appendChild(usuarioCell);
             row.appendChild(latitudCell);
             row.appendChild(longitudCell);
             row.appendChild(fechaCell);
@@ -543,18 +547,6 @@
         // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
         map.fitBounds(bounds);
 
-        // Agregar marcadores al mapa
-        //coordenadas.forEach(coordenada => {
-        //  const marker = L.marker([coordenada[0], coordenada[1]]).addTo(map);
-        //  const popupContent = `Latitud: ${coordenada[0]}, Longitud: ${coordenada[1]}`;
-        //  marker.bindPopup(popupContent);
-        //});
-
-        // Ajustar vista del mapa para mostrar todos los marcadores
-        //if (coordenadas.length > 0) {
-        //  const bounds = L.latLngBounds(coordenadas);
-        //  map.fitBounds(bounds);
-        //}
       }
   </script>
 </body>

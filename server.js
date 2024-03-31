@@ -14,11 +14,20 @@ let latestData = {
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
-    host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
+
+    //Sara BD
+    //host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
+    //user: 'admin',
+    //password: '17091709',
+
+    host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
     user: 'admin',
-    password: '17091709',
-    database: 'db_geotrack',
+    password: 'adastra2',
+
+    database: 'geotrack',
 });
+
+
 
 // Conección a la base de datos
 connection.connect(function (err) {
@@ -52,7 +61,7 @@ server.on('connection', (socket) => {
 
     // Manejo de los datos recibidos
     socket.on('data', (data) => {
-        console.log(`Datos capturados por el sniffer: ${data}`);
+        console.log(`Datos capturados por el sniffer:${data}`);
 
         const mensajito = String(data);
         const mensaje = mensajito.replace(/"/g, '');
@@ -65,24 +74,31 @@ server.on('connection', (socket) => {
         const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
         latestData.fecha = fechaFormateada;
 
+        // Obtener la hora y los minutos de la marca de tiempo
         const horaMinutos = valoresSeparados[3].split(':');
         let horas = parseInt(horaMinutos[0]);
         const minutos = horaMinutos[1];
-        let amPm = valoresSeparados[4]; // Obtener el período
-
+        latestData.usuario = valoresSeparados[4];
+        
         // Convertir a formato de 24 horas si es necesario
-        if (amPm === 'p.') {
-            if (horas !== 12) {
-                horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche
-            }
+        const amPm = valoresSeparados[4];
+        if (amPm === 'p.' && horas !== 12) {
+            horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche
         } else if (amPm === 'a.' && horas === 12) {
             horas = 0; // Establecer la hora a 0 si es medianoche y "a. m."
         }
 
         // Formatear la hora en formato de 24 horas
-        let horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
+        let horaFormateada;
+        if (horas === 0) {
+            horaFormateada = '00';
+        } else {
+            horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
+        }
 
         latestData.timestamp = `${horaFormateada}:${minutos}`;
+        
+        
 
         console.log(`latitud: ${latestData.lati}`);
         console.log(`longitud: ${latestData.longi}`);
@@ -155,10 +171,11 @@ app.get('/historicos', (req, res) => {
 
 // Ruta para filtrar por rango de fechas
 app.get('/filtrar-por-fechas', (req, res) => {
-    const { fechaInicio, fechaFin } = req.query;
+    const { fechaInicio, fechaFin, horaInicio, horaFin } = req.query;
 
-    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ?';
-    connection.query(sql, [fechaInicio, fechaFin], (error, results) => {
+    // Utiliza los valores de fecha y hora en tu consulta SQL para filtrar los datos
+    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ? AND hora BETWEEN ? AND ?';
+    connection.query(sql, [fechaInicio, fechaFin, horaInicio, horaFin], (error, results) => {
         if (error) {
             console.error(error);
             res.status(500).send('Error interno del servidor');

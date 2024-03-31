@@ -45,7 +45,7 @@ const net = require('net');
 const server = net.createServer();
 
 // Puerto a escuchar
-const PORT = 20000;
+const PORT = 5000;
 
 // Dirección IP en la que el servidor debe escuchar
 const HOST = '0.0.0.0';

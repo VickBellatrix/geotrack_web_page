@@ -10,7 +10,7 @@ const dbUser = process.env.user;
 const dbPassword = process.env.password;
 const dbName = process.env.database;
 
-//Variables de entorno de la aplicación
+//Variables de entorno 
 console.log(dbHost, dbUser, dbPassword, dbName);
 
 require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
@@ -24,37 +24,11 @@ let latestData = {
 };
 
 // Configurar la conexión a la base de datos
-//const connection = mysql.createConnection({
-
-    //Sara BD
-    //host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
-    //user: 'admin',
-    //password: '17091709',
-
-<<<<<<< HEAD
-    //host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
-    //user: 'admin',
-    //password: 'adastra2',
-    //database: 'geotrack',
-//});
-
 const connection = mysql.createConnection({
     host: process.env.host,
     user: process.env.user,
     password: process.env.password,
     database: process.env.database,
-=======
-   //host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
-    //user: 'admin',
-    //password: 'adastra2',
-
-    //database: 'geotrack',
-
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
->>>>>>> 0877ff7c877c6904e1f26d8488b4c62075b71564
 });
 
 // Conección a la base de datos
@@ -66,7 +40,6 @@ connection.connect(function (err) {
     }
 });
 
-//================================================
 const net = require('net');
 
 // Creación de un servidor TCP

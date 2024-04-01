@@ -32,7 +32,7 @@ En la visualización en tiempo real
 
 En la visualización de historicos
 - ~~Añadir polilinea de los recorridos históricos~~
-- Enviar mensaje de advertencia cuando no hay datos en las fechas seleccionadas
+- ~~Enviar mensaje de advertencia cuando no hay datos en las fechas seleccionadas~~
 - ~~Que filtre por horas~~
 - ~~Que el formato de horas no dependa del sistema operativo~~
 

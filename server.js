@@ -74,6 +74,7 @@ server.on('connection', (socket) => {
 
         const fechaPartes = valoresSeparados[2].split('/');
         const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
+        //latestData.fecha = "2024-03-20";
         latestData.fecha = fechaFormateada;
 
         latestData.timestamp = valoresSeparados[3]

@@ -511,6 +511,14 @@
 
       // Función para mostrar los resultados en el mapa
       function mostrarResultadosEnMapa(coordenadas) {
+
+        // Limpiar polilíneas anteriores
+        map.eachLayer(function(layer) {
+        if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+        }
+        });
+
         // Limpiar marcadores anteriores
         map.eachLayer(function(layer) {
           if (layer instanceof L.Marker) {

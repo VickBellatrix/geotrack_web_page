@@ -19,11 +19,10 @@ This project showcases practices in DevOps methodologies, including continuous i
 De la página 
 - Despliegue en cada una de las instancias
 - Url sin el puerto
-- Las url de direccionamiento de cada pagina segun la ip de cada instancia (dice localhost)
+- ~~Las url de direccionamiento de cada pagina segun la ip de cada instancia (dice localhost)~~
 
 Del github
-- Que no se pueda subir al main sin la aprobación de todos
-- Que el main tenga todas las prevenciones para evitar conflictos o perdidas de líneas accidentales
+- ~~Que no se pueda subir al main sin la aprobación de todos~~
 - ~~Variables de entorno~~
 
 En la visualización en tiempo real
@@ -40,5 +39,3 @@ En la base de datos
 - Nutrir la base de datos con información acerca de las últimas 2 semanas
 
 **Hacer pruebas para ambas páginas de tiempo real e históricos**
-
-//Comment

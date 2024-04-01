@@ -470,18 +470,19 @@
       });
 
       // Función para mostrar los resultados en la tabla
+      // Función para mostrar los resultados en la tabla
       function mostrarResultadosEnTabla(data) {
         const resultadosTbody = document.querySelector('#resultados tbody');
         resultadosTbody.innerHTML = ''; // Limpiar resultados anteriores
 
-        if (data.error) {
-          // Si hay un error, mostrar mensaje de error en una fila de la tabla
-          const errorRow = document.createElement('tr');
-          const errorCell = document.createElement('td');
-          errorCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
-          errorCell.textContent = data.error;
-          errorRow.appendChild(errorCell);
-          resultadosTbody.appendChild(errorRow);
+        if (data.length === 0) {
+          // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
+          const noDataMessage = document.createElement('tr');
+          const messageCell = document.createElement('td');
+          messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
+          messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
+          noDataMessage.appendChild(messageCell);
+          resultadosTbody.appendChild(noDataMessage);
         } else {
           // Mostrar los resultados en filas de la tabla
           data.forEach(result => {

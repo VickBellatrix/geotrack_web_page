@@ -24,7 +24,7 @@ De la página
 Del github
 - Que no se pueda subir al main sin la aprobación de todos
 - Que el main tenga todas las prevenciones para evitar conflictos o perdidas de líneas accidentales
-- Variables de entorno
+- ~~Variables de entorno~~
 
 En la visualización en tiempo real
 - ~~Que el zoom del mapa no sea impuesto~~

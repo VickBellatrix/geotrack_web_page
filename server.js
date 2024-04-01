@@ -3,6 +3,17 @@ const mysql = require('mysql');
 const app = express();
 const path = require('path');
 const historicosview = require('./historicosview');
+require('dotenv').config();
+
+const dbHost = process.env.host;
+const dbUser = process.env.user;
+const dbPassword = process.env.password;
+const dbName = process.env.database;
+
+//Variables de entorno 
+console.log(dbHost, dbUser, dbPassword, dbName);
+
+require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
 
 // Inicializar latestData para almacenar los últimos datos recibidos del sniffer
 let latestData = {
@@ -14,20 +25,11 @@ let latestData = {
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
-
-    //Sara BD
-    //host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
-    //user: 'admin',
-    //password: '17091709',
-
-    host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
-    user: 'admin',
-    password: 'adastra2',
-
-    database: 'geotrack',
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database,
 });
-
-
 
 // Conección a la base de datos
 connection.connect(function (err) {
@@ -38,7 +40,6 @@ connection.connect(function (err) {
     }
 });
 
-//================================================
 const net = require('net');
 
 // Creación de un servidor TCP
@@ -72,6 +73,7 @@ server.on('connection', (socket) => {
 
         const fechaPartes = valoresSeparados[2].split('/');
         const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
+        //latestData.fecha = "2024-03-20";
         latestData.fecha = fechaFormateada;
 
         // Obtener la hora y los minutos de la marca de tiempo

@@ -298,12 +298,14 @@
       </label>
     </div>
 
+    <!-- Modificamos el contenedor de las horas para aceptar formato de 24 horas -->
     <div id="hora-container" style="display: none;">
       <label for="hora-inicio" id="label-hora-inicio" style="font-size: 20px; margin-left: 20px;">Hora de inicio:</label>
-      <input type="time" id="hora-inicio" style="width: 150px;">
+      <input type="time" id="hora-inicio" style="width: 150px;" step="1">
       <label for="hora-fin" id="label-hora-fin" style="font-size: 20px; margin-left: 20px;">Hora de fin:</label>
-      <input type="time" id="hora-fin" style="width: 150px;">
+      <input type="time" id="hora-fin" style="width: 150px;" step="1">
     </div>
+
 
     <div>
       <button class="consult-button" onclick="filtrarPorFechaYHora()">Filtrar</button>
@@ -345,6 +347,7 @@
         <table id="resultados">
           <thead>
             <tr>
+              <th>Usuario</th>
               <th>Latitud</th>
               <th>Longitud</th>
               <th>Fecha</th>
@@ -379,7 +382,10 @@
       initMap();
 
       document.getElementById('buscar-datos').addEventListener('click', function() {
-        window.location.href = 'http://localhost:3000/';
+        //window.location.href = 'http://localhost:3000/';
+        var currentLocation = window.location.href;
+        var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1);
+        window.location.href = url;
       });
 
       // Asignar a las variables los elementos del DOM
@@ -419,8 +425,8 @@
 
         // Si se busca por hora, obtener los valores de hora introducidos por el usuario
         if (buscarPorHora) {
-          horaInicio = document.getElementById('hora-inicio').value + ':00'; // Agregar segundos
-          horaFin = document.getElementById('hora-fin').value + ':59'; // Agregar segundos
+          horaInicio = document.getElementById('hora-inicio').value;// + ':00'; // Agregar segundos
+          horaFin = document.getElementById('hora-fin').value;//+ ':59'; // Agregar segundos
         }
 
         // Verificar si se han seleccionado las fechas
@@ -467,32 +473,36 @@
       });
 
       // Función para mostrar los resultados en la tabla
+      // Función para mostrar los resultados en la tabla
       function mostrarResultadosEnTabla(data) {
         const resultadosTbody = document.querySelector('#resultados tbody');
         resultadosTbody.innerHTML = ''; // Limpiar resultados anteriores
 
-        if (data.error) {
-          // Si hay un error, mostrar mensaje de error en una fila de la tabla
-          const errorRow = document.createElement('tr');
-          const errorCell = document.createElement('td');
-          errorCell.setAttribute('colspan', '4'); // Column span para ocupar todas las columnas
-          errorCell.textContent = data.error;
-          errorRow.appendChild(errorCell);
-          resultadosTbody.appendChild(errorRow);
+        if (data.length === 0) {
+          // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
+          const noDataMessage = document.createElement('tr');
+          const messageCell = document.createElement('td');
+          messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
+          messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
+          noDataMessage.appendChild(messageCell);
+          resultadosTbody.appendChild(noDataMessage);
         } else {
           // Mostrar los resultados en filas de la tabla
           data.forEach(result => {
             const row = document.createElement('tr');
+            const usuarioCell = document.createElement('td');
             const latitudCell = document.createElement('td');
             const longitudCell = document.createElement('td');
             const fechaCell = document.createElement('td');
             const horaCell = document.createElement('td');
 
+            usuarioCell.textContent = result.usuario; // Obtener el usuario del resultado
             latitudCell.textContent = result.latitud;
             longitudCell.textContent = result.longitud;
             fechaCell.textContent = result.fecha;
             horaCell.textContent = result.hora;
 
+            row.appendChild(usuarioCell);
             row.appendChild(latitudCell);
             row.appendChild(longitudCell);
             row.appendChild(fechaCell);
@@ -505,6 +515,14 @@
 
       // Función para mostrar los resultados en el mapa
       function mostrarResultadosEnMapa(coordenadas) {
+
+        // Limpiar polilíneas anteriores
+        map.eachLayer(function(layer) {
+        if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+        }
+        });
+
         // Limpiar marcadores anteriores
         map.eachLayer(function(layer) {
           if (layer instanceof L.Marker) {
@@ -543,18 +561,6 @@
         // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
         map.fitBounds(bounds);
 
-        // Agregar marcadores al mapa
-        //coordenadas.forEach(coordenada => {
-        //  const marker = L.marker([coordenada[0], coordenada[1]]).addTo(map);
-        //  const popupContent = `Latitud: ${coordenada[0]}, Longitud: ${coordenada[1]}`;
-        //  marker.bindPopup(popupContent);
-        //});
-
-        // Ajustar vista del mapa para mostrar todos los marcadores
-        //if (coordenadas.length > 0) {
-        //  const bounds = L.latLngBounds(coordenadas);
-        //  map.fitBounds(bounds);
-        //}
       }
   </script>
 </body>

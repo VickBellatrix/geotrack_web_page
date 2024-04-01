@@ -383,10 +383,9 @@
 
       document.getElementById('buscar-datos').addEventListener('click', function() {
         //window.location.href = 'http://localhost:3000/';
-        var currentLocation = window.location.origin;
-
-        // Redirigir al usuario a la raíz del proyecto en la dirección y puerto de la instancia
-        window.location.href = currentLocation + ':3000/';
+        var currentLocation = window.location.href;
+        var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1);
+        window.location.href = url;
       });
 
       // Asignar a las variables los elementos del DOM

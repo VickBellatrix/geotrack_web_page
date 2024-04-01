@@ -3,6 +3,17 @@ const mysql = require('mysql');
 const app = express();
 const path = require('path');
 const historicosview = require('./historicosview');
+require('dotenv').config();
+
+const dbHost = process.env.host;
+const dbUser = process.env.user;
+const dbPassword = process.env.password;
+const dbName = process.env.database;
+
+//Variables de entorno 
+console.log(dbHost, dbUser, dbPassword, dbName);
+
+require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
 
 // Inicializar latestData para almacenar los últimos datos recibidos del sniffer
 let latestData = {
@@ -14,10 +25,10 @@ let latestData = {
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
-    host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
-    user: 'admin',
-    password: '17091709',
-    database: 'db_geotrack',
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database,
 });
 
 // Conección a la base de datos
@@ -29,7 +40,6 @@ connection.connect(function (err) {
     }
 });
 
-//================================================
 const net = require('net');
 
 // Creación de un servidor TCP
@@ -52,7 +62,7 @@ server.on('connection', (socket) => {
 
     // Manejo de los datos recibidos
     socket.on('data', (data) => {
-        console.log(`Datos capturados por el sniffer: ${data}`);
+        console.log(`Datos capturados por el sniffer:${data}`);
 
         const mensajito = String(data);
 
@@ -65,39 +75,21 @@ server.on('connection', (socket) => {
 
         const fechaPartes = valoresSeparados[2].split('/');
         const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
+        //latestData.fecha = "2024-03-20";
         latestData.fecha = fechaFormateada;
 
-        // Obtener la hora y los minutos de la marca de tiempo
-        const horaMinutos = valoresSeparados[3].split(':');
-        let horas = parseInt(horaMinutos[0]);
-        const minutos = horaMinutos[1];
-
-        // Convertir a formato de 24 horas si es necesario
-        const amPm = valoresSeparados[4];
-        if (amPm === 'p.' && horas !== 12) {
-            horas += 12; // Sumar 12 horas si es "p. m." y no es medianoche
-        } else if (amPm === 'a.' && horas === 12) {
-            horas = 0; // Establecer la hora a 0 si es medianoche y "a. m."
-        }
-
-        // Formatear la hora en formato de 24 horas
-        let horaFormateada;
-        if (horas === 0) {
-            horaFormateada = '00';
-        } else {
-            horaFormateada = horas.toString().padStart(2, '0'); // Asegurar que tenga dos dígitos
-        }
-
-        latestData.timestamp = `${horaFormateada}:${minutos}`;
-
+        latestData.timestamp = valoresSeparados[3]
+        latestData.usuario = valoresSeparados[4];   //Variable para el usuario
+        
         console.log(`latitud: ${latestData.lati}`);
         console.log(`longitud: ${latestData.longi}`);
         console.log(`fecha: ${latestData.fecha}`);
         console.log(`hora: ${latestData.timestamp}`);
+        console.log(`Usuario: ${latestData.usuario}`); 
 
         // Inserción de los datos en la base de datos
-        const sql = `INSERT INTO coords (latitud, longitud, fecha, hora) VALUES (?, ?, ?, ?)`;
-        connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp], (error, results) => {
+        const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario) VALUES (?, ?, ?, ?, ?)`;
+        connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp, latestData.usuario], (error, results) => {
             if (error) console.error(error);
             else console.log("Datos insertados correctamente en la base de datos");
 
@@ -159,10 +151,11 @@ app.get('/historicos', (req, res) => {
 
 // Ruta para filtrar por rango de fechas
 app.get('/filtrar-por-fechas', (req, res) => {
-    const { fechaInicio, fechaFin } = req.query;
+    const { fechaInicio, fechaFin, horaInicio, horaFin } = req.query;
 
-    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ?';
-    connection.query(sql, [fechaInicio, fechaFin], (error, results) => {
+    // Utiliza los valores de fecha y hora en tu consulta SQL para filtrar los datos
+    const sql = 'SELECT * FROM coords WHERE fecha BETWEEN ? AND ? AND hora BETWEEN ? AND ?';
+    connection.query(sql, [fechaInicio, fechaFin, horaInicio, horaFin], (error, results) => {
         if (error) {
             console.error(error);
             res.status(500).send('Error interno del servidor');

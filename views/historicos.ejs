@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mapa</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css" />
 
   <script src="https://unpkg.com/leaflet"></script>
   <style>
@@ -43,6 +42,24 @@
       text-align: center;
       margin-bottom: 0px;
       font-size: 30px;
+    }
+
+    #banner-space {
+      background-color: rgb(191, 210, 224);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 0px;
+      font-size: 5px;
+    }
+
+    #banner-space1 {
+      background-color: rgb(191, 210, 224);
+      color: white;
+      padding: 5px;
+      text-align: center;
+      margin-bottom: 0px;
+      font-size: 5px;
     }
 
     .button-container {
@@ -242,11 +259,14 @@
 </head>
 
 <body>
-  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+  <div id="banner" style="display: flex; justify-content: space-between;">
     <div class="logo-container">
       <img src="/views/Media/logo.jpeg" class="logo-image">
     </div>
-    <div class="title-container">
+  </div>
+
+  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+    <div class="title-container" style="text-align: center">
       <h1>Geotrack</h1>
     </div>
   </div>
@@ -259,7 +279,7 @@
 
   <div id="busqueda-container">
     <div style="text-align: center; color: rgb(4, 20, 32); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;">
-      ¿DÓNDE ESTUVO EN EL SIGUIENTE RANGO DE TIEMPO?
+      BÚSQUEDA DE HISTORICOS POR FECHA Y HORA
     </div>
 
     <div>
@@ -269,28 +289,57 @@
       <input type="date" id="fecha-fin">
     </div>
 
+    <div id="banner-space1">
+    </div>
+
     <div id="checkBox">
       <label for="buscar-por-hora">
         <input type="checkbox" id="buscar-por-hora"> Filtrar por hora
       </label>
     </div>
 
+    <!-- Modificamos el contenedor de las horas para aceptar formato de 24 horas -->
     <div id="hora-container" style="display: none;">
       <label for="hora-inicio" id="label-hora-inicio" style="font-size: 20px; margin-left: 20px;">Hora de inicio:</label>
-      <input type="time" id="hora-inicio" style="width: 150px;">
+      <input type="time" id="hora-inicio" style="width: 150px;" step="1">
       <label for="hora-fin" id="label-hora-fin" style="font-size: 20px; margin-left: 20px;">Hora de fin:</label>
-      <input type="time" id="hora-fin" style="width: 150px;">
+      <input type="time" id="hora-fin" style="width: 150px;" step="1">
     </div>
+
 
     <div>
       <button class="consult-button" onclick="filtrarPorFechaYHora()">Filtrar</button>
     </div>
 
+    <div id="banner-space">
+    </div>
+
     <div>
-      <p>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></p>
-      <p>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></p>
-      <p>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></p>
-      <p>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></p>
+      <label>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
+    </div>
+
+    <div>
+      <label>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
+    </div>
+
+    <div>
+      <label>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
+    </div>
+
+    <div>
+      <label>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></label>
+    </div>
+
+    <div id="banner-space">
     </div>
 
     <div class="map-container">
@@ -298,6 +347,7 @@
         <table id="resultados">
           <thead>
             <tr>
+              <th>Usuario</th>
               <th>Latitud</th>
               <th>Longitud</th>
               <th>Fecha</th>
@@ -317,8 +367,6 @@
 
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Declarar map como una variable global para que sea accesible en todas las funciones
       var map;
 
       function initMap() {
@@ -334,7 +382,10 @@
       initMap();
 
       document.getElementById('buscar-datos').addEventListener('click', function() {
-        window.location.href = 'http://localhost:3000/';
+        //window.location.href = 'http://localhost:3000/';
+        var currentLocation = window.location.href;
+        var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1);
+        window.location.href = url;
       });
 
       // Asignar a las variables los elementos del DOM
@@ -374,8 +425,8 @@
 
         // Si se busca por hora, obtener los valores de hora introducidos por el usuario
         if (buscarPorHora) {
-          horaInicio = document.getElementById('hora-inicio').value + ':00'; // Agregar segundos
-          horaFin = document.getElementById('hora-fin').value + ':59'; // Agregar segundos
+          horaInicio = document.getElementById('hora-inicio').value;// + ':00'; // Agregar segundos
+          horaFin = document.getElementById('hora-fin').value;//+ ':59'; // Agregar segundos
         }
 
         // Verificar si se han seleccionado las fechas
@@ -405,7 +456,9 @@
             data.forEach(result => {
               const latitud = result.latitud; // Obtener la latitud
               const longitud = result.longitud; // Obtener la longitud
-              coordenadas.push([parseFloat(latitud), parseFloat(longitud)]); // Agregar las coordenadas como un par [latitud, longitud]
+              const fecha = result.fecha;
+              const hora =result.hora;
+              coordenadas.push([parseFloat(latitud), parseFloat(longitud), fecha, hora]); // Agregar las coordenadas como un par [latitud, longitud]
             });
 
             // Llamar a la función para mostrar los resultados en el mapa
@@ -420,32 +473,36 @@
       });
 
       // Función para mostrar los resultados en la tabla
+      // Función para mostrar los resultados en la tabla
       function mostrarResultadosEnTabla(data) {
         const resultadosTbody = document.querySelector('#resultados tbody');
         resultadosTbody.innerHTML = ''; // Limpiar resultados anteriores
 
-        if (data.error) {
-          // Si hay un error, mostrar mensaje de error en una fila de la tabla
-          const errorRow = document.createElement('tr');
-          const errorCell = document.createElement('td');
-          errorCell.setAttribute('colspan', '4'); // Column span para ocupar todas las columnas
-          errorCell.textContent = data.error;
-          errorRow.appendChild(errorCell);
-          resultadosTbody.appendChild(errorRow);
+        if (data.length === 0) {
+          // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
+          const noDataMessage = document.createElement('tr');
+          const messageCell = document.createElement('td');
+          messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
+          messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
+          noDataMessage.appendChild(messageCell);
+          resultadosTbody.appendChild(noDataMessage);
         } else {
           // Mostrar los resultados en filas de la tabla
           data.forEach(result => {
             const row = document.createElement('tr');
+            const usuarioCell = document.createElement('td');
             const latitudCell = document.createElement('td');
             const longitudCell = document.createElement('td');
             const fechaCell = document.createElement('td');
             const horaCell = document.createElement('td');
 
+            usuarioCell.textContent = result.usuario; // Obtener el usuario del resultado
             latitudCell.textContent = result.latitud;
             longitudCell.textContent = result.longitud;
             fechaCell.textContent = result.fecha;
             horaCell.textContent = result.hora;
 
+            row.appendChild(usuarioCell);
             row.appendChild(latitudCell);
             row.appendChild(longitudCell);
             row.appendChild(fechaCell);
@@ -458,6 +515,14 @@
 
       // Función para mostrar los resultados en el mapa
       function mostrarResultadosEnMapa(coordenadas) {
+
+        // Limpiar polilíneas anteriores
+        map.eachLayer(function(layer) {
+        if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+        }
+        });
+
         // Limpiar marcadores anteriores
         map.eachLayer(function(layer) {
           if (layer instanceof L.Marker) {
@@ -465,20 +530,38 @@
           }
         });
 
-        // Agregar marcadores al mapa
-        coordenadas.forEach(coordenada => {
-          const marker = L.marker([coordenada[0], coordenada[1]]).addTo(map);
-          const popupContent = `Latitud: ${coordenada[0]}, Longitud: ${coordenada[1]}`;
-          marker.bindPopup(popupContent);
+        const polylinePoints = coordenadas.map(coordenada => [coordenada[0], coordenada[1]]);
+        const polyline = L.polyline(polylinePoints, { color: 'red' }).addTo(map);
+
+        const startMarker = L.marker([coordenadas[0][0], coordenadas[0][1]]).addTo(map);
+        const endMarker = L.marker([coordenadas[coordenadas.length - 1][0], coordenadas[coordenadas.length - 1][1]]).addTo(map);
+
+        // Crear contenido para los popups de los marcadores
+        const startMarkerPopupContent = `Inicio del recorrido:<br>Latitud: ${coordenadas[0][0]}, Longitud: ${coordenadas[0][1]}<br>Fecha: ${coordenadas[0][2]}<br>Hora: ${coordenadas[0][3]}`;
+        const endMarkerPopupContent = `Fin del recorrido:<br>Latitud: ${coordenadas[coordenadas.length - 1][0]}, Longitud: ${coordenadas[coordenadas.length - 1][1]}<br>Fecha: ${coordenadas[coordenadas.length - 1][2]}<br>Hora: ${coordenadas[coordenadas.length - 1][3]}`;
+
+        // Agregar popups a los marcadores
+        startMarker.bindPopup(startMarkerPopupContent);
+        endMarker.bindPopup(endMarkerPopupContent);
+
+        // Evento de clic en el marcador de inicio
+        startMarker.on('click', function (e) {
+          startMarker.openPopup();
         });
 
-        // Ajustar vista del mapa para mostrar todos los marcadores
-        if (coordenadas.length > 0) {
-          const bounds = L.latLngBounds(coordenadas);
-          map.fitBounds(bounds);
-        }
+        // Evento de clic en el marcador de fin
+        endMarker.on('click', function (e) {
+          endMarker.openPopup();
+        });
+        
+        const bounds = L.latLngBounds(polylinePoints);
+        bounds.extend(startMarker.getLatLng());
+        bounds.extend(endMarker.getLatLng());
+
+        // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
+        map.fitBounds(bounds);
+
       }
-    });
   </script>
 </body>
 

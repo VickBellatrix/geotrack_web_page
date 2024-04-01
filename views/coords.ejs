@@ -12,6 +12,7 @@
         <li>Longitud: <span id="longitud"></span></li>
         <li>Fecha: <span id="fecha"></span></li>
         <li>Hora: <span id="hora"></span></li>
+        <li>Usuario: <span id="Usuario"></span></li>
 
     </ul>
 
@@ -26,6 +27,7 @@
                 document.getElementById('longitud').innerText = data.longi;
                 document.getElementById('fecha').innerText = data.fecha;
                 document.getElementById('hora').innerText = data.timestamp;
+                document.getElementById('Usuario').innerText = data.usuario;
             })
             .catch(error => console.error('Error al obtener los datos:', error));
         }

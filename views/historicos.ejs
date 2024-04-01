@@ -382,7 +382,11 @@
       initMap();
 
       document.getElementById('buscar-datos').addEventListener('click', function() {
-        window.location.href = 'http://localhost:3000/';
+        //window.location.href = 'http://localhost:3000/';
+
+        var currentLocation = window.location.href;
+        var url = currentLocation;
+        window.location.href = url;
       });
 
       // Asignar a las variables los elementos del DOM

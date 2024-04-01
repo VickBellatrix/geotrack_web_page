@@ -4,6 +4,8 @@ const app = express();
 const path = require('path');
 const historicosview = require('./historicosview');
 
+require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
+
 // Inicializar latestData para almacenar los últimos datos recibidos del sniffer
 let latestData = {
     lati: 0,
@@ -20,11 +22,16 @@ const connection = mysql.createConnection({
     //user: 'admin',
     //password: '17091709',
 
-    host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
-    user: 'admin',
-    password: 'adastra2',
+   //host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
+    //user: 'admin',
+    //password: 'adastra2',
 
-    database: 'geotrack',
+    //database: 'geotrack',
+
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
 });
 
 

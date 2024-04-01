@@ -233,7 +233,10 @@
     
     
     document.getElementById('buscar-datos').addEventListener('click', function() {
-      window.location.href = 'http://localhost:3000/historicos';
+      //window.location.href = 'http://localhost:3000/historicos';
+      var currentLocation = window.location.href;
+      var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'historicos';
+      window.location.href = url;
     });
     document.addEventListener('DOMContentLoaded', initMap);
   </script>

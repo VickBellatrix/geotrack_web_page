@@ -9,9 +9,11 @@ const dbHost = process.env.host;
 const dbUser = process.env.user;
 const dbPassword = process.env.password;
 const dbName = process.env.database;
+const dBMaster = process.env.MAESTRO;
+
 
 //Variables de entorno 
-console.log(dbHost, dbUser, dbPassword, dbName);
+console.log(dbHost, dbUser, dbPassword, dbName, dBMaster);
 
 require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
 
@@ -29,6 +31,8 @@ const connection = mysql.createConnection({
     user: process.env.user,
     password: process.env.password,
     database: process.env.database,
+    isMaster: process.env.MAESTRO,
+
 });
 
 // Conección a la base de datos
@@ -39,6 +43,18 @@ connection.connect(function (err) {
         console.log("¡Conexión exitosa con la base de datos!")
     }
 });
+
+
+// Definir isMaster después de la conexión a la base de datos
+const isMaster = process.env.MAESTRO === 'true';
+
+if (isMaster) {
+    // Código para escribir en la base de datos
+    console.log('Esta instancia es el maestro, realizando operaciones de escritura en la base de datos...');
+} else {
+    // Si esta instancia no es el maestro, abstenerse de realizar operaciones de escritura
+    console.log('Esta instancia no es el maestro, no se realizan operaciones de escritura en la base de datos.');
+}
 
 const dgram = require('dgram');
 
@@ -150,5 +166,5 @@ app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-    console.log(`Servidor HTTP escuchando en http://localhost:3000/`);
+    console.log(`Servidor HTTP escuchando en c`);
 });

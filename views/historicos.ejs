@@ -616,7 +616,7 @@
 
         // Obtener las coordenadas del círculo dibujado
         var latLng = layer.getLatLng();
-        var radius = layer.getRadius() / 1000; // Convertir el radio a kilómetros
+        var radius = layer.getRadius()
 
         var circleInfo = document.getElementById('circle-info');
         // Mostrar las variables en los elementos del DOM
@@ -625,7 +625,6 @@
       });
 
       function filtrarPorArea() {
-
         // Obtener las coordenadas del centro y el radio
         const latLngLat = parseFloat(document.getElementById('Centro').textContent.split(':')[1].trim()); // Extraer la latitud del centro
         const latLngLng = parseFloat(document.getElementById('Centro').textContent.split(':')[2].trim()); // Extraer la longitud del centro
@@ -635,31 +634,44 @@
         // Crear una nueva matriz para almacenar los datos filtrados
         const DatosFiltrados = [];
 
-        // Obtener la matriz de coordenadas
-        const coordenadas = [];
-
         // Obtener todas las filas de la tabla
         const filas = document.querySelectorAll('#resultados tbody tr');
 
         // Iterar sobre cada fila de la tabla
         filas.forEach(fila => {
+          let radioDato;
+          let latitudDato; // Definir latitudDato fuera del bloque condicional
+          let longitudDato; // Definir longitudDato fuera del bloque condicional
           const datosFila = []; // Crear una matriz para almacenar los datos de cada fila
+
           // Obtener los datos de cada celda de la fila y agregarlos a la matriz de datos de la fila
-          fila.querySelectorAll('td').forEach(celda => {
+          fila.querySelectorAll('td').forEach((celda, index) => {
             datosFila.push(celda.textContent);
+            // Si es la celda de latitud, obtener su valor
+            if (index === 1) {
+              latitudDato = parseFloat(celda.textContent);
+            }
+            // Si es la celda de longitud, obtener su valor
+            if (index === 2) {
+              longitudDato = parseFloat(celda.textContent); // Corregir esta línea
+              console.log(latitudDato, longitudDato);
+              // Calcular la distancia euclidiana
+              radioDato = Math.sqrt(Math.pow(latitudDato - latLngLat, 2) + Math.pow(longitudDato - latLngLng, 2));
+              console.log("RadioDato:", radioDato, latitudDato, longitudDato); // Imprimir en consola el valor de radioDato
+              // Verificar si la distancia es menor o igual al radio y si es así, almacenar el dato
+              if (radioDato <= radius) {
+                DatosFiltrados.push(datosFila);
+              }
+            }
           });
-          coordenadas.push(datosFila); // Agregar los datos de la fila a la matriz de coordenadas
         });
 
-        // Agregar la matriz de coordenadas a la matriz de datos filtrados
-        DatosFiltrados.push(coordenadas);
-
         console.log("Datos Filtrados:", DatosFiltrados);
-
       }
+
       // Evento click del botón de filtrar
       document.getElementById('filtrar1-button').addEventListener('click', function() {
-        filtrarPorArea(); // Llamar a la función para filtrar por fecha y hora cuando se hace clic en el botón
+        filtrarPorArea(); // Llamar a la función para filtrar por área cuando se hace clic en el botón
       });
     </script>
 

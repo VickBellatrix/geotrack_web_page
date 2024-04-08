@@ -121,18 +121,35 @@
       font-weight: bold;
       font-size: 30px;
     }
+
+    .fixed-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      /* Asegura que esté sobre otros elementos */
+      background-color: rgb(8, 27, 42);
+      /* Color de fondo del botón */
+      color: white;
+      /* Color del texto del botón */
+      padding: 10px 20px;
+      /* Espaciado interno del botón */
+      border: none;
+      /* Sin borde */
+      border-radius: 20px;
+      /* Borde redondeado */
+      cursor: pointer;
+      /* Cambia el cursor al pasar sobre el botón */
+    }
   </style>
 </head>
 
 <body>
-  <div id="banner" style="display: flex; justify-content: space-between;">
+  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
     <div class="logo-container">
       <img src="/views/Media/logo.jpeg" class="logo-image">
     </div>
-  </div>
-
-  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
-    <div class="title-container" style="text-align: center">
+    <div class="title-container">
       <h1>Geotrack</h1>
     </div>
   </div>
@@ -145,26 +162,19 @@
     </button>
   </div>
 
-
-  <div class="button-container">
-    <button class="consult-button" id="centrar-mapa">
-      <h2>
-        Centrar en posición actual
-      </h2>
-    </button>
-  </div>
-
-
-
-
   <div id="map-container">
     <div class="position-container">
       <h3>POSICIÓN EN TIEMPO REAL</h3>
     </div>
     <div id="map"></div>
+    <div class="fixed-button" id="centrar-mapa">
+      <h2>
+        Centrar en posición actual
+      </h2>
+    </div>
   </div>
 
-  
+
 
   <script>
     function initMap() {
@@ -183,55 +193,56 @@
 
       function actualizarUbicacion() {
         fetch('/latest-data')
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.lati && data.longi && data.fecha && data.timestamp && data.usuario)  {
-                    // Eliminar el marcador anterior
-                  if (currentMarker) {
-                      map.removeLayer(currentMarker);
-                  }
+          .then(response => response.json())
+          .then(data => {
+            if (data && data.lati && data.longi && data.fecha && data.timestamp && data.usuario) {
+              // Eliminar el marcador anterior
+              if (currentMarker) {
+                map.removeLayer(currentMarker);
+              }
 
-                  // Agregar el nuevo marcador
-                  currentMarker = L.marker([data.lati, data.longi]).addTo(map)
-                  //    .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
-                 //     .openPopup();
+              // Agregar el nuevo marcador
+              currentMarker = L.marker([data.lati, data.longi]).addTo(map)
+              //    .bindPopup('Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'')
+              //     .openPopup();
 
-                 currentMarker.on('click', function(e) {
-                    var popupContent = 'Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:'+data.fecha+'\nTime stamp:'+data.timestamp+'';
-                    currentMarker.bindPopup(popupContent).openPopup();
-                });
+              currentMarker.on('click', function(e) {
+                var popupContent = 'Usted se encuentra aquí\n(latitud: ' + data.lati + ', longitud: ' + data.longi + ')\nFecha:' + data.fecha + '\nTime stamp:' + data.timestamp + '';
+                currentMarker.bindPopup(popupContent).openPopup();
+              });
 
-                  // Agregar punto a la polilínea para trazar el recorrido
-                  polyline.addLatLng([data.lati, data.longi]);
+              // Agregar punto a la polilínea para trazar el recorrido
+              polyline.addLatLng([data.lati, data.longi]);
 
-                  // Centrar el mapa en la nueva ubicación
-                  //map.setView([data.lati, data.longi], 13);  
+              // Centrar el mapa en la nueva ubicación
+              //map.setView([data.lati, data.longi], 13);  
 
-                  // Función para centrar el mapa en la posición actual
-                  function centrarMapaEnPosicionActual() {
-                      map.setView([data.lati, data.longi], 20);
-                  }
+              // Función para centrar el mapa en la posición actual
+              function centrarMapaEnPosicionActual() {
+                map.setView([data.lati, data.longi], 20);
+              }
 
-                  // Evento de clic para centrar el mapa en la posición actual cuando se presiona el botón
-                  document.getElementById('centrar-mapa').addEventListener('click', function() {
-                      centrarMapaEnPosicionActual();
-                  });
+              // Evento de clic para centrar el mapa en la posición actual cuando se presiona el botón
+              document.getElementById('centrar-mapa').addEventListener('click', function() {
+                centrarMapaEnPosicionActual();
+              });
 
-        // =================================
+              // =================================
 
 
 
-                } else {
-                    console.error('Los datos recibidos no son válidos:', data);
-                }
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
+            } else {
+              console.error('Los datos recibidos no son válidos:', data);
+            }
+          })
+          .catch(error => console.error('Error al obtener los datos:', error));
+      }
+
+      actualizarUbicacion();
+      setInterval(actualizarUbicacion, 5000);
     }
-    
-    actualizarUbicacion();
-    setInterval(actualizarUbicacion, 5000);}
-    
-    
+
+
     document.getElementById('buscar-datos').addEventListener('click', function() {
       //window.location.href = 'http://localhost:3000/historicos';
       var currentLocation = window.location.href;

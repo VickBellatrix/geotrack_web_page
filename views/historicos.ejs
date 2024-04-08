@@ -725,8 +725,7 @@
       }
 
       function mostrarResultadosEnMapa1(DatosFiltrados) {
-        // Limpiar polilíneas anteriores
-        drawnItems.clearLayers();
+
 
         // Crear arreglo para almacenar coordenadas de la polilínea
         const polylinePoints = DatosFiltrados.map(coordenada => [parseFloat(coordenada[1]), parseFloat(coordenada[2])]);
@@ -761,7 +760,8 @@
         bounds.extend(endMarker.getLatLng());
 
         // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
-        map2.fitBounds(bounds);
+        map.fitBounds(bounds);
+
       }
 
       // Evento click del botón de filtrar

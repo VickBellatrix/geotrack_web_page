@@ -39,3 +39,6 @@ En la base de datos
 - Nutrir la base de datos con información acerca de las últimas 2 semanas
 
 **Hacer pruebas para ambas páginas de tiempo real e históricos**
+
+
+Esto es una prueba del despliegue

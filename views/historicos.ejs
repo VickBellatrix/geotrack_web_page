@@ -616,7 +616,8 @@
 
         // Obtener las coordenadas del círculo dibujado
         var latLng = layer.getLatLng();
-        var radius = layer.getRadius()
+
+        var radius = layer.getRadius() / 1000;
 
         var circleInfo = document.getElementById('circle-info');
         // Mostrar las variables en los elementos del DOM
@@ -656,8 +657,33 @@
               longitudDato = parseFloat(celda.textContent); // Corregir esta línea
               console.log(latitudDato, longitudDato);
               // Calcular la distancia euclidiana
-              radioDato = Math.sqrt(Math.pow(latitudDato - latLngLat, 2) + Math.pow(longitudDato - latLngLng, 2));
+              let radioDato = 0;
+
+              function calcularDistancia(latitudDato, longitudDato, latLngLat, latLngLng) {
+                // Convertir las coordenadas de grados a radianes
+                const latitudDatoRad = latitudDato * Math.PI / 180;
+                const longitudDatoRad = longitudDato * Math.PI / 180;
+                const latLngLatRad = latLngLat * Math.PI / 180;
+                const latLngLngRad = latLngLng * Math.PI / 180;
+
+                // Calcular las diferencias en latitud y longitud
+                const deltaLat = latitudDatoRad - latLngLatRad;
+                const deltaLng = longitudDatoRad - latLngLngRad;
+
+                // Aplicar la fórmula de Haversine
+                const R = 6371; // Radio de la Tierra en kilómetros
+                const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                  Math.cos(latLngLatRad) * Math.cos(latitudDatoRad) *
+                  Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const distancia = R * c; // Distancia en kilómetros
+                // Convertir la distancia a metros
+                radioDato = distancia;
+              }
+              // Llamar a la función para calcular la distancia
+              calcularDistancia(latitudDato, longitudDato, latLngLat, latLngLng);
               console.log("RadioDato:", radioDato, latitudDato, longitudDato); // Imprimir en consola el valor de radioDato
+
               // Verificar si la distancia es menor o igual al radio y si es así, almacenar el dato
               if (radioDato <= radius) {
                 DatosFiltrados.push(datosFila);

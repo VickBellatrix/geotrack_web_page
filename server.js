@@ -99,52 +99,36 @@ const server = dgram.createSocket('udp4');
 
 // Escuchar en el puerto 5000
 const PORT = 5000;
+server.bind(PORT);
 
-// Dirección IP en la que el servidor debe escuchar
-const HOST = '0.0.0.0';
+// Manejar los mensajes recibidos
+server.on('message', (msg, rinfo) => {
+    console.log(`Mensaje recibido de ${rinfo.address}:${rinfo.port}: ${msg}`);
+    const mensaje = msg.toString().replace(/"/g, '');
+    const valoresSeparados = mensaje.split(' ');
 
-server.on('listening', () => {
-    const address = server.address();
-    console.log(`Servidor del sniffer escuchando en ${address.address}:${address.port}`);
-});
+    latestData.lati = parseFloat(valoresSeparados[0]);
+    latestData.longi = parseFloat(valoresSeparados[1]);
 
-// Manejo de conexiones de clientes
-server.on('connection', (socket) => {
-    console.log(`Cliente del sniffer conectado desde ${socket.remoteAddress}:${socket.remotePort}`);
+    const fechaPartes = valoresSeparados[2].split('/');
+    const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
+    latestData.fecha = fechaFormateada;
 
-    // Manejo de los datos recibidos
-    socket.on('data', (data) => {
-        console.log(`Datos capturados por el sniffer:${data}`);
+    latestData.timestamp = valoresSeparados[3]
+    latestData.usuario = valoresSeparados[4];   //Variable para el usuario
 
-        const mensajito = String(data);
+    console.log(`latitud: ${latestData.lati}`);
+    console.log(`longitud: ${latestData.longi}`);
+    console.log(`fecha: ${latestData.fecha}`);
+    console.log(`hora: ${latestData.timestamp}`);
+    console.log(`Usuario: ${latestData.usuario}`);
 
-        const mensaje = mensajito.replace(/"/g, '');
+    // Inserción de los datos en la base de datos
+    const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario) VALUES (?, ?, ?, ?, ?)`;
+    connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp, latestData.usuario], (error, results) => {
+        if (error) console.error(error);
+        else console.log("Datos insertados correctamente en la base de datos");
 
-        let valoresSeparados = mensaje.split(' ');
-
-        latestData.lati = parseFloat(valoresSeparados[0]);
-        latestData.longi = parseFloat(valoresSeparados[1]);
-
-        const fechaPartes = valoresSeparados[2].split('/');
-        const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
-        latestData.fecha = fechaFormateada;
-
-        latestData.timestamp = valoresSeparados[3]
-        latestData.usuario = valoresSeparados[4];   //Variable para el usuario
-
-        console.log(`latitud: ${latestData.lati}`);
-        console.log(`longitud: ${latestData.longi}`);
-        console.log(`fecha: ${latestData.fecha}`);
-        console.log(`hora: ${latestData.timestamp}`);
-        console.log(`Usuario: ${latestData.usuario}`);
-
-        // Inserción de los datos en la base de datos
-        const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario) VALUES (?, ?, ?, ?, ?)`;
-        connection.query(sql, [latestData.lati, latestData.longi, latestData.fecha, latestData.timestamp, latestData.usuario], (error, results) => {
-            if (error) console.error(error);
-            else console.log("Datos insertados correctamente en la base de datos");
-
-        });
     });
 });
 

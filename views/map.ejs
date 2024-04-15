@@ -18,60 +18,89 @@
     }
 
     .logo-container {
-      flex: 1;
-      margin-right: 10px;
+      max-width: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
 
     .logo-image {
-      max-width: 160px;
-      width: 100%;
+      max-width: 100%;
       height: auto;
-      border-radius: 40px;
-    }
-
-    .title-container {
-      flex: 1;
-      text-align: right;
-      margin-left: 20px;
+      margin-left: 25px;
+      margin-right: 25px;
     }
 
     #banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: rgb(8, 27, 42);
-      color: white;
-      padding: 20px;
-      text-align: center;
+      padding: 10px;
       margin-bottom: 0px;
-      font-size: 30px;
+      font-size: 20px;
     }
 
     .button-container {
       text-align: center;
-      margin-bottom: 10px;
-      margin-top: 10px;
+      max-height: 50px;
+      /* Altura máxima del contenedor */
+      display: flex;
+      align-items: center;
     }
 
     .consult-button {
-      background-color: rgb(8, 27, 42);
-      color: white;
-      border: none;
+      background-color: rgb(255, 255, 255);
+      max-height: 50px;
+      align-items: center;
       border-radius: 10px;
-      padding: 20px 40px;
-      font-size: 26px;
+      padding: 2vw 4vw;
+      font-size: min(5vw, 20px);
       cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .consult-button:hover {
-      background-color: rgb(4, 20, 32);
+      height: auto;
+      /* Altura ajustada automáticamente según el contenido */
+      width: auto;
+      display: flex;
+      /* Convertir el botón en un contenedor flex */
+      justify-content: center;
+      /* Alinear el contenido horizontalmente al centro */
     }
 
     .position-container {
       text-align: center;
+      align-items: center;
       color: rgb(4, 20, 32);
       margin-bottom: 20px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
       font-size: 30px;
+    }
+
+    .central-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      /* Ajusta la altura según sea necesario */
+    }
+
+    .central-button {
+      background-color: rgb(8, 27, 42);
+      max-height: 50px;
+      border-radius: 10px;
+      padding: 2vw 4vw;
+      font-size: min(5vw, 20px);
+      cursor: pointer;
+      height: auto;
+      /* Altura ajustada automáticamente según el contenido */
+      width: auto;
+      display: flex;
+      /* Convertir el botón en un contenedor flex */
+      justify-content: center;
+      /* Alinear el contenido horizontalmente al centro */
+      align-items: center;
+      /* Alinear el contenido verticalmente al centro */
     }
 
     #map-container {
@@ -84,32 +113,34 @@
       text-align: center;
       margin: 10px auto;
       overflow-x: auto;
-    }
-
+      height: 100%; /* La altura será igual al 100% del viewport */
+      max-height: 900px;
+  }
+  
     #map {
       height: 60vh;
       width: calc(100% - 20px);
       border-radius: 20px;
       border: 3px solid rgb(8, 27, 42);
     }
-
     h1 {
-      text-align: center;
-      color: white;
-      margin-bottom: 10px;
-      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-      font-weight: bold;
-      font-size: 80px;
-    }
-
-    h2 {
       text-align: center;
       color: rgb(255, 255, 255);
       margin-top: 5px;
       margin-bottom: 5px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
-      font-size: 30px;
+      font-size: min(5vw, 15px);
+    }
+
+    h2 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: min(5vw, 20px);
     }
 
     h3 {
@@ -121,60 +152,32 @@
       font-weight: bold;
       font-size: 30px;
     }
-
-    .fixed-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 999;
-      /* Asegura que esté sobre otros elementos */
-      background-color: rgb(8, 27, 42);
-      /* Color de fondo del botón */
-      color: white;
-      /* Color del texto del botón */
-      padding: 10px 20px;
-      /* Espaciado interno del botón */
-      border: none;
-      /* Sin borde */
-      border-radius: 20px;
-      /* Borde redondeado */
-      cursor: pointer;
-      /* Cambia el cursor al pasar sobre el botón */
-    }
   </style>
 </head>
 
 <body>
-  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+  <div id="banner">
     <div class="logo-container">
-      <img src="/views/Media/logo.jpeg" class="logo-image">
+      <img src="/views/Media/logo.png" class="logo-image">
     </div>
-    <div class="title-container">
-      <h1>Geotrack</h1>
+    <div class="button-container">
+      <button class="consult-button" id="buscar-datos">
+        <h2>CONSULTA DE HISTORICOS</h2>
+      </button>
     </div>
-  </div>
-
-  <div class="button-container">
-    <button class="consult-button" id="buscar-datos">
-      <h2>
-        CONSULTA DE HISTORICOS
-      </h2>
-    </button>
   </div>
 
   <div id="map-container">
     <div class="position-container">
-      <h3>POSICIÓN EN TIEMPO REAL</h3>
+      <h2>VEHICULOS EN CIRCULACIÓN</h2>
+      <div class="central-container">
+        <button class="central-button" id="centrar-mapa">
+          <h1>Mostrar vehículo en movimiento</h1>
+        </button>
+      </div>
     </div>
     <div id="map"></div>
-    <div class="fixed-button" id="centrar-mapa">
-      <h2>
-        Centrar en posición actual
-      </h2>
-    </div>
   </div>
-
-
 
   <script>
     function initMap() {
@@ -241,8 +244,6 @@
       actualizarUbicacion();
       setInterval(actualizarUbicacion, 5000);
     }
-
-
     document.getElementById('buscar-datos').addEventListener('click', function() {
       //window.location.href = 'http://localhost:3000/historicos';
       var currentLocation = window.location.href;
@@ -252,5 +253,4 @@
     document.addEventListener('DOMContentLoaded', initMap);
   </script>
 </body>
-
 </html>

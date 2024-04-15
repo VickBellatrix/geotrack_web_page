@@ -20,69 +20,82 @@
     }
 
     .logo-container {
-      flex: 1;
-      margin-right: 10px;
+      max-width: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
 
     .logo-image {
-      max-width: 160px;
-      width: 100%;
+      max-width: 100%;
       height: auto;
-      border-radius: 40px;
-    }
-
-    .title-container {
-      flex: 1;
-      text-align: right;
-      margin-left: 20px;
     }
 
     #banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: rgb(8, 27, 42);
-      color: white;
-      padding: 20px;
-      text-align: center;
+      padding: 10px;
       margin-bottom: 0px;
-      font-size: 30px;
+      font-size: 20px;
     }
 
     .button-container {
       text-align: center;
-      margin-bottom: 10px;
-      margin-top: 10px;
+      max-height: 50px;
+      /* Altura máxima del contenedor */
+      display: flex;
+      align-items: center;
     }
 
     .consult-button {
-      background-color: rgb(8, 27, 42);
-      color: white;
-      border: none;
+      background-color: rgb(255, 255, 255);
+      max-height: 50px;
+      align-items: center;
       border-radius: 10px;
-      padding: 20px 40px;
-      font-size: 26px;
+      padding: 2vw 4vw;
+      font-size: min(5vw, 20px);
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-bottom: 10px;
-      margin-top: 10px;
+      height: auto;
+      /* Altura ajustada automáticamente según el contenido */
+      width: auto;
+      display: flex;
+      /* Convertir el botón en un contenedor flex */
+      justify-content: center;
+      /* Alinear el contenido horizontalmente al centro */
     }
 
-    .consult1-button {
-      background-color: rgb(8, 27, 42);
-      color: white;
-      border: none;
+    .filtrar-button {
+      background-color: rgb(191, 210, 224);
+      max-height: 50px;
       border-radius: 10px;
-      padding: 20px 40px;
-      font-size: 26px;
+      font-size: min(5vw, 20px);
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-bottom: 10px;
-      margin-top: 10px;
+      height: auto;
+      width: auto;
+      display: flex;
+      justify-content: center;
+      /* Alinea horizontalmente el contenido */
+      align-items: center;
+      /* Alinea verticalmente el contenido */
+      margin: auto;
     }
-
-    .consult-button:hover {
-
-      background-color: rgb(4, 20, 32);
-      margin-top: 10px;
-      margin-bottom: 10px;
+    .filtrar1-button {
+      background-color: rgb(8, 27, 42);
+      max-height: 50px;
+      border-radius: 10px;
+      font-size: min(5vw, 20px);
+      cursor: pointer;
+      height: auto;
+      width: auto;
+      display: flex;
+      justify-content: center;
+      /* Alinea horizontalmente el contenido */
+      align-items: center;
+      /* Alinea verticalmente el contenido */
+      margin: 20px;
     }
 
     .position-container {
@@ -103,9 +116,7 @@
       max-width: calc(100% - 40px);
       text-align: center;
       margin: 10px auto;
-      overflow-x: auto;
     }
-
 
     #hora-container {
       background-color: rgb(191, 210, 224);
@@ -117,11 +128,6 @@
       text-align: center;
       margin: 10px auto;
       overflow-x: auto;
-    }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
     }
 
     .map-container {
@@ -145,8 +151,6 @@
       /* Permitir scroll vertical cuando sea necesario */
     }
 
-
-
     #map {
       height: 60vh;
       width: calc(100% - 20px);
@@ -161,32 +165,24 @@
       border: 3px solid rgb(8, 27, 42);
     }
 
-    div {
-      margin-bottom: 10px;
-      /* Ajusta la cantidad de espacio entre cada elemento */
-    }
-
-
-
-
     h1 {
-      text-align: center;
-      color: white;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-      font-weight: bold;
-      font-size: 80px;
-    }
-
-    h2 {
       text-align: center;
       color: rgb(255, 255, 255);
       margin-top: 5px;
       margin-bottom: 5px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
-      font-size: 30px;
+      font-size: min(5vw, 15px);
+    }
+
+    h2 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: min(5vw, 20px);
     }
 
     h3 {
@@ -201,11 +197,11 @@
 
     label {
       text-align: center;
-      color: rgb(4, 20, 32);
-      margin-bottom: 0px;
+      color: #ffffff;
+      margin: 5px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: lighter;
-      font-size: 15px;
+      font-size: 20x;
     }
 
     #resultados p {
@@ -272,75 +268,205 @@
       color: red;
       font-weight: bold;
     }
+
+    .inputs-container {
+      background-color: rgb(8, 27, 42);
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: none;
+      flex-direction: row;
+      /* Alinear los elementos en fila */
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      /* Alinear el texto horizontalmente */
+      border-radius: 20px;
+      text-align: center;
+      /* Alinea horizontalmente el contenido */
+    }
+
+    .select-container {
+      background-color: rgb(8, 27, 42);
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      /* Alinear los elementos en fila */
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      /* Alinear el texto horizontalmente */
+      border-radius: 20px;
+    }
+
+    h4 {
+      color: #ffffff;
+      margin: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: min(5vw, 20px);
+      flex: 1;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .icon-img {
+      width: 2em;
+      height: auto;
+      margin: 0 10px;
+      /* Espacio uniforme alrededor de la imagen */
+      border-radius: 8px;
+    }
+
+    .IDS-content {
+      margin: auto;
+      display: flex;
+      justify-content: flex-start; /* Cambiado a flex-start para alinear los elementos al principio */
+      align-items: center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    
+
+    /* Estilo para ocultar la barra de desplazamiento en WebKit (Chrome, Safari) */
+    .IDS-content::-webkit-scrollbar {
+      display: none;
+    }
+
+
+
+
+    .juan-img {
+      width: 200px;
+      margin: 20px;
+      border-radius: 20px;
+      box-shadow: none;
+      /* Sombras blancas */
+    }
+
+    .sara-img {
+      width: 200px;
+      margin: 20px;
+      border-radius: 20px;
+      box-shadow: none;
+      /* Sombras blancas */
+    }
+
+    .mateo-img {
+      width: 200px;
+      margin: 20px;
+      border-radius: 20px;
+      box-shadow: none;
+      /* Sombras blancas */
+    }
+
+    .selected {
+      box-shadow: 0 0 20px rgba(45, 197, 78, 0.8);
+    }
+
+    h5 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: lighter;
+      font-size: 10x;
+    }
   </style>
 
 </head>
 
 <body>
-  <div id="banner" style="display: flex; align-items: center; justify-content: space-between;">
+  <div id="banner">
     <div class="logo-container">
-      <img src="/views/Media/logo.jpeg" class="logo-image">
+      <img src="/views/Media/logo.png" class="logo-image">
     </div>
-    <div class="title-container">
-      <h1>Geotrack</h1>
+    <div class="button-container">
+      <button class="consult-button" id="buscar-datos">
+        <h2>
+          SEGUIMIENTO DE VEHÍCULOS
+        </h2>
+      </button>
     </div>
   </div>
-
-  <div class="button-container">
-    <button class="consult-button" id="buscar-datos">
-      <h2>POSICIÓN EN TIEMPO REAL</h2>
-    </button>
-  </div>
-
   <div id="busqueda-container">
-    <div style="text-align: center; color: rgb(4, 20, 32); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;">
+    <div style="text-align: center; color: rgb(8, 27, 42); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;">
       BÚSQUEDA DE HISTORICOS POR FECHA Y HORA
     </div>
-
-    <div>
-      <label for="fecha-inicio" style="font-size: 20px;">Fecha de inicio:</label>
-      <input type="date" id="fecha-inicio">
-      <label for="fecha-fin" style="font-size: 20px;">Fecha de fin:</label>
-      <input type="date" id="fecha-fin">
+    <div class="select-container">
+      <h4>Mostrar/ Ocultar parámetros de búsqueda</h4>
+      <img src="/views/Media/clic.jpeg" alt="Icono" class="icon-img">
     </div>
 
-    <div id="banner-space1">
-    </div>
+    <div class="inputs-container">
+      <label>Selecciona el vehiculo de interes:</label>
+      <div class="IDS-content">
+        <img src="/views/Media/juan.jpg" class="juan-img" onclick="selectImage('juan')">
+        <img src="/views/Media/sara.jpg" class="sara-img" onclick="selectImage('sara')">
+        <img src="/views/Media/mateo.jpg" class="mateo-img" onclick="selectImage('mateo')">
 
-    <div id="checkBox">
-      <label for="buscar-por-hora">
-        <input type="checkbox" id="buscar-por-hora"> Filtrar por hora
-      </label>
-    </div>
+      </div>
+      <label>Desliza para ver los demás vehiculos</label>
 
-    <!-- Modificamos el contenedor de las horas para aceptar formato de 24 horas -->
-    <div id="hora-container" style="display: none;">
-      <label for="hora-inicio" id="label-hora-inicio" style="font-size: 20px; margin-left: 20px;">Hora de inicio:</label>
-      <input type="time" id="hora-inicio" style="width: 150px;" step="1">
-      <label for="hora-fin" id="label-hora-fin" style="font-size: 20px; margin-left: 20px;">Hora de fin:</label>
-      <input type="time" id="hora-fin" style="width: 150px;" step="1">
-    </div>
+      <div>
+        <label for="fecha-inicio">Fecha de inicio:</label>
+        <input type="date" id="fecha-inicio">
+        <label for="fecha-fin">Fecha de fin:</label>
+        <input type="date" id="fecha-fin">
+      </div>
+      <div id="checkBox">
+        <label for="buscar-por-hora">
+          <input type="checkbox" id="buscar-por-hora"> Filtrar por hora
+        </label>
+      </div>
+
+      <!-- Modificamos el contenedor de las horas para aceptar formato de 24 horas -->
+      <div id="hora-container" style="display: none;">
+        <h5 for="hora-inicio" id="label-hora-inicio">Hora de inicio:</h5>
+        <input type="time" id="hora-inicio" style="width: 150px;" step="1">
+        <h5 for="hora-fin" id="label-hora-fin">Hora de fin:</h5>
+        <input type="time" id="hora-fin" style="width: 150px;" step="1">
+      </div>
 
 
-    <div>
-      <button class="consult-button" id="filtrar-button">Filtrar Por Tiempo</button>
-    </div>
+      <div>
+        <div class="button-container">
+          <button class="filtrar-button" id="filtrar-time-button">
+            <h2>Filtrar Por Tiempo</h2>
+          </button>
+        </div>
+
+        <div>
+          <label>ID seleccionada: <span id="selectedImageID"></span></label>
+        </div>
+
+        <div>
+          <label>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></label>
+        </div>
+    
+        <div>
+          <label>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></label>
+        </div>
+    
+        <div>
+          <label>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></label>
+        </div>
+    
+        <div>
+          <label>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></label>
+        </div>
 
 
-    <div>
-      <label>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></label>
-    </div>
 
-    <div>
-      <label>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></label>
-    </div>
+      </div>
 
-    <div>
-      <label>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></label>
-    </div>
-
-    <div>
-      <label>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></label>
     </div>
 
     <div class="map-container">
@@ -369,6 +495,37 @@
   </div>
 
   <script>
+    //////////////////////////////////////////////////////-----------PARAMETROS---------------///////////////
+    function toggleInputsContainer() {
+      var inputsContainer = document.querySelector(".inputs-container");
+      if (inputsContainer.style.display === "none" || inputsContainer.style.display === "") {
+        inputsContainer.style.display = "block";
+      } else {
+        inputsContainer.style.display = "none";
+      }
+    }
+    // Asociar la función al contenedor con clase "select-container"
+    document.querySelector(".select-container").addEventListener("click", toggleInputsContainer);
+    ////////////////////////////////////////////-------------SELECTOR DE IMAEGN-----------------///////////////////////////////////////////
+    let selectedImageID = null; // Variable para almacenar el ID de la imagen seleccionada
+
+    function selectImage(id) {
+      // Eliminar la clase 'selected' de todas las imágenes
+      const images = document.querySelectorAll('.IDS-content img');
+      images.forEach(img => img.classList.remove('selected'));
+
+      // Agregar la clase 'selected' a la imagen seleccionada
+      const selectedImg = document.querySelector(`.${id}-img`);
+      selectedImg.classList.add('selected');
+
+      // Asignar el ID de la imagen seleccionada a la variable 'selectedImageID'
+      selectedImageID = id;
+
+      // Actualizar el contenido del elemento <span> con el ID "selectedImageID"
+      const selectedImageIDElement = document.getElementById('selectedImageID');
+      selectedImageIDElement.textContent = selectedImageID;
+    }
+
     var map;
 
     function initMap() {
@@ -470,7 +627,7 @@
     }
 
     // Evento click del botón de filtrar
-    document.getElementById('filtrar-button').addEventListener('click', function() {
+    document.getElementById('filtrar-time-button').addEventListener('click', function() {
       filtrarPorFechaYHora(); // Llamar a la función para filtrar por fecha y hora cuando se hace clic en el botón
     });
 
@@ -585,8 +742,14 @@
       <div id="map2"></div>
       <p id="circle-info"></p>
     </div>
+
     <div>
-      <button class="consult-button" id="filtrar1-button">Filtrar Por Area</button>
+      <button class="filtrar1-button" id="filtrar1-button" >
+        <h4>
+          Filtrar Por Area
+        </h4>
+
+      </button>
     </div>
 
     <script>

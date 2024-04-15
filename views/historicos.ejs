@@ -381,8 +381,13 @@
       }).addTo(map);
     }
 
+    //==================
     initMap();
 
+
+    //=================
+
+    
     document.getElementById('buscar-datos').addEventListener('click', function() {
       //window.location.href = 'http://localhost:3000/';
       var currentLocation = window.location.href;
@@ -581,22 +586,14 @@
     <div>
       <label>Radio seleccionado: <span id="Radio"></span></label>
     </div>
-    <div class="map-container">
-      <div id="map2"></div>
-      <p id="circle-info"></p>
-    </div>
+
     <div>
       <button class="consult-button" id="filtrar1-button">Filtrar Por Area</button>
     </div>
 
     <script>
-      var historicalMap = L.map('map2').setView([10.9878, -74.7889], 13); // Iniciar el mapa centrado en Barranquilla
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetmap</a> contributors'
-      }).addTo(historicalMap);
-
-      var drawnItems = L.featureGroup().addTo(historicalMap);
+      var drawnItems = L.featureGroup().addTo(map);
 
       var drawControl = new L.Control.Draw({
         draw: {
@@ -610,9 +607,9 @@
           featureGroup: drawnItems
         }
       });
-      historicalMap.addControl(drawControl);
+      map.addControl(drawControl);
 
-      historicalMap.on(L.Draw.Event.CREATED, function(e) {
+      map.on(L.Draw.Event.CREATED, function(e) {
         var layer = e.layer;
         drawnItems.addLayer(layer);
 
@@ -734,8 +731,31 @@
           color: 'red'
         }).addTo(drawnItems);
 
-        const startMarker = L.marker(polylinePoints[0]).addTo(drawnItems);
-        const endMarker = L.marker(polylinePoints[polylinePoints.length - 1]).addTo(drawnItems);
+        //const startMarker = L.marker(polylinePoints[0]).addTo(drawnItems);
+        
+
+        //====== MARCADORES DE INICIO Y FIN ====
+
+        const inicioFinIcon = L.icon({
+        iconUrl: 'start.png', // Ruta de la imagen del icono personalizado
+        iconSize: [38, 38], // Tamaño del icono
+        iconAnchor: [16, 16], // Punto de anclaje del icono
+        popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
+       });
+
+       const FinIcon = L.icon({
+        iconUrl: 'end.png', // Ruta de la imagen del icono personalizado
+        iconSize: [38, 38], // Tamaño del icono
+        iconAnchor: [16, 16], // Punto de anclaje del icono
+        popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
+       });
+
+       const startMarker = L.marker(polylinePoints[0], { icon: inicioFinIcon }).addTo(drawnItems);
+       const endMarker = L.marker(polylinePoints[polylinePoints.length - 1], { icon: FinIcon }).addTo(drawnItems);
+
+        //======================================
+
+
 
         // Crear contenido para los popups de los marcadores
         const startMarkerPopupContent = `Inicio del recorrido:<br>Latitud: ${polylinePoints[0][0]}, Longitud: ${polylinePoints[0][1]}<br>Fecha: ${DatosFiltrados[0][3]}<br>Hora: ${DatosFiltrados[0][4]}`;
@@ -744,6 +764,35 @@
         // Agregar popups a los marcadores
         startMarker.bindPopup(startMarkerPopupContent);
         endMarker.bindPopup(endMarkerPopupContent);
+
+        //-------------- VARIOS MARCADORES --------------------
+
+          const simplePoints = [];
+          DatosFiltrados.forEach(coordenada => {
+              const latLng = L.latLng(parseFloat(coordenada[1]), parseFloat(coordenada[2]));
+              const simplePoint = L.circleMarker(latLng, {
+                  radius: 4, // Radio muy pequeño para que se vea como un punto
+                  color: 'blue', // Color del punto
+                  fillColor: 'red', // Color de relleno del punto
+                  fillOpacity: 1 // Opacidad del relleno del punto
+              }).addTo(drawnItems);
+
+
+              simplePoints.push(simplePoint);
+
+
+              const popupContent = `Fecha: ${coordenada[3]}<br>Hora: ${coordenada[4]}`;
+
+              // Vincular evento de clic al punto para mostrar el popup
+              simplePoint.on('click', function(event) {
+                  simplePoint.bindPopup(popupContent).openPopup();
+              });
+
+              simplePoints.push(simplePoint);
+          });
+
+
+        //-----------------------------------------------------
 
         // Evento de clic en el marcador de inicio
         startMarker.on('click', function(e) {
@@ -762,7 +811,20 @@
         // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
         map.fitBounds(bounds);
 
+
+        //=============
+        circleMarkers.forEach(circleMarker => {
+         bounds.extend(circleMarker.getLatLng());
+        });
+
+        // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores circulares
+        map.fitBounds(bounds);
+
+        
+
       }
+
+
 
       // Evento click del botón de filtrar
       document.getElementById('filtrar1-button').addEventListener('click', function() {

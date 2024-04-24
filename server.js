@@ -29,15 +29,21 @@ let latestData = {
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
-    host: process.env.host,
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.database,
-    isMaster: process.env.MAESTRO,
 
+    //Sara BD
+    //host: 'db-geotrack.cj2goeeuw2ku.us-east-2.rds.amazonaws.com',
+    //user: 'admin',
+    //password: '17091709',
+
+    host: 'database-1.chyoicow6j06.us-east-2.rds.amazonaws.com',
+    user: 'admin',
+    password: 'adastra2',
+
+    database: 'geotrack',
 });
 
-//Conección a la base de datos
+
+// Conección a la base de datos
 connection.connect(function (err) {
     if (err) {
         throw err;
@@ -45,6 +51,7 @@ connection.connect(function (err) {
         console.log("¡Conexión exitosa con la base de datos!")
     }
 });
+
 
 
 // Definir isMaster después de la conexión a la base de datos

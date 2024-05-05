@@ -82,6 +82,7 @@
       /* Alinea verticalmente el contenido */
       margin: auto;
     }
+
     .filtrar1-button {
       background-color: rgb(8, 27, 42);
       max-height: 50px;
@@ -321,7 +322,8 @@
     .IDS-content {
       margin: auto;
       display: flex;
-      justify-content: flex-start; /* Cambiado a flex-start para alinear los elementos al principio */
+      justify-content: flex-start;
+      /* Cambiado a flex-start para alinear los elementos al principio */
       align-items: center;
       overflow-x: auto;
       overflow-y: hidden;
@@ -329,7 +331,7 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
-    
+
 
     /* Estilo para ocultar la barra de desplazamiento en WebKit (Chrome, Safari) */
     .IDS-content::-webkit-scrollbar {
@@ -413,9 +415,9 @@
 
       <div>
         <label for="fecha-inicio">Fecha de inicio:</label>
-        <input type="date" id="fecha-inicio">
+        <input type="date" id="fecha-inicio" name="fecha-inicio" min="2024-03-01" max="2025-12-31"><br><br>
         <label for="fecha-fin">Fecha de fin:</label>
-        <input type="date" id="fecha-fin">
+        <input type="date" id="fecha-fin" name="fecha-fin" min="2024-03-01" max="2025-12-31"><br><br>
       </div>
       <div id="checkBox">
         <label for="buscar-por-hora">
@@ -437,7 +439,7 @@
           <button class="filtrar-button" id="filtrar-time-button">
             <h2>Filtrar Por Tiempo</h2>
           </button>
-        </div> 
+        </div>
       </div>
 
     </div>
@@ -498,6 +500,30 @@
       const selectedImageIDElement = document.getElementById('selectedImageID');
       selectedImageIDElement.textContent = selectedImageID;
     }
+    ///////////////////////////////////////////------ CALENDARIOS-----////////////////////////////
+    var fechaInicioInput = document.getElementById('fecha-inicio');
+    var fechaFinInput = document.getElementById('fecha-fin');
+    var horaInicioInput = document.getElementById('hora-inicio');
+    var horaFinInput = document.getElementById('hora-fin');
+
+    // Cuando se cambia el valor del campo de fecha de inicio
+    fechaInicioInput.addEventListener('change', function() {
+      // Establecer el valor mínimo del campo de fecha de fin como el valor seleccionado en el campo de fecha de inicio
+      fechaFinInput.min = fechaInicioInput.value;
+
+      // Obtener las fechas como objetos Date para compararlas
+      var fechaInicio = new Date(fechaInicioInput.value);
+      var fechaFin = new Date(fechaFinInput.value);
+
+      // Verificar si la fecha de fin es menor que la fecha de inicio
+      if (fechaFin < fechaInicio) {
+        // Mostrar mensaje de error al usuario
+        alert('Rango de fecha incorrecto: La fecha de fin no puede ser anterior a la fecha de inicio.');
+        // También podrías mostrar el mensaje de error en algún elemento HTML en lugar de usar alert
+        // document.getElementById('mensaje-error').innerText = 'Rango de fecha incorrecto: La fecha de fin no puede ser anterior a la fecha de inicio.';
+        // Y luego estilizar ese elemento para que sea más visible para el usuario
+      }
+    });
 
     var map;
 
@@ -562,12 +588,19 @@
       }
 
       // Verificar si se han seleccionado las fechas
-      if (fechaInicio === '' || fechaFin === '') {
+      if (fechaInicioInput.value === '' || fechaFinInput.value === '') {
         // Mostrar mensaje de error al usuario
         alert('Por favor, seleccione las fechas de inicio y fin.');
-        return; // Detener la ejecución si las fechas no están seleccionadas
+        return ; // Detener la ejecución si las fechas no están seleccionadas
       }
 
+      // Verificar si la fecha de fin es menor que la fecha de inicio
+      if (fechaFin < fechaInicio) {
+        // Mostrar mensaje de error al usuario
+        alert('Rango de fecha incorrecto: La fecha de fin no puede ser anterior a la fecha de inicio.');
+        return ;
+      }
+      
 
       // Hacer la petición al servidor con los parámetros correspondientes
       fetch(`/filtrar-por-fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&horaInicio=${horaInicio}&horaFin=${horaFin}`)
@@ -693,9 +726,9 @@
   </script>
 
 
-   <!---------------------------------------------------------SEGUNDA PARTE DE LA BUSQUEDA------------------------------------------------->
+  <!---------------------------------------------------------SEGUNDA PARTE DE LA BUSQUEDA------------------------------------------------->
 
-   <div id="busqueda-container">
+  <div id="busqueda-container">
     <div style="text-align: center; color: rgb(4, 20, 32); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;">
       BÚSQUEDA DE HISTORICOS POR AREA
     </div>
@@ -712,7 +745,6 @@
     </div>
 
     <script>
-
       var drawnItems = L.featureGroup().addTo(map);
 
       var drawControl = new L.Control.Draw({
@@ -852,26 +884,30 @@
         }).addTo(drawnItems);
 
         //const startMarker = L.marker(polylinePoints[0]).addTo(drawnItems);
-        
+
 
         //====== MARCADORES DE INICIO Y FIN ====
 
         const inicioFinIcon = L.icon({
-        iconUrl: 'start.png', // Ruta de la imagen del icono personalizado
-        iconSize: [38, 38], // Tamaño del icono
-        iconAnchor: [16, 16], // Punto de anclaje del icono
-        popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
-       });
+          iconUrl: 'start.png', // Ruta de la imagen del icono personalizado
+          iconSize: [38, 38], // Tamaño del icono
+          iconAnchor: [16, 16], // Punto de anclaje del icono
+          popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
+        });
 
-       const FinIcon = L.icon({
-        iconUrl: 'end.png', // Ruta de la imagen del icono personalizado
-        iconSize: [38, 38], // Tamaño del icono
-        iconAnchor: [16, 16], // Punto de anclaje del icono
-        popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
-       });
+        const FinIcon = L.icon({
+          iconUrl: 'end.png', // Ruta de la imagen del icono personalizado
+          iconSize: [38, 38], // Tamaño del icono
+          iconAnchor: [16, 16], // Punto de anclaje del icono
+          popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
+        });
 
-       const startMarker = L.marker(polylinePoints[0], { icon: inicioFinIcon }).addTo(drawnItems);
-       const endMarker = L.marker(polylinePoints[polylinePoints.length - 1], { icon: FinIcon }).addTo(drawnItems);
+        const startMarker = L.marker(polylinePoints[0], {
+          icon: inicioFinIcon
+        }).addTo(drawnItems);
+        const endMarker = L.marker(polylinePoints[polylinePoints.length - 1], {
+          icon: FinIcon
+        }).addTo(drawnItems);
 
         //======================================
 
@@ -887,29 +923,29 @@
 
         //-------------- VARIOS MARCADORES --------------------
 
-          const simplePoints = [];
-          DatosFiltrados.forEach(coordenada => {
-              const latLng = L.latLng(parseFloat(coordenada[1]), parseFloat(coordenada[2]));
-              const simplePoint = L.circleMarker(latLng, {
-                  radius: 4, // Radio muy pequeño para que se vea como un punto
-                  color: 'blue', // Color del punto
-                  fillColor: 'red', // Color de relleno del punto
-                  fillOpacity: 1 // Opacidad del relleno del punto
-              }).addTo(drawnItems);
+        const simplePoints = [];
+        DatosFiltrados.forEach(coordenada => {
+          const latLng = L.latLng(parseFloat(coordenada[1]), parseFloat(coordenada[2]));
+          const simplePoint = L.circleMarker(latLng, {
+            radius: 4, // Radio muy pequeño para que se vea como un punto
+            color: 'blue', // Color del punto
+            fillColor: 'red', // Color de relleno del punto
+            fillOpacity: 1 // Opacidad del relleno del punto
+          }).addTo(drawnItems);
 
 
-              simplePoints.push(simplePoint);
+          simplePoints.push(simplePoint);
 
 
-              const popupContent = `Fecha: ${coordenada[3]}<br>Hora: ${coordenada[4]}`;
+          const popupContent = `Fecha: ${coordenada[3]}<br>Hora: ${coordenada[4]}`;
 
-              // Vincular evento de clic al punto para mostrar el popup
-              simplePoint.on('click', function(event) {
-                  simplePoint.bindPopup(popupContent).openPopup();
-              });
-
-              simplePoints.push(simplePoint);
+          // Vincular evento de clic al punto para mostrar el popup
+          simplePoint.on('click', function(event) {
+            simplePoint.bindPopup(popupContent).openPopup();
           });
+
+          simplePoints.push(simplePoint);
+        });
 
 
         //-----------------------------------------------------
@@ -934,13 +970,13 @@
 
         //=============
         circleMarkers.forEach(circleMarker => {
-         bounds.extend(circleMarker.getLatLng());
+          bounds.extend(circleMarker.getLatLng());
         });
 
         // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores circulares
         map.fitBounds(bounds);
 
-        
+
 
       }
 

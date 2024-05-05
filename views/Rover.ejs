@@ -5,6 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ROVER</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <!-- Import Three.js using an import-map -->
+  <script type="importmap">
+    {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@^0.163.0/build/three.module.min.js"
+    }
+  }
+</script>
   <style>
     body {
       background-color: white;
@@ -167,12 +177,16 @@
       <h3>¡Bienvenidos!</h3>
       <h2>En esta web encontrarán datos del rover, tales como su orientación en tiempo real, su posición satelital y podrás consular donde ha estado. </h2>
     </div>
-    <div id="object-container">
-      <model-viewer id="objeto3d" src="./Media/Curiosity Rover.glb" alt="Rover 3d" camera-controls camera-orbit="65deg 55deg 2.5m" auto-rotate></model-viewer>
-    </div>
+
+    // ///////////////////////COLOCA AQUI EL RENDER 3D////////////////////////////////////////////////
+
   </div>
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  </div>
+
   <script>
+    // COLOCA AQUI EL SCRIPT DEL RENDER//
+
+
     document.getElementById('historicos').addEventListener('click', function() {
       var currentLocation = window.location.href;
       var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'historicos';

@@ -65,67 +65,122 @@ if (isMaster) {
 }
 //}
 
-const dgram = require("dgram");
+const net = require("net");
 
-// Crear un socket UDP
-const server = dgram.createSocket("udp4");
+// Crear un servidor TCP
+const server = net.createServer();
 
-// Escuchar en el puerto 5000
-const PORT = 5000;
-server.bind(PORT);
+// Escuchar eventos de conexión
+server.on("connection", (socket) => {
+  console.log(
+    `Nueva conexión establecida desde ${socket.remoteAddress}:${socket.remotePort}`
+  );
 
-// Manejar los mensajes recibidos
-server.on("message", (msg, rinfo) => {
-  console.log(`Mensaje recibido de ${rinfo.address}:${rinfo.port}: ${msg}`);
-  const mensaje = msg.toString().replace(/"/g, "");
-  const valoresSeparados = mensaje.split(" ");
+  // Escuchar eventos de datos
+  socket.on("data", (data) => {
+    console.log(
+      `Datos recibidos desde ${socket.remoteAddress}:${socket.remotePort}: ${data}`
+    );
 
-  latestData.lati = parseFloat(valoresSeparados[0]);
-  latestData.longi = parseFloat(valoresSeparados[1]);
+    //=====================================
 
-  const fechaPartes = valoresSeparados[2].split("/");
-  const fechaFormateada = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`;
-  latestData.fecha = fechaFormateada;
+    const message = String(data);
+    // MENSAJE QUE SE ENVIA:   $GPRMC,040451.00,A,1054.28928,N,07448.58710,W,0.502,,050524,,,A*6A , -0.62, 0.06, -0.04,ROVER
 
-  latestData.timestamp = valoresSeparados[3];
-  latestData.usuario = valoresSeparados[4]; //Variable para el usuario
+    const parts = message.split(",");
 
-  console.log(`latitud: ${latestData.lati}`);
-  console.log(`longitud: ${latestData.longi}`);
-  console.log(`fecha: ${latestData.fecha}`);
-  console.log(`hora: ${latestData.timestamp}`);
-  console.log(`Usuario: ${latestData.usuario}`);
+    // Extraer los campos relevantes
+    const time = parts[1]; // Hora en formato HHMMSS.ss
+    const latitude = parts[3].replace(".", "");
+    const longitude = parts[5].replace(".", "");
+    const rawDate = parts[9]; // Tomar la fecha completa
+    const yaw = parts[13]; // Yaw
+    const pitch = parts[14]; // Pitch
+    const roll = parts[15]; // Roll
+    const usuario = parts[16]; // Usuario
 
-  // Inserción de los datos en la base de datos
-  if (isMaster) {
-    const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario) VALUES (?, ?, ?, ?, ?)`;
+    // Convertir la hora a formato legible
+    const hours = time.substr(0, 2);
+    const minutes = time.substr(2, 2);
+    const seconds = time.substr(4, 2);
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    const latitudeDegrees = latitude.substr(0, 2); // Extraer los grados de latitud
+    const latitudeMinutes = latitude.substr(2, 6); // Extraer los minutos de latitud
+    const latitudeWithDecimal = `${latitudeDegrees}.${latitudeMinutes}`; // Concatenar grados y minutos
+    const adjustedLatitude = parseFloat(latitudeWithDecimal).toFixed(7);
+
+    const longitudeDegrees = longitude.substr(0, 3); // Extraer los grados de longitud
+    const longitudeMinutes = longitude.substr(2, 6); // Extraer los minutos de longitud
+    const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
+    const adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
+
+    date = rawDate[0]; // Tomar solo la fecha
+
+    // Formatear la fecha
+    // Extraer los componentes de la fecha
+    const day = rawDate.substr(0, 2);
+    const month = rawDate.substr(2, 2);
+    const year = `20${rawDate.substr(4, 2)}`; // Se asume que el año está en formato YY (ej. 24 para 2024)
+
+    // Formatear la fecha
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // Imprimir los datos procesados
+    console.log(`Hora: ${formattedTime}`);
+    console.log(`Fecha: ${formattedDate}`);
+    console.log(`Latitud: ${adjustedLatitude}`);
+    console.log(`Longitud: ${adjustedLongitude}`);
+    console.log(`YAW: ${yaw}`);
+    console.log(`PITCH: ${pitch}`);
+    console.log(`Roll: ${roll}`);
+    console.log(`Usuario: ${usuario}`);
+
+    // Inserción de los datos en la base de datos
+    const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario, yaw, pitch, roll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     connection.query(
       sql,
       [
-        latestData.lati,
-        latestData.longi,
-        latestData.fecha,
-        latestData.timestamp,
-        latestData.usuario,
+        adjustedLatitude,
+        adjustedLongitude,
+        formattedDate,
+        formattedTime,
+        usuario,
+        yaw,
+        pitch,
+        roll,
       ],
       (error, results) => {
         if (error) console.error(error);
         else console.log("Datos insertados correctamente en la base de datos");
       }
     );
-  }
+
+    //=====================================
+  });
+
+  // Escuchar eventos de cierre
+  socket.on("close", () => {
+    console.log(
+      `Conexión cerrada desde ${socket.remoteAddress}:${socket.remotePort}`
+    );
+  });
+
+  // Manejar errores de conexión
+  socket.on("error", (err) => {
+    console.error(`Error en la conexión: ${err}`);
+  });
 });
 
-// Manejar errores
+// Manejar errores del servidor
 server.on("error", (err) => {
-  console.log(`Error en el servidor: ${err.stack}`);
-  server.close();
+  console.error(`Error en el servidor: ${err}`);
 });
 
-// Escuchar cuando el socket está listo para recibir mensajes
-server.on("listening", () => {
-  const address = server.address();
-  console.log(`Servidor UDP escuchando en ${address.address}:${address.port}`);
+// Iniciar el servidor y escuchar en el puerto deseado
+const PORT = 5000; // Puedes cambiar este puerto si deseas
+server.listen(PORT, () => {
+  console.log(`Servidor TCP escuchando en el puerto ${PORT}`);
 });
 
 // Configuración del motor de vistas EJS
@@ -214,5 +269,5 @@ app.use(express.static(__dirname));
 
 // Configuración servidor HTTP
 app.listen(portHTTP, () => {
-  console.log(`Servidor HTTP escuchando en c`);
+  console.log(`Servidor HTTP escuchando en http://localhost:3000/`);
 });

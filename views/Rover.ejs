@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROVER</title>
+  <style>
+    body {
+      background-color: white;
+      color: rgb(8, 27, 42);
+      font-family: Batangas-Regular;
+      margin: 0;
+      padding: 0;
+    }
+
+    .logo-container {
+      max-width: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .logo-image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    #banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgb(8, 27, 42);
+      padding: 10px;
+      margin-bottom: 0px;
+      font-size: 20px;
+    }
+
+    .button-container {
+      text-align: center;
+      max-height: 50px;
+      /* Altura máxima del contenedor */
+      display: flex;
+      align-items: center;
+    }
+
+    .consult-button {
+      background-color: rgb(255, 255, 255);
+      max-height: 50px;
+      align-items: center;
+      border-radius: 10px;
+      padding: 2vw 4vw;
+      font-size: min(5vw, 20px);
+      cursor: pointer;
+      height: auto;
+      /* Altura ajustada automáticamente según el contenido */
+      width: auto;
+      display: flex;
+      /* Convertir el botón en un contenedor flex */
+      justify-content: center;
+      /* Alinear el contenido horizontalmente al centro */
+    }
+
+    .position-container {
+      text-align: center;
+      align-items: center;
+      color: rgb(4, 20, 32);
+      margin-bottom: 20px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+
+    #content-container {
+      background-color: rgb(191, 210, 224);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: calc(100vw - 100px);
+      max-width: calc(100% - 40px);
+      text-align: center;
+      margin: 10px auto;
+      overflow-x: auto;
+      height: 100%;
+      /* La altura será igual al 100% del viewport */
+      max-height: 900px;
+    }
+
+    #object-container {
+      background-color: blanchedalmond;
+      border-radius: 20px;
+      border-width: 2px;
+      border-color: black;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: calc(100vw - 100px);
+      max-width: calc(100% - 40px);
+      text-align: center;
+      margin: 10px auto;
+      overflow-x: auto;
+      height: 100%;
+      /* La altura será igual al 100% del viewport */
+      max-height: 900px;
+    }
+
+    #objeto3d {
+      width: 500px;
+      /* Ancho igual al ancho de la ventana del navegador */
+      height: 500px;
+      /* Para asegurar que el div se muestre como un bloque */
+    }
+
+    h1 {
+      text-align: center;
+      color: rgb(255, 255, 255);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: min(5vw, 15px);
+    }
+
+    h2 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin-top: 2px;
+      margin-bottom: 2px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: min(5vw, 16px);
+    }
+
+    h3 {
+      text-align: center;
+      color: rgb(8, 27, 42);
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="banner">
+    <div class="logo-container">
+      <img src="/views/Media/logo.png" class="logo-image">
+    </div>
+    <div class="button-container">
+      <button class="consult-button" id="gps">
+        <h2>POSICIÓN GPS</h2>
+
+      </button>
+    </div>
+    <div class="button-container">
+      <button class="consult-button" id="historicos">
+        <h2>CONSULTA DE HISTORICOS</h2>
+      </button>
+    </div>
+  </div>
+
+  <div id="content-container">
+    <div class="position-container">
+      <h3>¡Bienvenidos!</h3>
+      <h2>En esta web encontrarán datos del rover, tales como su orientación en tiempo real, su posición satelital y podrás consular donde ha estado. </h2>
+    </div>
+    <div id="object-container">
+      <model-viewer id="objeto3d" src="./Media/Curiosity Rover.glb" alt="Rover 3d" camera-controls camera-orbit="65deg 55deg 2.5m" auto-rotate></model-viewer>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js">
+
+
+
+
+
+  </script>
+  <script>
+    document.getElementById('historicos').addEventListener('click', function() {
+      var currentLocation = window.location.href;
+      var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'historicos';
+      window.location.href = url;
+    });
+
+    document.getElementById('gps').addEventListener('click', function() {
+      var currentLocation = window.location.href;
+      var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'ubicacion';
+      window.location.href = url;
+    });
+  </script>
+</body>
+
+</html>

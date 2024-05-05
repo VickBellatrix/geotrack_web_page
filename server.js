@@ -159,7 +159,7 @@ app.get("/latest-data", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.render("map");
+  res.render("rover");
 });
 
 // Ruta para filtrar por rango de fechas
@@ -167,8 +167,8 @@ app.get("/historicos", (req, res) => {
   res.render("historicos");
 });
 
-app.get("/historicosMP", (req, res) => {
-  res.render("historicosMP");
+app.get("/ubicacion", (req, res) => {
+  res.render("map");
 });
 
 // Ruta para filtrar por rango de fechas

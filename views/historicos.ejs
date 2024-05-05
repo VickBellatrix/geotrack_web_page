@@ -20,7 +20,7 @@
     }
 
     .logo-container {
-      max-width: 200px;
+      max-width: 140px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -55,7 +55,7 @@
       max-height: 50px;
       align-items: center;
       border-radius: 10px;
-      padding: 2vw 4vw;
+      padding: 1.5vw 3vw;
       font-size: min(5vw, 20px);
       cursor: pointer;
       height: auto;
@@ -135,8 +135,7 @@
     }
 
     .left {
-      flex: 1;
-      margin-right: 10px;
+      DISPLAY: NONE;
     }
 
     .right {
@@ -145,10 +144,7 @@
     }
 
     .table-container {
-      max-height: 850px;
-      /* Altura máxima para la tabla */
-      overflow-y: auto;
-      /* Permitir scroll vertical cuando sea necesario */
+      display: none;
     }
 
     #map {
@@ -178,11 +174,11 @@
     h2 {
       text-align: center;
       color: rgb(8, 27, 42);
-      margin-top: 5px;
-      margin-bottom: 5px;
+      margin-top: 2px;
+      margin-bottom: 2px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
-      font-size: min(5vw, 20px);
+      font-size: min(5vw, 16px);
     }
 
     h3 {
@@ -290,7 +286,7 @@
     .select-container {
       background-color: rgb(8, 27, 42);
       border: 1px solid #ccc;
-      padding: 20px;
+      padding: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: relative;
       display: flex;
@@ -397,7 +393,7 @@
     </div>
   </div>
   <div id="busqueda-container">
-    <div style="text-align: center; color: rgb(8, 27, 42); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;">
+    <div style="text-align: center; color: rgb(8, 27, 42); margin-bottom: 10px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 20px;">
       BÚSQUEDA DE HISTORICOS POR FECHA Y HORA
     </div>
     <div class="select-container">
@@ -441,30 +437,7 @@
           <button class="filtrar-button" id="filtrar-time-button">
             <h2>Filtrar Por Tiempo</h2>
           </button>
-        </div>
-
-        <div>
-          <label>ID seleccionada: <span id="selectedImageID"></span></label>
-        </div>
-
-        <div>
-          <label>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></label>
-        </div>
-    
-        <div>
-          <label>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></label>
-        </div>
-    
-        <div>
-          <label>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></label>
-        </div>
-    
-        <div>
-          <label>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></label>
-        </div>
-
-
-
+        </div> 
       </div>
 
     </div>
@@ -595,11 +568,6 @@
         return; // Detener la ejecución si las fechas no están seleccionadas
       }
 
-      // Mostrar los valores de fecha y hora en pantalla para el usuario
-      document.getElementById('fecha-inicio-usuario').textContent = fechaInicio;
-      document.getElementById('fecha-fin-usuario').textContent = fechaFin;
-      document.getElementById('hora-inicio-usuario').textContent = horaInicio;
-      document.getElementById('hora-fin-usuario').textContent = horaFin;
 
       // Hacer la petición al servidor con los parámetros correspondientes
       fetch(`/filtrar-por-fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&horaInicio=${horaInicio}&horaFin=${horaFin}`)

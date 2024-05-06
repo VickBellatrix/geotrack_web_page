@@ -19,7 +19,7 @@ console.log(dbHost, dbUser, dbPassword, dbName, dBMaster);
 require("dotenv").config(); // Cargar variables de entorno desde el archivo .env
 
 // Inicializar latestData para almacenar los últimos datos recibidos del sniffer
-let latestData = {
+const latestData = {
   lati: 0,
   longi: 0,
   fecha: 0,

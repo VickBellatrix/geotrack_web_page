@@ -1,42 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoTrack</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoTrack</title>
 </head>
+
 <body>
-    <h1>Geotrack: datos recibidos:</h1>
-    <ul id="datos">
-        <li>Latitud: <span id="latitud"></span></li>
-        <li>Longitud: <span id="longitud"></span></li>
-        <li>Fecha: <span id="fecha"></span></li>
-        <li>Hora: <span id="hora"></span></li>
-        <li>Usuario: <span id="Usuario"></span></li>
+  <h1>Geotrack: datos recibidos:</h1>
+  <ul id="datos">
+    <li>Latitud: <span id="latitud"></span></li>
+    <li>Longitud: <span id="longitud"></span></li>
+    <li>Fecha: <span id="fecha"></span></li>
+    <li>Hora: <span id="hora"></span></li>
+    <li>Usuario: <span id="Usuario"></span></li>
+    <li>Orientación:</li>
+    <li>Yaw: <span id="yaw"></span></li>
+    <li>Pitch: <span id="pitch"></span></li>
+    <li>Roll: <span id="roll"></span></li>
+  </ul>
 
-    </ul>
+  <script>
+    // Función para actualizar los datos
+    function actualizarDatos() {
+      fetch('/latest-data') // Solicitar los últimos datos al servidor
+        .then(response => response.json())
+        .then(data => {
+          // Actualizar los elementos HTML con los nuevos datos recibidos
+          document.getElementById('latitud').innerText = data.lati;
+          document.getElementById('longitud').innerText = data.longi;
+          document.getElementById('fecha').innerText = data.fecha;
+          document.getElementById('hora').innerText = data.timestamp;
+          document.getElementById('Usuario').innerText = data.usuario;
+          document.getElementById('yaw').innerText = data.yaw;
+          document.getElementById('pitch').innerText = data.pitch;
+          document.getElementById('roll').innerText = data.roll;
+        })
+        .catch(error => console.error('Error al obtener los datos:', error));
+    }
 
-    <script>
-        // Función para actualizar los datos
-        function actualizarDatos() {
-            fetch('/latest-data') // Solicitar los últimos datos al servidor
-            .then(response => response.json())
-            .then(data => {
-                // Actualizar los elementos HTML con los nuevos datos recibidos
-                document.getElementById('latitud').innerText = data.lati;
-                document.getElementById('longitud').innerText = data.longi;
-                document.getElementById('fecha').innerText = data.fecha;
-                document.getElementById('hora').innerText = data.timestamp;
-                document.getElementById('Usuario').innerText = data.usuario;
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
-        }
+    // Actualizar los datos cada 5 segundos (5000 milisegundos)
+    setInterval(actualizarDatos, 5000);
 
-        // Actualizar los datos cada 5 segundos (5000 milisegundos)
-        setInterval(actualizarDatos, 500);
-
-        // Llamar a la función actualizarDatos al cargar la página para obtener los datos iniciales
-        window.onload = actualizarDatos;
-    </script>
+    // Llamar a la función actualizarDatos al cargar la página para obtener los datos iniciales
+    window.onload = actualizarDatos;
+  </script>
 </body>
+
 </html>

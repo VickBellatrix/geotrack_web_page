@@ -190,7 +190,7 @@
       margin-bottom: 2px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
-      font-size: min(5vw, 16px);
+      font-size: min(5vw, 20px);
     }
 
     h3 {
@@ -211,7 +211,7 @@
       margin-bottom: 20px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: lighter;
-      font-size: 20x;
+      font-size: min(5vw, 24px);
     }
 
     #resultados p {
@@ -411,14 +411,14 @@
     </div>
 
     <div class="inputs-container">
-      <label>Selecciona el vehiculo de interes:</label>
+      <!-- <label>Selecciona el vehiculo de interes:</label>
       <div class="IDS-content">
         <img src="/views/Media/juan.jpg" class="juan-img" onclick="selectImage('juan')">
         <img src="/views/Media/sara.jpg" class="sara-img" onclick="selectImage('sara')">
         <img src="/views/Media/mateo.jpg" class="mateo-img" onclick="selectImage('mateo')">
 
       </div>
-      <label>Desliza para ver los demás vehiculos</label>
+      <label>Desliza para ver los demás vehiculos</label> -->
 
       <div>
         <label for="fecha-inicio">Fecha de inicio:</label>
@@ -665,13 +665,26 @@
             const longitud = result.longitud; // Obtener la longitud
             const fecha = result.fecha;
             const hora = result.hora;
-            coordenadas.push([parseFloat(latitud), parseFloat(longitud), fecha, hora]); // Agregar las coordenadas como un par [latitud, longitud]
+            const yaw = result.yaw; // Obtener el yaw
+            const pitch = result.pitch; // Obtener el pitch
+            const roll = result.roll; // Obtener el roll
+
+            coordenadas.push([
+              parseFloat(latitud),
+              parseFloat(longitud),
+              fecha,
+              hora,
+              parseFloat(yaw), // Agregar yaw a la matriz de coordenadas
+              parseFloat(pitch), // Agregar pitch a la matriz de coordenadas
+              parseFloat(roll) // Agregar roll a la matriz de coordenadas
+            ]);
           });
 
           // Llamar a la función para mostrar los resultados en el mapa
           mostrarResultadosEnMapa(coordenadas);
         })
         .catch(error => console.error('Error:', error));
+
     }
 
     // Evento click del botón de filtrar
@@ -688,7 +701,7 @@
         // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
         const noDataMessage = document.createElement('tr');
         const messageCell = document.createElement('td');
-        messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
+        messageCell.setAttribute('colspan', '8'); // Column span para ocupar todas las columnas
         messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
         noDataMessage.appendChild(messageCell);
         resultadosTbody.appendChild(noDataMessage);
@@ -701,23 +714,33 @@
           const longitudCell = document.createElement('td');
           const fechaCell = document.createElement('td');
           const horaCell = document.createElement('td');
+          const yawCell = document.createElement('td');
+          const pitchCell = document.createElement('td');
+          const rollCell = document.createElement('td');
 
           usuarioCell.textContent = result.usuario; // Obtener el usuario del resultado
           latitudCell.textContent = result.latitud;
           longitudCell.textContent = result.longitud;
           fechaCell.textContent = result.fecha;
           horaCell.textContent = result.hora;
+          yawCell.textContent = result.yaw; // Agregar el valor de yaw
+          pitchCell.textContent = result.pitch; // Agregar el valor de pitch
+          rollCell.textContent = result.roll; // Agregar el valor de roll
 
           row.appendChild(usuarioCell);
           row.appendChild(latitudCell);
           row.appendChild(longitudCell);
           row.appendChild(fechaCell);
           row.appendChild(horaCell);
+          row.appendChild(yawCell); // Agregar la celda de yaw a la fila
+          row.appendChild(pitchCell); // Agregar la celda de pitch a la fila
+          row.appendChild(rollCell); // Agregar la celda de roll a la fila
 
           resultadosTbody.appendChild(row);
         });
       }
     }
+
 
     // Función para mostrar los resultados en el mapa
     function mostrarResultadosEnMapa(coordenadas) {
@@ -962,7 +985,14 @@
         simplePoints.push(simplePoint);
 
 
-        const popupContent = `Fecha: ${coordenada[3]}<br>Hora: ${coordenada[4]}`;
+        const popupContent = `
+              Fecha: ${coordenada[3]}<br>
+              Hora: ${coordenada[4]}<br>
+              Yaw: ${coordenada[5]}<br>
+              Pitch: ${coordenada[6]}<br>
+              Roll: ${coordenada[7]}<br>
+              `;
+
 
         // Vincular evento de clic al punto para mostrar el popup
         simplePoint.on('click', function(event) {

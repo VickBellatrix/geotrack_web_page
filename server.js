@@ -172,6 +172,9 @@ adjustedLongitude = "-" + adjustedLongitude;
     latestData.pitch = pitch;
     latestData.roll = roll;
 
+        console.log(`Latitud2: ${latestData.lati}`);
+    console.log(`Longitud2: ${latestData.longi}`);
+
     // Inserción de los datos en la base de datos
     const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario, yaw, pitch, roll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     connection.query(

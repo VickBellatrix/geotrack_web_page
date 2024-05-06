@@ -136,6 +136,16 @@ server.on("connection", (socket) => {
     console.log(`Roll: ${roll}`);
     console.log(`Usuario: ${usuario}`);
 
+    // Asignar los valores a latestData
+    latestData.lati = adjustedLatitude;
+    latestData.longi = adjustedLongitude;
+    latestData.fecha = formattedDate;
+    latestData.timestamp = formattedTime;
+    latestData.usuario = usuario;
+    latestData.yaw = yaw;
+    latestData.pitch = pitch;
+    latestData.roll = roll;
+
     // Inserción de los datos en la base de datos
     const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario, yaw, pitch, roll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     connection.query(

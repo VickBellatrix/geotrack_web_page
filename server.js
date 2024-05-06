@@ -110,14 +110,21 @@ server.on("connection", (socket) => {
 
       const latitudeDegrees = latitude.substr(0, 2); // Extraer los grados de latitud
       const latitudeMinutes = latitude.substr(2, 6); // Extraer los minutos de latitud
-      const latitudeWithDecimal = `${latitudeDegrees}.${latitudeMinutes}`; // Concatenar grados y minutos
-      const adjustedLatitude = parseFloat(latitudeWithDecimal).toFixed(7);
+      //const latitudeWithDecimal = `${latitudeDegrees}.${latitudeMinutes}`; // Concatenar grados y minutos
+      //const adjustedLatitude = parseFloat(latitudeWithDecimal).toFixed(7);
   
       const longitudeDegrees = longitude.substr(0, 3); // Extraer los grados de longitud
       const longitudeMinutes = longitude.substr(2, 6); // Extraer los minutos de longitud
       const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
-      let adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
-      adjustedLongitude = "-"+adjustedLongitude;
+      //let adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
+      //adjustedLongitude = "-"+adjustedLongitude;
+
+    const latitudeWithDecimal = parseFloat(`${latitudeDegrees}.${latitudeMinutes}`);
+const adjustedLatitude = latitudeWithDecimal.toFixed(7);
+
+const longitudeWithDecimal = parseFloat(`${longitudeDegrees}.${longitudeMinutes}`);
+let adjustedLongitude = longitudeWithDecimal.toFixed(7);
+adjustedLongitude = "-" + adjustedLongitude;
 
       // Formatear la hora
       const hours = time.substr(0, 2);

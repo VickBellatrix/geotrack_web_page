@@ -107,6 +107,9 @@ server.on("connection", (socket) => {
       let longitude = gpsFields[5];
       //let longitudeDir = gpsFields[6];
       const date = gpsFields[9];
+
+    const adjustedLatitude = latitude;
+    const adjustedLongitude = longitude;
  
       // Formatear la hora
       const hours = time.substr(0, 2);

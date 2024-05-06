@@ -87,44 +87,51 @@ server.on("connection", (socket) => {
     const message = String(data);
     // MENSAJE QUE SE ENVIA:   $GPRMC,040451.00,A,1054.28928,N,07448.58710,W,0.502,,050524,,,A*6A , -0.62, 0.06, -0.04,ROVER
 
-    const parts = message.split(",");
+ const parts = message.split("|");
 
-    // Extraer los campos relevantes
-    const time = parts[1]; // Hora en formato HHMMSS.ss
-    const latitude = parts[3].replace(".", "");
-    const longitude = parts[5].replace(".", "");
-    const rawDate = parts[9]; // Tomar la fecha completa
-    const yaw = parts[13]; // Yaw
-    const pitch = parts[14]; // Pitch
-    const roll = parts[15]; // Roll
-    const usuario = parts[16]; // Usuario
+    if (parts.length === 2) {
+      const gpsData = parts[0].trim();
+      const imuData = parts[1].trim();
 
-    // Convertir la hora a formato legible
-    const hours = time.substr(0, 2);
-    const minutes = time.substr(2, 2);
-    const seconds = time.substr(4, 2);
-    const formattedTime = `${hours}:${minutes}:${seconds}`;
+      // Procesar los datos del GPS
+      console.log("Datos del GPS:", gpsData);
 
-    const latitudeDegrees = latitude.substr(0, 2); // Extraer los grados de latitud
-    const latitudeMinutes = latitude.substr(2, 6); // Extraer los minutos de latitud
-    const latitudeWithDecimal = `${latitudeDegrees}.${latitudeMinutes}`; // Concatenar grados y minutos
-    const adjustedLatitude = parseFloat(latitudeWithDecimal).toFixed(7);
+      // Procesar los datos de la IMU
+      console.log("Datos de la IMU:", imuData);
 
-    const longitudeDegrees = longitude.substr(0, 3); // Extraer los grados de longitud
-    const longitudeMinutes = longitude.substr(2, 6); // Extraer los minutos de longitud
-    const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
-    const adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
+      // Separar los datos del GPS
+      const gpsFields = gpsData.split(",");
+      const time = gpsFields[1];
+      const latitude = gpsFields[3];
+      const latitudeDir = gpsFields[4];
+      let longitude = gpsFields[5];
+      let longitudeDir = gpsFields[6];
+      const date = gpsFields[9];
 
-    date = rawDate[0]; // Tomar solo la fecha
+      // Formatear la hora
+      const hours = time.substr(0, 2);
+      const minutes = time.substr(2, 2);
+      const seconds = time.substr(4, 2);
+      const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-    // Formatear la fecha
-    // Extraer los componentes de la fecha
-    const day = rawDate.substr(0, 2);
-    const month = rawDate.substr(2, 2);
-    const year = `20${rawDate.substr(4, 2)}`; // Se asume que el año está en formato YY (ej. 24 para 2024)
+      // Formatear la fecha
+      const day = date.substr(0, 2);
+      const month = date.substr(2, 2);
+      const year = `20${date.substr(4, 2)}`;
+      const formattedDate = `${day}/${month}/${year}`;
 
-    // Formatear la fecha
-    const formattedDate = `${year}-${month}-${day}`;
+      // Asegurarse de que la longitud sea negativa si la dirección no está presente o es diferente de "E" (este)
+      if (!longitudeDir || longitudeDir !== "E") {
+        longitude = "-" + longitude;
+      }
+
+      // Separar los datos de la IMU
+      const imuValues = imuData.split(",");
+      const yaw = imuValues[0].trim();
+      const pitch = imuValues[1].trim();
+      const roll = imuValues[2].trim();
+
+
 
     // Imprimir los datos procesados
     console.log(`Hora: ${formattedTime}`);

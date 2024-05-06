@@ -89,7 +89,7 @@ server.on("connection", (socket) => {
 
  const parts = message.split("|");
 
-    if (parts.length === 2) {
+    //if (parts.length === 2) {
       const gpsData = parts[0].trim();
       const imuData = parts[1].trim();
 
@@ -131,7 +131,7 @@ server.on("connection", (socket) => {
       const pitch = imuValues[1].trim();
       const roll = imuValues[2].trim();
 
-    }
+    //}
 
     // Imprimir los datos procesados
     console.log(`Hora: ${formattedTime}`);

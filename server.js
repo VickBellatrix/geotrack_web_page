@@ -126,10 +126,10 @@ server.on("connection", (socket) => {
       const formattedTime = `${hours}:${minutes}:${seconds}`;
 
       // Formatear la fecha
-      const day = date.substr(0, 2);
+      const year = "20" + date.substr(4, 2);
       const month = date.substr(2, 2);
-      const year = `20${date.substr(4, 2)}`;
-      const formattedDate = `${day}/${month}/${year}`;
+      const day = date.substr(0, 2);
+      const formattedDate = `${year}-${month}-${day}`;
 
       // Asegurarse de que la longitud sea negativa si la dirección no está presente o es diferente de "E" (este)
       //if (!longitudeDir || longitudeDir !== "E") {

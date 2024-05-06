@@ -134,7 +134,8 @@ server.on("connection", (socket) => {
       const pitch = imuValues[1].trim();
       const roll = imuValues[2].trim();
 
-    //}
+    //} 
+    const usuario = "Rover";
 
     // Imprimir los datos procesados
     console.log(`Hora: ${formattedTime}`);

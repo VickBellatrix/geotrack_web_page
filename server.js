@@ -121,9 +121,9 @@ server.on("connection", (socket) => {
       const formattedDate = `${day}/${month}/${year}`;
 
       // Asegurarse de que la longitud sea negativa si la dirección no está presente o es diferente de "E" (este)
-      if (!longitudeDir || longitudeDir !== "E") {
+      //if (!longitudeDir || longitudeDir !== "E") {
         longitude = "-" + longitude;
-      }
+      //}
 
       // Separar los datos de la IMU
       const imuValues = imuData.split(",");

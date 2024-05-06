@@ -103,11 +103,11 @@ server.on("connection", (socket) => {
       const gpsFields = gpsData.split(",");
       const time = gpsFields[1];
       const latitude = gpsFields[3];
-      const latitudeDir = gpsFields[4];
+      //const latitudeDir = gpsFields[4];
       let longitude = gpsFields[5];
-      let longitudeDir = gpsFields[6];
+      //let longitudeDir = gpsFields[6];
       const date = gpsFields[9];
-
+ 
       // Formatear la hora
       const hours = time.substr(0, 2);
       const minutes = time.substr(2, 2);

@@ -102,15 +102,23 @@ server.on("connection", (socket) => {
       // Separar los datos del GPS
       const gpsFields = gpsData.split(",");
       const time = gpsFields[1];
-      const latitude = gpsFields[3];
+      const latitude = gpsFields[3].replace(".", ""); ;
       //const latitudeDir = gpsFields[4];
-      let longitude = gpsFields[5];
+      let longitude = gpsFields[5].replace(".", ""); ;
       //let longitudeDir = gpsFields[6];
       const date = gpsFields[9];
 
-    const adjustedLatitude = latitude;
-    const adjustedLongitude = longitude;
- 
+      const latitudeDegrees = latitude.substr(0, 2); // Extraer los grados de latitud
+      const latitudeMinutes = latitude.substr(2, 6); // Extraer los minutos de latitud
+      const latitudeWithDecimal = `${latitudeDegrees}.${latitudeMinutes}`; // Concatenar grados y minutos
+      const adjustedLatitude = parseFloat(latitudeWithDecimal).toFixed(7);
+  
+      const longitudeDegrees = longitude.substr(0, 3); // Extraer los grados de longitud
+      const longitudeMinutes = longitude.substr(2, 6); // Extraer los minutos de longitud
+      const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
+      const adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
+      adjustedLongitude = "-"+adjustedLongitude;
+
       // Formatear la hora
       const hours = time.substr(0, 2);
       const minutes = time.substr(2, 2);
@@ -125,7 +133,7 @@ server.on("connection", (socket) => {
 
       // Asegurarse de que la longitud sea negativa si la dirección no está presente o es diferente de "E" (este)
       //if (!longitudeDir || longitudeDir !== "E") {
-        longitude = "-" + longitude;
+       // longitude = "-" + longitude;
       //}
 
       // Separar los datos de la IMU

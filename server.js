@@ -115,7 +115,7 @@ server.on("connection", (socket) => {
   
       const longitudeDegrees = longitude.substr(0, 3); // Extraer los grados de longitud
       const longitudeMinutes = longitude.substr(2, 6); // Extraer los minutos de longitud
-      const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
+      //const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
       //let adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
       //adjustedLongitude = "-"+adjustedLongitude;
 

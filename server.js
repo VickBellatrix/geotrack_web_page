@@ -150,24 +150,28 @@ server.on("connection", (socket) => {
     }
 
     // Inserción de los datos en la base de datos
-    const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario, yaw, pitch, roll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    connection.query(
-      sql,
-      [
-        adjustedLatitude,
-        adjustedLongitude,
-        formattedDate,
-        formattedTime,
-        usuario,
-        yaw,
-        pitch,
-        roll,
-      ],
-      (error, results) => {
-        if (error) console.error(error);
-        else console.log("Datos insertados correctamente en la base de datos");
-      }
-    );
+
+    if (isMaster) {
+      const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario, yaw, pitch, roll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+      connection.query(
+        sql,
+        [
+          adjustedLatitude,
+          adjustedLongitude,
+          formattedDate,
+          formattedTime,
+          usuario,
+          yaw,
+          pitch,
+          roll,
+        ],
+        (error, results) => {
+          if (error) console.error(error);
+          else
+            console.log("Datos insertados correctamente en la base de datos");
+        }
+      );
+    }
 
     //=====================================
   });

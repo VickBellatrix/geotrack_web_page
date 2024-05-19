@@ -97,10 +97,10 @@ server.on("connection", (socket) => {
 
     // Separar los datos del GPS
     const gpsFields = gpsData.split(",");
-    const latitude = gpsFields[0].trim();
-    const longitude = gpsFields[1].trim();
-    const date = gpsFields[2].trim();
-    const time = gpsFields[3].trim();
+    const latitude = gpsFields[0];
+    const longitude = gpsFields[1];
+    const date = gpsFields[2];
+    const time = gpsFields[3];
 
     const adjustedLatitude = parseFloat(latitude).toFixed(7);
     let adjustedLongitude = parseFloat(longitude).toFixed(7);
@@ -118,9 +118,9 @@ server.on("connection", (socket) => {
 
     // Separar los datos de la IMU
     const imuValues = imuData.split(",");
-    const yaw = imuValues[0].trim();
-    const pitch = imuValues[1].trim();
-    const roll = imuValues[2].trim();
+    const yaw = imuValues[0];
+    const pitch = imuValues[1];
+    const roll = imuValues[2];
 
     const usuario = "Rover";
 

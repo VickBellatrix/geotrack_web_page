@@ -5,9 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ROVER</title>
-  <!-- Importar Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.3.8/build/spline-viewer.js"></script>
 
   <style>
     body {
@@ -44,7 +43,6 @@
     .button-container {
       text-align: center;
       max-height: 50px;
-      /* Altura máxima del contenedor */
       display: flex;
       align-items: center;
     }
@@ -58,12 +56,9 @@
       font-size: min(5vw, 20px);
       cursor: pointer;
       height: auto;
-      /* Altura ajustada automáticamente según el contenido */
       width: auto;
       display: flex;
-      /* Convertir el botón en un contenedor flex */
       justify-content: center;
-      /* Alinear el contenido horizontalmente al centro */
     }
 
     .position-container {
@@ -76,7 +71,6 @@
       font-size: 30px;
     }
 
-
     #content-container {
       background-color: rgb(191, 210, 224);
       border-radius: 20px;
@@ -88,7 +82,6 @@
       margin: 10px auto;
       overflow-x: auto;
       height: 100%;
-      /* La altura será igual al 100% del viewport */
       max-height: 900px;
     }
 
@@ -105,7 +98,6 @@
       margin: 10px auto;
       overflow-x: auto;
       height: 100%;
-      /* La altura será igual al 100% del viewport */
       max-height: 900px;
     }
 
@@ -114,35 +106,23 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 80vw;
-      /* Ancho relativo al 80% del ancho de la ventana del navegador */
       height: 80vh;
-      /* Alto relativo al 80% de la altura de la ventana del navegador */
       max-width: 800px;
-      /* Ancho máximo de 800px para mantener la proporción */
       max-height: 800px;
-      /* Alto máximo de 800px para mantener la proporción */
       background-color: #f0f0f0;
-      /* Color de fondo */
       border: 2px solid #ccc;
-      /* Borde sólido de 2px de grosor y color gris claro */
       border-radius: 10px;
-      /* Borde redondeado con un radio de 10px */
       overflow: hidden;
-      /* Oculta cualquier contenido que exceda el tamaño del contenedor */
       display: flex;
-      /* Convertir el botón en un contenedor flex */
       justify-content: center;
       align-items: center;
-      /* Alinear el contenido horizontalmente al centro */
     }
 
     #animacion3d {
-      width: 100%;
-      /* Ancho del 100% del contenedor */
-      height: 100%;
-      /* Alto del 100% del contenedor */
+      width: 100vw;
+      height: 100vh;
+      display: block;
     }
-
 
     h1 {
       text-align: center;
@@ -184,7 +164,6 @@
     <div class="button-container">
       <button class="consult-button" id="gps">
         <h2>POSICIÓN GPS</h2>
-
       </button>
     </div>
     <div class="button-container">
@@ -198,86 +177,61 @@
     <div class="position-container">
       <h3>¡Bienvenidos!</h3>
       <h2>En esta web encontrarán datos del rover, tales como su orientación en tiempo real, su posición satelital y podrás consular donde ha estado. </h2>
-      <div class="Render-container">
-        <div id="animacion3d"></div>
+      <div id="Render-container">
+        <div id="animacion3d">
+<spline-viewer url="https://prod.spline.design/fXMPQk0dnAZKKvhd/scene.splinecode"></spline-viewer>
+        </div>
       </div>
     </div>
   </div>
-  </div>
   <script>
-    // Variables para controlar la orientación del cubo
-    var rotationX = 0;
-    var rotationY = 0;
-    var rotationZ = 0;
+    // Crear la cámara
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 5);
 
-    // Crea una escena
-    var scene = new THREE.Scene();
+    // Crear la escena
+    const scene = new THREE.Scene();
 
-    // Crea una cámara
-    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+    // Cargar el objeto 3D desde Spline
+    const loader = new SplineLoader();
+    loader.load(
+      'https://prod.spline.design/fXMPQk0dnAZKKvhd/scene.splinecode',
+      (splineScene) => {
+        scene.add(splineScene);
+      }
+    );
 
-    // Crea un renderizador
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth * 0.7, window.innerHeight * 0.7);
+    // Crear el renderizador
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('animacion3d').appendChild(renderer.domElement);
 
-    // Crea un cubo
-    var geometry = new THREE.BoxGeometry();
-    var material = new THREE.MeshBasicMaterial({
-      color: 0x00ff00
+    // Configurar las sombras
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
+
+    scene.background = new THREE.Color('#2d2e32');
+    renderer.setClearAlpha(1);
+
+    // Configurar los controles de órbita
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.125;
+
+    // Ajustar la ventana al redimensionar
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
-    var cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
 
-    // Función para actualizar la orientación del cubo
-    function updateCubeRotation() {
-      fetch('/latest-data') // Realizar solicitud al servidor para obtener los últimos datos
-        .then(response => response.json())
-        .then(data => {
-          // Verificar si los datos de orientación están presentes y asignarlos a las variables de rotación
-          if (data && data.yaw !== undefined && data.pitch !== undefined && data.roll !== undefined) {
-            rotationX = data.pitch;
-            rotationY = data.yaw;
-            rotationZ = data.roll;
-
-            // Actualizar la rotación del cubo
-            cube.rotation.x = rotationX;
-            cube.rotation.y = rotationY;
-            cube.rotation.z = rotationZ;
-          } else {
-            // Si los datos de orientación no están presentes, dejar la rotación del cubo en cero
-            cube.rotation.set(0, 0, 0);
-          }
-        })
-        .catch(error => {
-          console.error('Error al obtener los datos de orientación:', error);
-          // Si hay un error al obtener los datos, dejar la rotación del cubo en cero
-          cube.rotation.set(0, 0, 0);
-        });
-    }
-
-    // Función para renderizar la escena
-    function render() {
-      requestAnimationFrame(render);
-      updateCubeRotation();
+    // Función de animación
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
       renderer.render(scene, camera);
     }
-
-    // Inicia la renderización
-    render();
-
-    document.getElementById('historicos').addEventListener('click', function() {
-      var currentLocation = window.location.href;
-      var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'historicos';
-      window.location.href = url;
-    });
-
-    document.getElementById('gps').addEventListener('click', function() {
-      var currentLocation = window.location.href;
-      var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'ubicacion';
-      window.location.href = url;
-    });
+    animate();
   </script>
 </body>
 

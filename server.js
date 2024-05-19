@@ -116,7 +116,16 @@ server.on("connection", (socket) => {
     // Formatear la fecha
     const formattedDate = date.split("/").reverse().join("-");
 
-    const combinedDateTime = `${formattedDate}T${formattedTime}Z`;
+
+    function correctDateFormat(date) {
+        const [year, day, month] = date.split("-");
+        return `${year}-${month}-${day}`;
+    }
+
+
+    const correctedDateInput = correctDateFormat(formattedDate);
+
+    const combinedDateTime = `${correctedDateInput}T${formattedTime}Z`;
 
     function convertToGMTMinus5(gmtDateTime) {
         // Crear una nueva fecha con el valor proporcionado (que se asume en GMT)

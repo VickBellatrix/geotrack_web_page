@@ -116,6 +116,36 @@ server.on("connection", (socket) => {
     // Formatear la fecha
     const formattedDate = date.split("/").reverse().join("-");
 
+    const combinedDateTime = `${formattedDate}T${formattedTime}Z`;
+
+    function convertToGMTMinus5(gmtDateTime) {
+        // Crear una nueva fecha con el valor proporcionado (que se asume en GMT)
+        let date = new Date(gmtDateTime);
+    
+        // Obtener el tiempo actual en milisegundos
+        let currentTime = date.getTime();
+    
+        // Convertir las 5 horas a milisegundos
+        let gmtMinus5Offset = -5 * 60 * 60 * 1000;
+    
+        // Ajustar el tiempo al tiempo de GMT-5
+        let gmtMinus5Time = currentTime + gmtMinus5Offset;
+    
+        // Crear una nueva fecha ajustada a GMT-5
+        let gmtMinus5Date = new Date(gmtMinus5Time);
+    
+        return gmtMinus5Date;
+    }
+
+
+
+    let gmtMinus5DateTime = convertToGMTMinus5(combinedDateTime);
+
+    // Separar la fecha y la hora corregidas
+    let correctedDate = gmtMinus5DateTime.toISOString().split('T')[0];
+    let correctedTime = gmtMinus5DateTime.toISOString().split('T')[1].split('Z')[0];
+
+
     // Separar los datos de la IMU
     const imuValues = imuData.split(",");
     const yaw = imuValues[0];
@@ -125,8 +155,8 @@ server.on("connection", (socket) => {
     const usuario = "Rover";
 
     // Imprimir los datos procesados
-    console.log(`Hora: ${formattedTime}`);
-    console.log(`Fecha: ${formattedDate}`);
+    console.log(`Hora: ${correctedTime}`);
+    console.log(`Fecha: ${correctedDate}`);
     console.log(`Latitud: ${adjustedLatitude}`);
     console.log(`Longitud: ${adjustedLongitude}`);
     console.log(`YAW: ${yaw}`);
@@ -137,8 +167,8 @@ server.on("connection", (socket) => {
     // Asignar los valores a latestData
     latestData.lati = adjustedLatitude;
     latestData.longi = adjustedLongitude;
-    latestData.fecha = formattedDate;
-    latestData.timestamp = formattedTime;
+    latestData.fecha = correctedDate;
+    latestData.timestamp = correctedTime;
     latestData.usuario = usuario;
     latestData.yaw = yaw;
     latestData.pitch = pitch;

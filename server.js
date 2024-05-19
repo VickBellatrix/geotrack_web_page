@@ -83,13 +83,10 @@ server.on("connection", (socket) => {
     );
 
     //=====================================
-
     const message = String(data);
-    // MENSAJE QUE SE ENVIA:   $GPRMC,040451.00,A,1054.28928,N,07448.58710,W,0.502,,050524,,,A*6A , -0.62, 0.06, -0.04,ROVER
+    const parts = message.split("|");
 
- const parts = message.split("|");
-
-    //if (parts.length === 2) {
+    if (parts.length === 2) {
       const gpsData = parts[0].trim();
       const imuData = parts[1].trim();
 
@@ -101,47 +98,24 @@ server.on("connection", (socket) => {
 
       // Separar los datos del GPS
       const gpsFields = gpsData.split(",");
-      const time = gpsFields[1];
-      const latitude = gpsFields[3].replace(".", ""); ;
-      //const latitudeDir = gpsFields[4];
-      let longitude = gpsFields[5].replace(".", ""); ;
-      //let longitudeDir = gpsFields[6];
-      const date = gpsFields[9];
+      const latitude = gpsFields[0].trim();
+      const longitude = gpsFields[1].trim();
+      const date = gpsFields[2].trim();
+      const time = gpsFields[3].trim();
 
-      const latitudeDegrees = latitude.substr(0, 2); // Extraer los grados de latitud
-      const latitudeMinutes = latitude.substr(2, 6); // Extraer los minutos de latitud
-      //const latitudeWithDecimal = `${latitudeDegrees}.${latitudeMinutes}`; // Concatenar grados y minutos
-      //const adjustedLatitude = parseFloat(latitudeWithDecimal).toFixed(7);
-  
-      const longitudeDegrees = longitude.substr(0, 3); // Extraer los grados de longitud
-      const longitudeMinutes = longitude.substr(2, 6); // Extraer los minutos de longitud
-      //const longitudeWithDecimal = `${longitudeDegrees}.${longitudeMinutes}`; // Concatenar grados y minutos
-      //let adjustedLongitude = parseFloat(longitudeWithDecimal).toFixed(7);
-      //adjustedLongitude = "-"+adjustedLongitude;
+      const adjustedLatitude = parseFloat(latitude).toFixed(7);
+      let adjustedLongitude = parseFloat(longitude).toFixed(7);
 
-    const latitudeWithDecimal = parseFloat(`${latitudeDegrees}.${latitudeMinutes}`);
-const adjustedLatitude = latitudeWithDecimal.toFixed(7);
-
-const longitudeWithDecimal = parseFloat(`${longitudeDegrees}.${longitudeMinutes}`);
-let adjustedLongitude = longitudeWithDecimal.toFixed(7);
-adjustedLongitude = "-" + adjustedLongitude;
+      // Asegurarse de que la longitud sea negativa
+      if (!longitude.startsWith("-")) {
+        adjustedLongitude = "-" + adjustedLongitude;
+      }
 
       // Formatear la hora
-      const hours = time.substr(0, 2);
-      const minutes = time.substr(2, 2);
-      const seconds = time.substr(4, 2);
-      const formattedTime = `${hours}:${minutes}:${seconds}`;
+      const formattedTime = time;
 
       // Formatear la fecha
-      const year = "20" + date.substr(4, 2);
-      const month = date.substr(2, 2);
-      const day = date.substr(0, 2);
-      const formattedDate = `${year}-${month}-${day}`;
-
-      // Asegurarse de que la longitud sea negativa si la dirección no está presente o es diferente de "E" (este)
-      //if (!longitudeDir || longitudeDir !== "E") {
-       // longitude = "-" + longitude;
-      //}
+      const formattedDate = date.split("/").reverse().join("-");
 
       // Separar los datos de la IMU
       const imuValues = imuData.split(",");
@@ -149,31 +123,31 @@ adjustedLongitude = "-" + adjustedLongitude;
       const pitch = imuValues[1].trim();
       const roll = imuValues[2].trim();
 
-    //} 
-    const usuario = "Rover";
+      const usuario = "Rover";
 
-    // Imprimir los datos procesados
-    console.log(`Hora: ${formattedTime}`);
-    console.log(`Fecha: ${formattedDate}`);
-    console.log(`Latitud: ${adjustedLatitude}`);
-    console.log(`Longitud: ${adjustedLongitude}`);
-    console.log(`YAW: ${yaw}`);
-    console.log(`PITCH: ${pitch}`);
-    console.log(`Roll: ${roll}`);
-    console.log(`Usuario: ${usuario}`);
+      // Imprimir los datos procesados
+      console.log(`Hora: ${formattedTime}`);
+      console.log(`Fecha: ${formattedDate}`);
+      console.log(`Latitud: ${adjustedLatitude}`);
+      console.log(`Longitud: ${adjustedLongitude}`);
+      console.log(`YAW: ${yaw}`);
+      console.log(`PITCH: ${pitch}`);
+      console.log(`Roll: ${roll}`);
+      console.log(`Usuario: ${usuario}`);
 
-    // Asignar los valores a latestData
-    latestData.lati = adjustedLatitude;
-    latestData.longi = adjustedLongitude;
-    latestData.fecha = formattedDate;
-    latestData.timestamp = formattedTime;
-    latestData.usuario = usuario;
-    latestData.yaw = yaw;
-    latestData.pitch = pitch;
-    latestData.roll = roll;
+      // Asignar los valores a latestData
+      latestData.lati = adjustedLatitude;
+      latestData.longi = adjustedLongitude;
+      latestData.fecha = formattedDate;
+      latestData.timestamp = formattedTime;
+      latestData.usuario = usuario;
+      latestData.yaw = yaw;
+      latestData.pitch = pitch;
+      latestData.roll = roll;
 
-        console.log(latestData.lati);
-    console.log(latestData.longi );
+      console.log(latestData.lati);
+      console.log(latestData.longi);
+    }
 
     // Inserción de los datos en la base de datos
     const sql = `INSERT INTO coords (latitud, longitud, fecha, hora, usuario, yaw, pitch, roll) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;

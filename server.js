@@ -86,68 +86,66 @@ server.on("connection", (socket) => {
     const message = String(data);
     const parts = message.split("|");
 
-    if (parts.length === 2) {
-      const gpsData = parts[0].trim();
-      const imuData = parts[1].trim();
+    const gpsData = parts[0].trim();
+    const imuData = parts[1].trim();
 
-      // Procesar los datos del GPS
-      console.log("Datos del GPS:", gpsData);
+    // Procesar los datos del GPS
+    console.log("Datos del GPS:", gpsData);
 
-      // Procesar los datos de la IMU
-      console.log("Datos de la IMU:", imuData);
+    // Procesar los datos de la IMU
+    console.log("Datos de la IMU:", imuData);
 
-      // Separar los datos del GPS
-      const gpsFields = gpsData.split(",");
-      const latitude = gpsFields[0].trim();
-      const longitude = gpsFields[1].trim();
-      const date = gpsFields[2].trim();
-      const time = gpsFields[3].trim();
+    // Separar los datos del GPS
+    const gpsFields = gpsData.split(",");
+    const latitude = gpsFields[0].trim();
+    const longitude = gpsFields[1].trim();
+    const date = gpsFields[2].trim();
+    const time = gpsFields[3].trim();
 
-      const adjustedLatitude = parseFloat(latitude).toFixed(7);
-      let adjustedLongitude = parseFloat(longitude).toFixed(7);
+    const adjustedLatitude = parseFloat(latitude).toFixed(7);
+    let adjustedLongitude = parseFloat(longitude).toFixed(7);
 
-      // Asegurarse de que la longitud sea negativa
-      if (!longitude.startsWith("-")) {
-        adjustedLongitude = "-" + adjustedLongitude;
-      }
-
-      // Formatear la hora
-      const formattedTime = time;
-
-      // Formatear la fecha
-      const formattedDate = date.split("/").reverse().join("-");
-
-      // Separar los datos de la IMU
-      const imuValues = imuData.split(",");
-      const yaw = imuValues[0].trim();
-      const pitch = imuValues[1].trim();
-      const roll = imuValues[2].trim();
-
-      const usuario = "Rover";
-
-      // Imprimir los datos procesados
-      console.log(`Hora: ${formattedTime}`);
-      console.log(`Fecha: ${formattedDate}`);
-      console.log(`Latitud: ${adjustedLatitude}`);
-      console.log(`Longitud: ${adjustedLongitude}`);
-      console.log(`YAW: ${yaw}`);
-      console.log(`PITCH: ${pitch}`);
-      console.log(`Roll: ${roll}`);
-      console.log(`Usuario: ${usuario}`);
-
-      // Asignar los valores a latestData
-      latestData.lati = adjustedLatitude;
-      latestData.longi = adjustedLongitude;
-      latestData.fecha = formattedDate;
-      latestData.timestamp = formattedTime;
-      latestData.usuario = usuario;
-      latestData.yaw = yaw;
-      latestData.pitch = pitch;
-      latestData.roll = roll;
-
-      console.log(latestData.lati);
-      console.log(latestData.longi);
+    // Asegurarse de que la longitud sea negativa
+    if (!longitude.startsWith("-")) {
+      adjustedLongitude = "-" + adjustedLongitude;
     }
+
+    // Formatear la hora
+    const formattedTime = time;
+
+    // Formatear la fecha
+    const formattedDate = date.split("/").reverse().join("-");
+
+    // Separar los datos de la IMU
+    const imuValues = imuData.split(",");
+    const yaw = imuValues[0].trim();
+    const pitch = imuValues[1].trim();
+    const roll = imuValues[2].trim();
+
+    const usuario = "Rover";
+
+    // Imprimir los datos procesados
+    console.log(`Hora: ${formattedTime}`);
+    console.log(`Fecha: ${formattedDate}`);
+    console.log(`Latitud: ${adjustedLatitude}`);
+    console.log(`Longitud: ${adjustedLongitude}`);
+    console.log(`YAW: ${yaw}`);
+    console.log(`PITCH: ${pitch}`);
+    console.log(`Roll: ${roll}`);
+    console.log(`Usuario: ${usuario}`);
+
+    // Asignar los valores a latestData
+    latestData.lati = adjustedLatitude;
+    latestData.longi = adjustedLongitude;
+    latestData.fecha = formattedDate;
+    latestData.timestamp = formattedTime;
+    latestData.usuario = usuario;
+    latestData.yaw = yaw;
+    latestData.pitch = pitch;
+    latestData.roll = roll;
+
+    console.log(latestData.lati);
+    console.log(latestData.longi);
 
     // Inserción de los datos en la base de datos
 

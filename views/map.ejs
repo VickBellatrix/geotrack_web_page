@@ -18,7 +18,7 @@
     }
 
     .logo-container {
-      max-width: 200px;
+      max-width: 140px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,8 +28,6 @@
     .logo-image {
       max-width: 100%;
       height: auto;
-      margin-left: 25px;
-      margin-right: 25px;
     }
 
     #banner {
@@ -44,7 +42,7 @@
 
     .button-container {
       text-align: center;
-      max-height: 50px;
+      max-height: 40px;
       /* Altura máxima del contenedor */
       display: flex;
       align-items: center;
@@ -52,10 +50,10 @@
 
     .consult-button {
       background-color: rgb(255, 255, 255);
-      max-height: 50px;
+      max-height: auto;
       align-items: center;
       border-radius: 10px;
-      padding: 2vw 4vw;
+      padding: 1vw;
       font-size: min(5vw, 20px);
       cursor: pointer;
       height: auto;
@@ -113,16 +111,18 @@
       text-align: center;
       margin: 10px auto;
       overflow-x: auto;
-      height: 100%; /* La altura será igual al 100% del viewport */
+      height: 100%;
+      /* La altura será igual al 100% del viewport */
       max-height: 900px;
-  }
-  
+    }
+
     #map {
       height: 60vh;
       width: calc(100% - 20px);
       border-radius: 20px;
       border: 3px solid rgb(8, 27, 42);
     }
+
     h1 {
       text-align: center;
       color: rgb(255, 255, 255);
@@ -136,11 +136,11 @@
     h2 {
       text-align: center;
       color: rgb(8, 27, 42);
-      margin-top: 5px;
-      margin-bottom: 5px;
+      margin-top: 2px;
+      margin-bottom: 2px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
-      font-size: min(5vw, 20px);
+      font-size: min(5vw, 16px);
     }
 
     h3 {
@@ -218,7 +218,7 @@
               polyline.addLatLng([data.lati, data.longi]);
 
               // Centrar el mapa en la nueva ubicación
-              //map.setView([data.lati, data.longi], 13);  
+              map.setView([data.lati, data.longi]);  
 
               // Función para centrar el mapa en la posición actual
               function centrarMapaEnPosicionActual() {
@@ -253,4 +253,5 @@
     document.addEventListener('DOMContentLoaded', initMap);
   </script>
 </body>
+
 </html>

@@ -20,7 +20,7 @@
     }
 
     .logo-container {
-      max-width: 200px;
+      max-width: 140px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -55,7 +55,7 @@
       max-height: 50px;
       align-items: center;
       border-radius: 10px;
-      padding: 2vw 4vw;
+      padding: 1.5vw 3vw;
       font-size: min(5vw, 20px);
       cursor: pointer;
       height: auto;
@@ -82,6 +82,7 @@
       /* Alinea verticalmente el contenido */
       margin: auto;
     }
+
     .filtrar1-button {
       background-color: rgb(8, 27, 42);
       max-height: 50px;
@@ -118,6 +119,17 @@
       margin: 10px auto;
     }
 
+    #busquedaArea-container {
+      background-color: rgb(8, 27, 42);
+      border-radius: 20px;
+      padding: 5px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: calc(100vw);
+      max-width: calc(100% - 40px);
+      text-align: center;
+      margin: 10px auto;
+    }
+
     #hora-container {
       background-color: rgb(191, 210, 224);
       border-radius: 20px;
@@ -135,8 +147,7 @@
     }
 
     .left {
-      flex: 1;
-      margin-right: 10px;
+      DISPLAY: NONE;
     }
 
     .right {
@@ -145,10 +156,7 @@
     }
 
     .table-container {
-      max-height: 850px;
-      /* Altura máxima para la tabla */
-      overflow-y: auto;
-      /* Permitir scroll vertical cuando sea necesario */
+      display: none;
     }
 
     #map {
@@ -178,8 +186,8 @@
     h2 {
       text-align: center;
       color: rgb(8, 27, 42);
-      margin-top: 5px;
-      margin-bottom: 5px;
+      margin-top: 2px;
+      margin-bottom: 2px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: bold;
       font-size: min(5vw, 20px);
@@ -198,10 +206,12 @@
     label {
       text-align: center;
       color: #ffffff;
-      margin: 5px;
+      margin: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       font-weight: lighter;
-      font-size: 20x;
+      font-size: min(5vw, 24px);
     }
 
     #resultados p {
@@ -290,7 +300,7 @@
     .select-container {
       background-color: rgb(8, 27, 42);
       border: 1px solid #ccc;
-      padding: 20px;
+      padding: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: relative;
       display: flex;
@@ -325,7 +335,8 @@
     .IDS-content {
       margin: auto;
       display: flex;
-      justify-content: flex-start; /* Cambiado a flex-start para alinear los elementos al principio */
+      justify-content: flex-start;
+      /* Cambiado a flex-start para alinear los elementos al principio */
       align-items: center;
       overflow-x: auto;
       overflow-y: hidden;
@@ -333,15 +344,12 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
-    
+
 
     /* Estilo para ocultar la barra de desplazamiento en WebKit (Chrome, Safari) */
     .IDS-content::-webkit-scrollbar {
       display: none;
     }
-
-
-
 
     .juan-img {
       width: 200px;
@@ -397,29 +405,26 @@
     </div>
   </div>
   <div id="busqueda-container">
-    <div style="text-align: center; color: rgb(8, 27, 42); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;">
-      BÚSQUEDA DE HISTORICOS POR FECHA Y HORA
-    </div>
     <div class="select-container">
       <h4>Mostrar/ Ocultar parámetros de búsqueda</h4>
       <img src="/views/Media/clic.jpeg" alt="Icono" class="icon-img">
     </div>
 
     <div class="inputs-container">
-      <label>Selecciona el vehiculo de interes:</label>
+      <!-- <label>Selecciona el vehiculo de interes:</label>
       <div class="IDS-content">
         <img src="/views/Media/juan.jpg" class="juan-img" onclick="selectImage('juan')">
         <img src="/views/Media/sara.jpg" class="sara-img" onclick="selectImage('sara')">
         <img src="/views/Media/mateo.jpg" class="mateo-img" onclick="selectImage('mateo')">
 
       </div>
-      <label>Desliza para ver los demás vehiculos</label>
+      <label>Desliza para ver los demás vehiculos</label> -->
 
       <div>
         <label for="fecha-inicio">Fecha de inicio:</label>
-        <input type="date" id="fecha-inicio">
+        <input type="date" id="fecha-inicio" name="fecha-inicio" min="2024-03-01" max="2025-12-31"><br><br>
         <label for="fecha-fin">Fecha de fin:</label>
-        <input type="date" id="fecha-fin">
+        <input type="date" id="fecha-fin" name="fecha-fin" min="2024-03-01" max="2025-12-31"><br><br>
       </div>
       <div id="checkBox">
         <label for="buscar-por-hora">
@@ -434,64 +439,81 @@
         <h5 for="hora-fin" id="label-hora-fin">Hora de fin:</h5>
         <input type="time" id="hora-fin" style="width: 150px;" step="1">
       </div>
+    </div>
 
 
+    <div id="busquedaArea-container">
+      <div style="display: none;">
+        <label>Centro seleccionado: <span id="Centro"></span></label>
+      </div>
+
+      <div style="display: none;">
+        <label>Radio seleccionado: <span id="Radio"></span></label>
+      </div>
       <div>
         <div class="button-container">
           <button class="filtrar-button" id="filtrar-time-button">
             <h2>Filtrar Por Tiempo</h2>
           </button>
         </div>
-
-        <div>
-          <label>ID seleccionada: <span id="selectedImageID"></span></label>
-        </div>
-
-        <div>
-          <label>Fecha de inicio seleccionada: <span id="fecha-inicio-usuario"></span></label>
-        </div>
-    
-        <div>
-          <label>Fecha de fin seleccionada: <span id="fecha-fin-usuario"></span></label>
-        </div>
-    
-        <div>
-          <label>Hora de inicio seleccionada: <span id="hora-inicio-usuario"></span></label>
-        </div>
-    
-        <div>
-          <label>Hora de fin seleccionada: <span id="hora-fin-usuario"></span></label>
-        </div>
-
-
-
       </div>
 
-    </div>
-
-    <div class="map-container">
-      <div class="left">
-        <div class="table-container">
-          <table id="resultados">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Latitud</th>
-                <th>Longitud</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Aquí se agregarán las filas de resultados -->
-            </tbody>
-          </table>
-        </div>
+      <div>
+        <label>Para seleccionar el area de interés dar click al icono "⚫" del mapa y arrastre para generar un Area.</label>
       </div>
-      <div class="right">
-        <div id="map"></div>
+
+      <div>
+        <button class="filtrar-button" id="filtrar1-button">
+          <h2>Filtrar Por Area</h2>
+        </button>
       </div>
     </div>
+
+
+    <div class="table-container">
+      <table id="resultados1">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Aquí se agregarán las filas de resultados -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+  <div class="map-container">
+    <div class="left">
+      <div class="table-container">
+        <table id="resultados">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Latitud</th>
+              <th>Longitud</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aquí se agregarán las filas de resultados -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="right">
+      <div id="map"></div>
+    </div>
+  </div>
   </div>
 
   <script>
@@ -525,6 +547,30 @@
       const selectedImageIDElement = document.getElementById('selectedImageID');
       selectedImageIDElement.textContent = selectedImageID;
     }
+    ///////////////////////////////////////////------ CALENDARIOS-----////////////////////////////
+    var fechaInicioInput = document.getElementById('fecha-inicio');
+    var fechaFinInput = document.getElementById('fecha-fin');
+    var horaInicioInput = document.getElementById('hora-inicio');
+    var horaFinInput = document.getElementById('hora-fin');
+
+    // Cuando se cambia el valor del campo de fecha de inicio
+    fechaInicioInput.addEventListener('change', function() {
+      // Establecer el valor mínimo del campo de fecha de fin como el valor seleccionado en el campo de fecha de inicio
+      fechaFinInput.min = fechaInicioInput.value;
+
+      // Obtener las fechas como objetos Date para compararlas
+      var fechaInicio = new Date(fechaInicioInput.value);
+      var fechaFin = new Date(fechaFinInput.value);
+
+      // Verificar si la fecha de fin es menor que la fecha de inicio
+      if (fechaFin < fechaInicio) {
+        // Mostrar mensaje de error al usuario
+        alert('Rango de fecha incorrecto: La fecha de fin no puede ser anterior a la fecha de inicio.');
+        // También podrías mostrar el mensaje de error en algún elemento HTML en lugar de usar alert
+        // document.getElementById('mensaje-error').innerText = 'Rango de fecha incorrecto: La fecha de fin no puede ser anterior a la fecha de inicio.';
+        // Y luego estilizar ese elemento para que sea más visible para el usuario
+      }
+    });
 
     var map;
 
@@ -538,8 +584,13 @@
       }).addTo(map);
     }
 
+    //==================
     initMap();
 
+
+    //=================
+
+    
     document.getElementById('buscar-datos').addEventListener('click', function() {
       //window.location.href = 'http://localhost:3000/';
       var currentLocation = window.location.href;
@@ -589,17 +640,19 @@
       }
 
       // Verificar si se han seleccionado las fechas
-      if (fechaInicio === '' || fechaFin === '') {
+      if (fechaInicioInput.value === '' || fechaFinInput.value === '') {
         // Mostrar mensaje de error al usuario
         alert('Por favor, seleccione las fechas de inicio y fin.');
         return; // Detener la ejecución si las fechas no están seleccionadas
       }
 
-      // Mostrar los valores de fecha y hora en pantalla para el usuario
-      document.getElementById('fecha-inicio-usuario').textContent = fechaInicio;
-      document.getElementById('fecha-fin-usuario').textContent = fechaFin;
-      document.getElementById('hora-inicio-usuario').textContent = horaInicio;
-      document.getElementById('hora-fin-usuario').textContent = horaFin;
+      // Verificar si la fecha de fin es menor que la fecha de inicio
+      if (fechaFin < fechaInicio) {
+        // Mostrar mensaje de error al usuario
+        alert('Rango de fecha incorrecto: La fecha de fin no puede ser anterior a la fecha de inicio.');
+        return;
+      }
+
 
       // Hacer la petición al servidor con los parámetros correspondientes
       fetch(`/filtrar-por-fechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&horaInicio=${horaInicio}&horaFin=${horaFin}`)
@@ -617,13 +670,26 @@
             const longitud = result.longitud; // Obtener la longitud
             const fecha = result.fecha;
             const hora = result.hora;
-            coordenadas.push([parseFloat(latitud), parseFloat(longitud), fecha, hora]); // Agregar las coordenadas como un par [latitud, longitud]
+            const yaw = result.yaw; // Obtener el yaw
+            const pitch = result.pitch; // Obtener el pitch
+            const roll = result.roll; // Obtener el roll
+
+            coordenadas.push([
+              parseFloat(latitud),
+              parseFloat(longitud),
+              fecha,
+              hora,
+              parseFloat(yaw), // Agregar yaw a la matriz de coordenadas
+              parseFloat(pitch), // Agregar pitch a la matriz de coordenadas
+              parseFloat(roll) // Agregar roll a la matriz de coordenadas
+            ]);
           });
 
           // Llamar a la función para mostrar los resultados en el mapa
           mostrarResultadosEnMapa(coordenadas);
         })
         .catch(error => console.error('Error:', error));
+
     }
 
     // Evento click del botón de filtrar
@@ -640,7 +706,7 @@
         // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
         const noDataMessage = document.createElement('tr');
         const messageCell = document.createElement('td');
-        messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
+        messageCell.setAttribute('colspan', '8'); // Column span para ocupar todas las columnas
         messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
         noDataMessage.appendChild(messageCell);
         resultadosTbody.appendChild(noDataMessage);
@@ -653,23 +719,33 @@
           const longitudCell = document.createElement('td');
           const fechaCell = document.createElement('td');
           const horaCell = document.createElement('td');
+          const yawCell = document.createElement('td');
+          const pitchCell = document.createElement('td');
+          const rollCell = document.createElement('td');
 
           usuarioCell.textContent = result.usuario; // Obtener el usuario del resultado
           latitudCell.textContent = result.latitud;
           longitudCell.textContent = result.longitud;
           fechaCell.textContent = result.fecha;
           horaCell.textContent = result.hora;
+          yawCell.textContent = result.yaw; // Agregar el valor de yaw
+          pitchCell.textContent = result.pitch; // Agregar el valor de pitch
+          rollCell.textContent = result.roll; // Agregar el valor de roll
 
           row.appendChild(usuarioCell);
           row.appendChild(latitudCell);
           row.appendChild(longitudCell);
           row.appendChild(fechaCell);
           row.appendChild(horaCell);
+          row.appendChild(yawCell); // Agregar la celda de yaw a la fila
+          row.appendChild(pitchCell); // Agregar la celda de pitch a la fila
+          row.appendChild(rollCell); // Agregar la celda de roll a la fila
 
           resultadosTbody.appendChild(row);
         });
       }
     }
+
 
     // Función para mostrar los resultados en el mapa
     function mostrarResultadosEnMapa(coordenadas) {
@@ -722,285 +798,249 @@
       map.fitBounds(bounds);
 
     }
-  </script>
+    var drawnItems = L.featureGroup().addTo(map);
 
+    var drawControl = new L.Control.Draw({
+      draw: {
+        circle: true,
+        marker: false,
+        polygon: false,
+        polyline: false,
+        rectangle: false,
+      },
+      edit: {
+        featureGroup: drawnItems
+      }
+    });
+    map.addControl(drawControl);
 
-   <!---------------------------------------------------------SEGUNDA PARTE DE LA BUSQUEDA------------------------------------------------->
+    map.on(L.Draw.Event.CREATED, function(e) {
+      var layer = e.layer;
+      drawnItems.addLayer(layer);
 
-   <div id="busqueda-container">
-    <div style="text-align: center; color: rgb(4, 20, 32); margin-bottom: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;">
-      BÚSQUEDA DE HISTORICOS POR AREA
-    </div>
-    <div>
-      <label>Centro seleccionado: <span id="Centro"></span></label>
-    </div>
+      // Obtener las coordenadas del círculo dibujado
+      var latLng = layer.getLatLng();
 
-    <div>
-      <label>Radio seleccionado: <span id="Radio"></span></label>
-    </div>
+      var radius = layer.getRadius() / 1000;
 
-    <div>
-      <button class="consult-button" id="filtrar1-button">Filtrar Por Area</button>
-    </div>
+      var circleInfo = document.getElementById('circle-info');
+      // Mostrar las variables en los elementos del DOM
+      document.getElementById('Centro').textContent = `Latitud: ${latLng.lat}, Longitud: ${latLng.lng}`;
+      document.getElementById('Radio').textContent = `${radius} km`;
+    });
 
-    <script>
+    function filtrarPorArea() {
+      // Obtener las coordenadas del centro y el radio
+      const latLngLat = parseFloat(document.getElementById('Centro').textContent.split(':')[1].trim()); // Extraer la latitud del centro
+      const latLngLng = parseFloat(document.getElementById('Centro').textContent.split(':')[2].trim()); // Extraer la longitud del centro
+      const radius = parseFloat(document.getElementById('Radio').textContent.split(' ')[0]); // Extraer el radio y convertirlo a número
+      console.log(`Latitud: ${latLngLat}, Longitud: ${latLngLng}, Radio: ${radius}`);
 
-      var drawnItems = L.featureGroup().addTo(map);
+      // Crear una nueva matriz para almacenar los datos filtrados
+      const DatosFiltrados = [];
 
-      var drawControl = new L.Control.Draw({
-        draw: {
-          circle: true,
-          marker: false,
-          polygon: false,
-          polyline: false,
-          rectangle: false,
-        },
-        edit: {
-          featureGroup: drawnItems
-        }
-      });
-      map.addControl(drawControl);
+      // Obtener todas las filas de la tabla
+      const filas = document.querySelectorAll('#resultados tbody tr');
 
-      map.on(L.Draw.Event.CREATED, function(e) {
-        var layer = e.layer;
-        drawnItems.addLayer(layer);
+      // Iterar sobre cada fila de la tabla
+      filas.forEach(fila => {
+        let radioDato;
+        let latitudDato; // Definir latitudDato fuera del bloque condicional
+        let longitudDato; // Definir longitudDato fuera del bloque condicional
+        const datosFila = []; // Crear una matriz para almacenar los datos de cada fila
 
-        // Obtener las coordenadas del círculo dibujado
-        var latLng = layer.getLatLng();
+        // Obtener los datos de cada celda de la fila y agregarlos a la matriz de datos de la fila
+        fila.querySelectorAll('td').forEach((celda, index) => {
+          datosFila.push(celda.textContent);
+          // Si es la celda de latitud, obtener su valor
+          if (index === 1) {
+            latitudDato = parseFloat(celda.textContent);
+          }
+          // Si es la celda de longitud, obtener su valor
+          if (index === 2) {
+            longitudDato = parseFloat(celda.textContent); // Corregir esta línea
+            console.log(latitudDato, longitudDato);
+            // Calcular la distancia euclidiana
+            let radioDato = 0;
 
-        var radius = layer.getRadius() / 1000;
+            function calcularDistancia(latitudDato, longitudDato, latLngLat, latLngLng) {
+              // Convertir las coordenadas de grados a radianes
+              const latitudDatoRad = latitudDato * Math.PI / 180;
+              const longitudDatoRad = longitudDato * Math.PI / 180;
+              const latLngLatRad = latLngLat * Math.PI / 180;
+              const latLngLngRad = latLngLng * Math.PI / 180;
 
-        var circleInfo = document.getElementById('circle-info');
-        // Mostrar las variables en los elementos del DOM
-        document.getElementById('Centro').textContent = `Latitud: ${latLng.lat}, Longitud: ${latLng.lng}`;
-        document.getElementById('Radio').textContent = `${radius} km`;
-      });
+              // Calcular las diferencias en latitud y longitud
+              const deltaLat = latitudDatoRad - latLngLatRad;
+              const deltaLng = longitudDatoRad - latLngLngRad;
 
-      function filtrarPorArea() {
-        // Obtener las coordenadas del centro y el radio
-        const latLngLat = parseFloat(document.getElementById('Centro').textContent.split(':')[1].trim()); // Extraer la latitud del centro
-        const latLngLng = parseFloat(document.getElementById('Centro').textContent.split(':')[2].trim()); // Extraer la longitud del centro
-        const radius = parseFloat(document.getElementById('Radio').textContent.split(' ')[0]); // Extraer el radio y convertirlo a número
-        console.log(`Latitud: ${latLngLat}, Longitud: ${latLngLng}, Radio: ${radius}`);
-
-        // Crear una nueva matriz para almacenar los datos filtrados
-        const DatosFiltrados = [];
-
-        // Obtener todas las filas de la tabla
-        const filas = document.querySelectorAll('#resultados tbody tr');
-
-        // Iterar sobre cada fila de la tabla
-        filas.forEach(fila => {
-          let radioDato;
-          let latitudDato; // Definir latitudDato fuera del bloque condicional
-          let longitudDato; // Definir longitudDato fuera del bloque condicional
-          const datosFila = []; // Crear una matriz para almacenar los datos de cada fila
-
-          // Obtener los datos de cada celda de la fila y agregarlos a la matriz de datos de la fila
-          fila.querySelectorAll('td').forEach((celda, index) => {
-            datosFila.push(celda.textContent);
-            // Si es la celda de latitud, obtener su valor
-            if (index === 1) {
-              latitudDato = parseFloat(celda.textContent);
+              // Aplicar la fórmula de Haversine
+              const R = 6371; // Radio de la Tierra en kilómetros
+              const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                Math.cos(latLngLatRad) * Math.cos(latitudDatoRad) *
+                Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+              const distancia = R * c; // Distancia en kilómetros
+              // Convertir la distancia a metros
+              radioDato = distancia;
             }
-            // Si es la celda de longitud, obtener su valor
-            if (index === 2) {
-              longitudDato = parseFloat(celda.textContent); // Corregir esta línea
-              console.log(latitudDato, longitudDato);
-              // Calcular la distancia euclidiana
-              let radioDato = 0;
-
-              function calcularDistancia(latitudDato, longitudDato, latLngLat, latLngLng) {
-                // Convertir las coordenadas de grados a radianes
-                const latitudDatoRad = latitudDato * Math.PI / 180;
-                const longitudDatoRad = longitudDato * Math.PI / 180;
-                const latLngLatRad = latLngLat * Math.PI / 180;
-                const latLngLngRad = latLngLng * Math.PI / 180;
-
-                // Calcular las diferencias en latitud y longitud
-                const deltaLat = latitudDatoRad - latLngLatRad;
-                const deltaLng = longitudDatoRad - latLngLngRad;
-
-                // Aplicar la fórmula de Haversine
-                const R = 6371; // Radio de la Tierra en kilómetros
-                const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-                  Math.cos(latLngLatRad) * Math.cos(latitudDatoRad) *
-                  Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                const distancia = R * c; // Distancia en kilómetros
-                // Convertir la distancia a metros
-                radioDato = distancia;
-              }
-              // Llamar a la función para calcular la distancia
-              calcularDistancia(latitudDato, longitudDato, latLngLat, latLngLng);
-              console.log("RadioDato:", radioDato, latitudDato, longitudDato); // Imprimir en consola el valor de radioDato
-              // Verificar si la distancia es menor o igual al radio y si es así, almacenar el dato
-              if (radioDato <= radius) {
-                DatosFiltrados.push(datosFila);
-              }
+            // Llamar a la función para calcular la distancia
+            calcularDistancia(latitudDato, longitudDato, latLngLat, latLngLng);
+            console.log("RadioDato:", radioDato, latitudDato, longitudDato); // Imprimir en consola el valor de radioDato
+            // Verificar si la distancia es menor o igual al radio y si es así, almacenar el dato
+            if (radioDato <= radius) {
+              DatosFiltrados.push(datosFila);
             }
-          });
+          }
         });
-        console.log("Datos Filtrados:", DatosFiltrados);
-        mostrarResultadosEnTabla1(DatosFiltrados);
-        // Llamar a la función para mostrar los resultados en el mapa
-        mostrarResultadosEnMapa1(DatosFiltrados);
-      }
-      // Definición de la función para mostrar los resultados en la tabla
-      function mostrarResultadosEnTabla1(data) {
-        const resultadosTbody = document.querySelector('#resultados1 tbody');
-        resultadosTbody.innerHTML = ''; // Limpiar resultados anteriores
+      });
+      console.log("Datos Filtrados:", DatosFiltrados);
+      mostrarResultadosEnTabla1(DatosFiltrados);
+      // Llamar a la función para mostrar los resultados en el mapa
+      mostrarResultadosEnMapa1(DatosFiltrados);
+    }
+    // Definición de la función para mostrar los resultados en la tabla
+    function mostrarResultadosEnTabla1(data) {
+      const resultadosTbody = document.querySelector('#resultados1 tbody');
+      resultadosTbody.innerHTML = ''; // Limpiar resultados anteriores
 
-        if (data.length === 0) {
-          // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
-          const noDataMessage = document.createElement('tr');
-          const messageCell = document.createElement('td');
-          messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
-          messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
-          noDataMessage.appendChild(messageCell);
-          resultadosTbody.appendChild(noDataMessage);
-        } else {
-          // Mostrar los resultados en filas de la tabla
-          data.forEach(result => {
-            const row = document.createElement('tr');
-            result.forEach(dato => {
-              const cell = document.createElement('td');
-              cell.textContent = dato;
-              row.appendChild(cell);
-            });
-            resultadosTbody.appendChild(row);
+      if (data.length === 0) {
+        // Si no hay resultados, mostrar un mensaje indicando que no hay información disponible
+        const noDataMessage = document.createElement('tr');
+        const messageCell = document.createElement('td');
+        messageCell.setAttribute('colspan', '5'); // Column span para ocupar todas las columnas
+        messageCell.textContent = 'No hay información disponible para la fecha solicitada.';
+        noDataMessage.appendChild(messageCell);
+        resultadosTbody.appendChild(noDataMessage);
+      } else {
+        // Mostrar los resultados en filas de la tabla
+        data.forEach(result => {
+          const row = document.createElement('tr');
+          result.forEach(dato => {
+            const cell = document.createElement('td');
+            cell.textContent = dato;
+            row.appendChild(cell);
           });
-        }
+          resultadosTbody.appendChild(row);
+        });
       }
+    }
 
-      function mostrarResultadosEnMapa1(DatosFiltrados) {
+    function mostrarResultadosEnMapa1(DatosFiltrados) {
 
 
-        // Crear arreglo para almacenar coordenadas de la polilínea
-        const polylinePoints = DatosFiltrados.map(coordenada => [parseFloat(coordenada[1]), parseFloat(coordenada[2])]);
+      // Crear arreglo para almacenar coordenadas de la polilínea
+      const polylinePoints = DatosFiltrados.map(coordenada => [parseFloat(coordenada[1]), parseFloat(coordenada[2])]);
 
-        const polyline = L.polyline(polylinePoints, {
-          color: 'red'
-        }).addTo(drawnItems);
+      const polyline = L.polyline(polylinePoints, {
+        color: 'red'
+      }).addTo(drawnItems);
 
-        //const startMarker = L.marker(polylinePoints[0]).addTo(drawnItems);
-        
+      //const startMarker = L.marker(polylinePoints[0]).addTo(drawnItems);
 
-        //====== MARCADORES DE INICIO Y FIN ====
 
-        const inicioFinIcon = L.icon({
+      //====== MARCADORES DE INICIO Y FIN ====
+
+      const inicioFinIcon = L.icon({
         iconUrl: 'start.png', // Ruta de la imagen del icono personalizado
         iconSize: [38, 38], // Tamaño del icono
         iconAnchor: [16, 16], // Punto de anclaje del icono
         popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
-       });
+      });
 
-       const FinIcon = L.icon({
+      const FinIcon = L.icon({
         iconUrl: 'end.png', // Ruta de la imagen del icono personalizado
         iconSize: [38, 38], // Tamaño del icono
         iconAnchor: [16, 16], // Punto de anclaje del icono
         popupAnchor: [0, -10] // Punto de anclaje del popup relativo al icono
-       });
-
-       const startMarker = L.marker(polylinePoints[0], { icon: inicioFinIcon }).addTo(drawnItems);
-       const endMarker = L.marker(polylinePoints[polylinePoints.length - 1], { icon: FinIcon }).addTo(drawnItems);
-
-        //======================================
-
-
-
-        // Crear contenido para los popups de los marcadores
-        const startMarkerPopupContent = `Inicio del recorrido:<br>Latitud: ${polylinePoints[0][0]}, Longitud: ${polylinePoints[0][1]}<br>Fecha: ${DatosFiltrados[0][3]}<br>Hora: ${DatosFiltrados[0][4]}`;
-        const endMarkerPopupContent = `Fin del recorrido:<br>Latitud: ${polylinePoints[polylinePoints.length - 1][0]}, Longitud: ${polylinePoints[polylinePoints.length - 1][1]}<br>Fecha: ${DatosFiltrados[DatosFiltrados.length - 1][3]}<br>Hora: ${DatosFiltrados[DatosFiltrados.length - 1][4]}`;
-
-        // Agregar popups a los marcadores
-        startMarker.bindPopup(startMarkerPopupContent);
-        endMarker.bindPopup(endMarkerPopupContent);
-
-        //-------------- VARIOS MARCADORES --------------------
-
-          const simplePoints = [];
-          DatosFiltrados.forEach(coordenada => {
-              const latLng = L.latLng(parseFloat(coordenada[1]), parseFloat(coordenada[2]));
-              const simplePoint = L.circleMarker(latLng, {
-                  radius: 4, // Radio muy pequeño para que se vea como un punto
-                  color: 'blue', // Color del punto
-                  fillColor: 'red', // Color de relleno del punto
-                  fillOpacity: 1 // Opacidad del relleno del punto
-              }).addTo(drawnItems);
-
-
-              simplePoints.push(simplePoint);
-
-
-              const popupContent = `Fecha: ${coordenada[3]}<br>Hora: ${coordenada[4]}`;
-
-              // Vincular evento de clic al punto para mostrar el popup
-              simplePoint.on('click', function(event) {
-                  simplePoint.bindPopup(popupContent).openPopup();
-              });
-
-              simplePoints.push(simplePoint);
-          });
-
-
-        //-----------------------------------------------------
-
-        // Evento de clic en el marcador de inicio
-        startMarker.on('click', function(e) {
-          startMarker.openPopup();
-        });
-
-        // Evento de clic en el marcador de fin
-        endMarker.on('click', function(e) {
-          endMarker.openPopup();
-        });
-
-        const bounds = L.latLngBounds(polylinePoints);
-        bounds.extend(startMarker.getLatLng());
-        bounds.extend(endMarker.getLatLng());
-
-        // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
-        map.fitBounds(bounds);
-
-
-        //=============
-        circleMarkers.forEach(circleMarker => {
-         bounds.extend(circleMarker.getLatLng());
-        });
-
-        // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores circulares
-        map.fitBounds(bounds);
-
-        
-
-      }
-
-
-
-      // Evento click del botón de filtrar
-      document.getElementById('filtrar1-button').addEventListener('click', function() {
-        filtrarPorArea(); // Llamar a la función para filtrar por área cuando se hace clic en el botón
       });
-    </script>
 
-    <div class="table-container">
-      <table id="resultados1">
-        <thead>
-          <tr>
-            <th>Usuario</th>
-            <th>Latitud</th>
-            <th>Longitud</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Aquí se agregarán las filas de resultados -->
-        </tbody>
-      </table>
-    </div>
-  </div>
+      const startMarker = L.marker(polylinePoints[0], {
+        icon: inicioFinIcon
+      }).addTo(drawnItems);
+      const endMarker = L.marker(polylinePoints[polylinePoints.length - 1], {
+        icon: FinIcon
+      }).addTo(drawnItems);
+
+      //======================================
+
+
+
+      // Crear contenido para los popups de los marcadores
+      const startMarkerPopupContent = `Inicio del recorrido:<br>Latitud: ${polylinePoints[0][0]}, Longitud: ${polylinePoints[0][1]}<br>Fecha: ${DatosFiltrados[0][3]}<br>Hora: ${DatosFiltrados[0][4]}`;
+      const endMarkerPopupContent = `Fin del recorrido:<br>Latitud: ${polylinePoints[polylinePoints.length - 1][0]}, Longitud: ${polylinePoints[polylinePoints.length - 1][1]}<br>Fecha: ${DatosFiltrados[DatosFiltrados.length - 1][3]}<br>Hora: ${DatosFiltrados[DatosFiltrados.length - 1][4]}`;
+
+      // Agregar popups a los marcadores
+      startMarker.bindPopup(startMarkerPopupContent);
+      endMarker.bindPopup(endMarkerPopupContent);
+
+      //-------------- VARIOS MARCADORES --------------------
+
+      const simplePoints = [];
+      DatosFiltrados.forEach(coordenada => {
+        const latLng = L.latLng(parseFloat(coordenada[1]), parseFloat(coordenada[2]));
+        const simplePoint = L.circleMarker(latLng, {
+          radius: 4, // Radio muy pequeño para que se vea como un punto
+          color: 'blue', // Color del punto
+          fillColor: 'red', // Color de relleno del punto
+          fillOpacity: 1 // Opacidad del relleno del punto
+        }).addTo(drawnItems);
+
+
+        simplePoints.push(simplePoint);
+
+
+        const popupContent = `
+              Fecha: ${coordenada[3]}<br>
+              Hora: ${coordenada[4]}<br>
+              Yaw: ${coordenada[5]}<br>
+              Pitch: ${coordenada[6]}<br>
+              Roll: ${coordenada[7]}<br>
+              `;
+
+
+        // Vincular evento de clic al punto para mostrar el popup
+        simplePoint.on('click', function(event) {
+          simplePoint.bindPopup(popupContent).openPopup();
+        });
+
+        simplePoints.push(simplePoint);
+      });
+
+
+      //-----------------------------------------------------
+
+      // Evento de clic en el marcador de jjjjjjj
+      startMarker.on('click', function(e) {
+        startMarker.openPopup();
+      });
+
+      // Evento de clic en el marcador de fin
+      endMarker.on('click', function(e) {
+        endMarker.openPopup();
+      });
+
+      const bounds = L.latLngBounds(polylinePoints);
+      bounds.extend(startMarker.getLatLng());
+      bounds.extend(endMarker.getLatLng());
+
+      // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores
+      map.fitBounds(bounds);
+
+
+      //=============
+      circleMarkers.forEach(circleMarker => {
+        bounds.extend(circleMarker.getLatLng());
+      });
+
+      // Ajustar la vista del mapa para mostrar toda la polilínea y los marcadores circulares
+      map.fitBounds(bounds);
+    }
+    // Evento click del botón de filtrar
+    document.getElementById('filtrar1-button').addEventListener('click', function() {
+      filtrarPorArea(); // Llamar a la función para filtrar por área cuando se hace clic en el botón
+    });
+  </script>
 </body>
 
 </html>

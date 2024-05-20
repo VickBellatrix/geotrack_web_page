@@ -193,9 +193,6 @@ server.on("connection", (socket) => {
     latestData.pitch = pitch;
     latestData.roll = roll;
 
-    console.log(latestData.lati);
-    console.log(latestData.longi);
-
     // Inserción de los datos en la base de datos
 
     if (isMaster) {

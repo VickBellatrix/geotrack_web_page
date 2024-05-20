@@ -164,6 +164,10 @@ server.on("connection", (socket) => {
 
     let correctedTime = gmtMinus5DateTime.toISOString().split('T')[1].split('Z')[0];
 
+    let hora2 = correctedTime.split(".");
+
+    let horacorregida = hora2[0];
+
 
     // Separar los datos de la IMU
     const imuValues = imuData.split(",");
@@ -174,7 +178,7 @@ server.on("connection", (socket) => {
     const usuario = "Rover";
 
     // Imprimir los datos procesados
-    console.log(`Hora: ${correctedTime}`);
+    console.log(`Hora: ${horacorregida}`);
     console.log(`Fecha: ${correctedDate}`);
     console.log(`Latitud: ${adjustedLatitude}`);
     console.log(`Longitud: ${adjustedLongitude}`);
@@ -187,7 +191,7 @@ server.on("connection", (socket) => {
     latestData.lati = adjustedLatitude;
     latestData.longi = adjustedLongitude;
     latestData.fecha = correctedDate;
-    latestData.timestamp = correctedTime;
+    latestData.timestamp = horacorregida;
     latestData.usuario = usuario;
     latestData.yaw = yaw;
     latestData.pitch = pitch;

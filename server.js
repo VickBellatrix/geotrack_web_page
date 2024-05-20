@@ -157,7 +157,7 @@ server.on("connection", (socket) => {
 
     function correctDateFormat2(date) {
         const [year, month, day] = date.split("-");
-        return `${year}/${month}/${day}`;
+        return `${day}/${month}/${year}`;
     }
 
     correctedDate = correctDateFormat2(correctedDate);

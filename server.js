@@ -204,14 +204,14 @@ server.on("connection", (socket) => {
       connection.query(
         sql,
         [
-          adjustedLatitude,
-          adjustedLongitude,
-          formattedDate,
-          formattedTime,
-          usuario,
-          yaw,
-          pitch,
-          roll,
+            latestData.lati,
+            latestData.longi,
+            latestData.fecha,
+            latestData.timestamp,
+            latestData.usuario,
+            latestData.yaw,
+            latestData.pitch,
+            latestData.roll,
         ],
         (error, results) => {
           if (error) console.error(error);

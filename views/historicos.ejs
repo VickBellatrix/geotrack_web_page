@@ -590,9 +590,8 @@
 
     //=================
 
-    
-    document.getElementById('buscar-datos').addEventListener('click', function() {
-      //window.location.href = 'http://localhost:3000/';
+      document.getElementById('buscar-datos').addEventListener('click', function() {
+      //window.location.href = 'http://localhost:3000/ubicacion';
       var currentLocation = window.location.href;
       var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1);
       window.location.href = url;

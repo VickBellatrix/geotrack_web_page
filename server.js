@@ -267,7 +267,7 @@ app.get("/latest-data", (req, res) => {
   res.json(latestData);
 });
 
-app.get("/", (req, res) => {
+app.get("/ubicacion", (req, res) => {
   res.render("ubicacion");
 });
 

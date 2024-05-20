@@ -43,6 +43,7 @@
     .button-container {
       text-align: center;
       max-height: 50px;
+      /* Altura máxima del contenedor */
       display: flex;
       align-items: center;
     }
@@ -56,9 +57,12 @@
       font-size: min(5vw, 20px);
       cursor: pointer;
       height: auto;
+      /* Altura ajustada automáticamente según el contenido */
       width: auto;
       display: flex;
+      /* Convertir el botón en un contenedor flex */
       justify-content: center;
+      /* Alinear el contenido horizontalmente al centro */
     }
 
     .position-container {
@@ -71,6 +75,7 @@
       font-size: 30px;
     }
 
+
     #content-container {
       background-color: rgb(191, 210, 224);
       border-radius: 20px;
@@ -82,6 +87,7 @@
       margin: 10px auto;
       overflow-x: auto;
       height: 100%;
+      /* La altura será igual al 100% del viewport */
       max-height: 900px;
     }
 
@@ -98,17 +104,13 @@
       margin: 10px auto;
       overflow-x: auto;
       height: 100%;
+      /* La altura será igual al 100% del viewport */
       max-height: 900px;
     }
 
     #Render-container {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vw;
-      height: 80vh;
-      max-width: 800px;
-      max-height: 800px;
+      width: 100%;
+      /* Ajuste el ancho al 100% */
       background-color: #f0f0f0;
       border: 2px solid #ccc;
       border-radius: 10px;
@@ -119,10 +121,12 @@
     }
 
     #animacion3d {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: calc(100vh - 300px);
+      /* Ajusta la altura para ocupar el espacio restante debajo del texto */
       display: block;
-    }
+    }y
+
 
     h1 {
       text-align: center;
@@ -164,6 +168,7 @@
     <div class="button-container">
       <button class="consult-button" id="gps">
         <h2>POSICIÓN GPS</h2>
+
       </button>
     </div>
     <div class="button-container">
@@ -185,6 +190,7 @@
     </div>
   </div>
   <script>
+
     // Crear la cámara
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 5);
@@ -200,6 +206,33 @@
         scene.add(splineScene);
       }
     );
+
+    function updateRoverPosition(positionData) {
+  splineScene.rotation.x = positionData.x;
+  splineScene.rotation.y = positionData.y;
+  splineScene.rotation.z = positionData.z;
+}
+
+function updateRoverRotation() {
+  fetch('/latest-data') // Realizar solicitud al servidor para obtener los últimos datos
+    .then(response => response.json())
+    .then(data => {
+      // Verify if orientation data is present
+      if (data && data.yaw !== undefined && data.pitch !== undefined && data.roll !== undefined) {
+        positionData.x = data.pitch;
+        positionData.y = data.yaw;
+        positionData.z = data.roll;
+        updateRoverPosition(positionData); // Call update function here
+      } else {
+        // Handle missing data (e.g., display error message)
+        console.warn('Orientation data not found in response');
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos de orientación:', error);
+      // Handle data fetching errors (e.g., display error message or use defaults)
+    });
+}
 
     // Crear el renderizador
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -233,6 +266,21 @@
     }
     animate();
   </script>
+
+<script>
+document.getElementById('historicos').addEventListener('click', function() {
+  var currentLocation = window.location.href;
+  var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'historicos';
+  window.location.href = url;
+});
+
+document.getElementById('gps').addEventListener('click', function() {
+  var currentLocation = window.location.href;
+  var url = currentLocation.substring(0, currentLocation.lastIndexOf('/') + 1) + 'ubicacion';
+  window.location.href = url;
+});
+</script>
+
 </body>
 
 </html>

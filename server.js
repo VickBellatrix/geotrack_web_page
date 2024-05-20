@@ -152,6 +152,16 @@ server.on("connection", (socket) => {
 
     // Separar la fecha y la hora corregidas
     let correctedDate = gmtMinus5DateTime.toISOString().split('T')[0];
+
+
+
+    function correctDateFormat2(date) {
+        const [year, day, month] = date.split("-");
+        return `${year}-${month}-${day}`;
+    }
+
+    correctedDate = correctDateFormat2(correctedDate);
+
     let correctedTime = gmtMinus5DateTime.toISOString().split('T')[1].split('Z')[0];
 
 

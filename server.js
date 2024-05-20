@@ -268,7 +268,7 @@ app.get("/latest-data", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.render("rover");
+  res.render("ubicacion");
 });
 
 // Ruta para filtrar por rango de fechas
@@ -276,8 +276,8 @@ app.get("/historicos", (req, res) => {
   res.render("historicos");
 });
 
-app.get("/ubicacion", (req, res) => {
-  res.render("map");
+app.get("/rover", (req, res) => {
+  res.render("rover");
 });
 
 // Ruta para filtrar por rango de fechas

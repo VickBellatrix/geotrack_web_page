@@ -86,6 +86,11 @@ server.on("connection", (socket) => {
     const message = String(data);
     const parts = message.split("|");
 
+    if (parts.length < 2) {
+      console.error("Datos recibidos en un formato inesperado.");
+      return;
+    }
+
     const gpsData = parts[0].trim();
     const imuData = parts[1].trim();
 
@@ -97,6 +102,11 @@ server.on("connection", (socket) => {
 
     // Separar los datos del GPS
     const gpsFields = gpsData.split(",");
+    if (gpsFields.length < 4) {
+      console.error("Datos del GPS en un formato inesperado.");
+      return;
+    }
+
     const latitude = gpsFields[0];
     const longitude = gpsFields[1];
     const date = gpsFields[2];
@@ -116,61 +126,61 @@ server.on("connection", (socket) => {
     // Formatear la fecha
     const formattedDate = date.split("/").reverse().join("-");
 
-
     function correctDateFormat(date) {
-        const [year, day, month] = date.split("-");
-        return `${year}-${month}-${day}`;
+      const [year, day, month] = date.split("-");
+      return `${year}-${month}-${day}`;
     }
-
 
     const correctedDateInput = correctDateFormat(formattedDate);
 
     const combinedDateTime = `${correctedDateInput}T${formattedTime}Z`;
 
     function convertToGMTMinus5(gmtDateTime) {
-        // Crear una nueva fecha con el valor proporcionado (que se asume en GMT)
-        let date = new Date(gmtDateTime);
-    
-        // Obtener el tiempo actual en milisegundos
-        let currentTime = date.getTime();
-    
-        // Convertir las 5 horas a milisegundos
-        let gmtMinus5Offset = -5 * 60 * 60 * 1000;
-    
-        // Ajustar el tiempo al tiempo de GMT-5
-        let gmtMinus5Time = currentTime + gmtMinus5Offset;
-    
-        // Crear una nueva fecha ajustada a GMT-5
-        let gmtMinus5Date = new Date(gmtMinus5Time);
-    
-        return gmtMinus5Date;
+      let date = new Date(gmtDateTime);
+
+      if (isNaN(date.getTime())) {
+        throw new Error("Fecha y hora no válidas.");
+      }
+
+      let currentTime = date.getTime();
+      let gmtMinus5Offset = -5 * 60 * 60 * 1000;
+      let gmtMinus5Time = currentTime + gmtMinus5Offset;
+      let gmtMinus5Date = new Date(gmtMinus5Time);
+
+      return gmtMinus5Date;
     }
 
+    let correctedDate, correctedTime;
+    try {
+      let gmtMinus5DateTime = convertToGMTMinus5(combinedDateTime);
 
+      correctedDate = gmtMinus5DateTime.toISOString().split("T")[0];
 
-    let gmtMinus5DateTime = convertToGMTMinus5(combinedDateTime);
-
-    // Separar la fecha y la hora corregidas
-    let correctedDate = gmtMinus5DateTime.toISOString().split('T')[0];
-
-
-
-    function correctDateFormat2(date) {
+      function correctDateFormat2(date) {
         const [year, month, day] = date.split("-");
         return `${year}-${month}-${day}`;
+      }
+
+      correctedDate = correctDateFormat2(correctedDate);
+
+      correctedTime = gmtMinus5DateTime
+        .toISOString()
+        .split("T")[1]
+        .split("Z")[0];
+
+      let hora2 = correctedTime.split(".");
+      correctedTime = hora2[0];
+    } catch (error) {
+      console.error("Error procesando la fecha y hora:", error.message);
+      return;
     }
-
-    correctedDate = correctDateFormat2(correctedDate);
-
-    let correctedTime = gmtMinus5DateTime.toISOString().split('T')[1].split('Z')[0];
-
-    let hora2 = correctedTime.split(".");
-
-    let horacorregida = hora2[0];
-
 
     // Separar los datos de la IMU
     const imuValues = imuData.split(",");
+    if (imuValues.length < 3) {
+      console.error("Datos de la IMU en un formato inesperado.");
+      return;
+    }
     const yaw = imuValues[0];
     const pitch = imuValues[1];
     const roll = imuValues[2];
@@ -178,7 +188,7 @@ server.on("connection", (socket) => {
     const usuario = "Rover";
 
     // Imprimir los datos procesados
-    console.log(`Hora: ${horacorregida}`);
+    console.log(`Hora: ${correctedTime}`);
     console.log(`Fecha: ${correctedDate}`);
     console.log(`Latitud: ${adjustedLatitude}`);
     console.log(`Longitud: ${adjustedLongitude}`);
@@ -191,7 +201,7 @@ server.on("connection", (socket) => {
     latestData.lati = adjustedLatitude;
     latestData.longi = adjustedLongitude;
     latestData.fecha = correctedDate;
-    latestData.timestamp = horacorregida;
+    latestData.timestamp = correctedTime;
     latestData.usuario = usuario;
     latestData.yaw = yaw;
     latestData.pitch = pitch;
@@ -204,14 +214,14 @@ server.on("connection", (socket) => {
       connection.query(
         sql,
         [
-            latestData.lati,
-            latestData.longi,
-            latestData.fecha,
-            latestData.timestamp,
-            latestData.usuario,
-            latestData.yaw,
-            latestData.pitch,
-            latestData.roll,
+          latestData.lati,
+          latestData.longi,
+          latestData.fecha,
+          latestData.timestamp,
+          latestData.usuario,
+          latestData.yaw,
+          latestData.pitch,
+          latestData.roll,
         ],
         (error, results) => {
           if (error) console.error(error);
